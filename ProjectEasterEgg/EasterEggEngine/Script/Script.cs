@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public class Script
+    public class Script : IScript
     {
         public bool Active
         {
@@ -22,5 +23,17 @@ namespace Mindstep.EasterEgg.Engine
         {
             throw new System.NotImplementedException();
         }
+
+        public IEnumerator<ScriptTask> GetEnumerator()
+        {
+            return ScriptContent();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public abstract IEnumerator<ScriptTask> ScriptContent();
     }
 }

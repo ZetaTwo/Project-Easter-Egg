@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public interface IScriptEngine
+    public class World
     {
-        void Update();
-        void AddScript(Script script);
+        private List<IDrawable> drawableObjects;
     }
 }

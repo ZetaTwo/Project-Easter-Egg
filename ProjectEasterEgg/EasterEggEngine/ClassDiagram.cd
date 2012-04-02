@@ -26,7 +26,7 @@
   <Class Name="Mindstep.EasterEgg.Engine.GraphicsManager" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAgAAAAAAAAAAAAAIAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAACAAAAAAAgAAAAAAAQAAAAEIAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Graphics\GraphicsManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -65,7 +65,7 @@
   <Class Name="Mindstep.EasterEgg.Engine.ScriptEngine" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAEBAAAAAQAAAA=</HashCode>
       <FileName>Script\ScriptEngine.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -100,6 +100,13 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.World" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>World.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="Mindstep.EasterEgg.Engine.IDrawable" Collapsed="true">
     <Position X="4.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
@@ -110,7 +117,7 @@
   <Interface Name="Mindstep.EasterEgg.Engine.IScriptEngine" Collapsed="true">
     <Position X="8.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Script\IScriptEngine.cs</FileName>
     </TypeIdentifier>
   </Interface>
