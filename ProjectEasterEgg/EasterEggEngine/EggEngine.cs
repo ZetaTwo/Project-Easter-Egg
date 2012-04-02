@@ -8,21 +8,76 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Mindstep.EasterEgg.Game;
 
-namespace GameClient
+namespace Mindstep.EasterEgg.Engine
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class EggEngine : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public Game1()
+        public ISoundManager Sound
+        {
+            get
+            {
+                return Services.GetService(typeof(ISoundManager)) as ISoundManager;
+            }
+        }
+
+        public IGraphicsManager Graphics
+        {
+            get
+            {
+                return Services.GetService(typeof(IGraphicsManager)) as IGraphicsManager;
+            }
+        }
+
+        public IPhysicsManager Physics
+        {
+            get
+            {
+                return Services.GetService(typeof(IPhysicsManager)) as IPhysicsManager;
+            }
+        }
+
+        public IInputManager Input
+        {
+            get
+            {
+                return Services.GetService(typeof(IInputManager)) as IInputManager;
+            }
+        }
+
+        public IStorageManager Storage
+        {
+            get
+            {
+                return Services.GetService(typeof(IStorageManager)) as IStorageManager;
+            }
+        }
+
+        public IScriptEngine Script
+        {
+            get
+            {
+                return Services.GetService(typeof(IScriptEngine)) as IScriptEngine;
+            }
+        }
+
+        public EggEngine()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            Services.AddService(typeof(IScriptEngine), new ScriptEngine());
+            Services.AddService(typeof(IPhysicsManager), new PhysicsManager());
+            Services.AddService(typeof(ISoundManager), new SoundManager());
+            Services.AddService(typeof(IInputManager), new InputManager());
+            Services.AddService(typeof(IGraphicsManager), new GraphicsManager());
         }
 
         /// <summary>
@@ -71,6 +126,8 @@ namespace GameClient
                 this.Exit();
 
             // TODO: Add your update logic here
+            Input.Update();
+            Script.Update();
 
             base.Update(gameTime);
         }
@@ -84,6 +141,7 @@ namespace GameClient
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            Graphics.Draw();
 
             base.Draw(gameTime);
         }
