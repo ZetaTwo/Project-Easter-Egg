@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameClientContent", "GameCl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCommons", "GameCommons\GameCommons.csproj", "{8CC9ECC9-CFD1-4180-8750-9182A69FE103}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor\MapEditor.csproj", "{697DD7AF-D754-49AC-A7B7-C9D2A02701F9}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingArea", "TestingArea\TestingArea.csproj", "{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTests", "GameTests\GameTests.csproj", "{391FC111-A70A-42BD-B7A4-791DDB7CEF50}"
@@ -65,6 +66,14 @@ Global
 		{8CC9ECC9-CFD1-4180-8750-9182A69FE103}.Release|Mixed Platforms.Build.0 = Release|x86
 		{8CC9ECC9-CFD1-4180-8750-9182A69FE103}.Release|x86.ActiveCfg = Release|x86
 		{8CC9ECC9-CFD1-4180-8750-9182A69FE103}.Release|x86.Build.0 = Release|x86
+		{697DD7AF-D754-49AC-A7B7-C9D2A02701F9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{697DD7AF-D754-49AC-A7B7-C9D2A02701F9}.Debug|x86.ActiveCfg = Debug|x86
+		{81B2C2D0-8DDB-4616-A381-27E78F15C115}.Debug|x86.ActiveCfg = Debug|x86
+		{81B2C2D0-8DDB-4616-A381-27E78F15C115}.Debug|x86.Build.0 = Debug|x86
+		{697DD7AF-D754-49AC-A7B7-C9D2A02701F9}.Release|x86.Build.0 = Release|x86
+		{910B4073-D6FE-47F4-9BB7-311E2D011C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B2C2D0-8DDB-4616-A381-27E78F15C115}.Release|x86.ActiveCfg = Release|x86
+		{81B2C2D0-8DDB-4616-A381-27E78F15C115}.Release|x86.Build.0 = Release|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Debug|Mixed Platforms.Build.0 = Debug|x86

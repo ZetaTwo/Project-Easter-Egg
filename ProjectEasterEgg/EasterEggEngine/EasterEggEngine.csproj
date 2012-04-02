@@ -59,13 +59,23 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character.cs" />
+    <Compile Include="Dialogue.cs" />
+    <Compile Include="DialogueChoice.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\GameEntity.cs" />
     <Compile Include="Game\GameEntitySolid.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\IDrawable.cs" />
+    <Compile Include="Graphics\IGraphicsManager.cs" />
+    <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="IScriptEngine.cs" />
+    <Compile Include="IScriptTask.cs" />
+    <Compile Include="ScriptState.cs" />
+    <Compile Include="Storage\IStorageManager.cs" />
+    <Compile Include="Physics\IPhysicsManager.cs" />
+    <Compile Include="Script\IScriptEngine.cs" />
+    <Compile Include="Sound\ISoundManager.cs" />
     <Compile Include="Physics\Box.cs" />
     <Compile Include="Physics\IBox.cs" />
     <Compile Include="Physics\PhysicsManager.cs" />
@@ -73,12 +83,13 @@
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\Script.cs" />
     <Compile Include="Script\ScriptEngine.cs" />
-    <Compile Include="Script\ScriptTask.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundEngine.cs" />
+    <Compile Include="Storage\StorageManager.cs" />
+    <Compile Include="Game\World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Stoorage\" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameCommons\GameCommons.csproj">
@@ -86,10 +97,7 @@
       <Name>GameCommons</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
