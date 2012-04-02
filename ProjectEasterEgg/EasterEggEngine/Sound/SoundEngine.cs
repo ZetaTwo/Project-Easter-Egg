@@ -2,19 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mindstep.EasterEgg.Engine
 {
     public class SoundManager : ISoundManager
     {
-        public void PlaySound()
+        EggEngine engine;
+        public EggEngine Engine
         {
-            throw new System.NotImplementedException();
+            get { return engine; }
         }
 
-        public Sound GetSound()
+        SoundManager(EggEngine _engine)
         {
-            throw new System.NotImplementedException();
+            engine = _engine;
+        }
+
+        public void PlaySound(string soundName)
+        {
+            SoundEffect soundEffect = Engine.Content.Load<SoundEffect>(soundName);
+            soundEffect.Play();
+        }
+
+        public SoundEffect GetSound(string soundName)
+        {
+            return Engine.Content.Load<SoundEffect>(soundName);
         }
     }
 }
