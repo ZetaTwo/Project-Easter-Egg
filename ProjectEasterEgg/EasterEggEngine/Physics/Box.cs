@@ -5,8 +5,31 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Box : IBox, IHasNeighbours<Box>
+    public class Box : IBox
     {
-        
+
+        public Microsoft.Xna.Framework.Vector3 Offset
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int Size
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Character.cs" />
     <Compile Include="Game\IGameEntity.cs" />
+    <Compile Include="Physics\IHasNeighbours.cs" />
+    <Compile Include="Physics\Node.cs" />
     <Compile Include="Script\Dialogue.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\GameEntity.cs" />

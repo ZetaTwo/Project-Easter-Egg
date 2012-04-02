@@ -10,7 +10,7 @@ namespace Mindstep.EasterEgg.Game.Scripts
     {
         public override IEnumerator<float> ScriptContent()
         {
-            yield return 0f;
+            yield break;
         }
     }
 }

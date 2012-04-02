@@ -16,7 +16,9 @@ namespace Mindstep.EasterEgg.Engine.Input
 
         public MousePointer(EggEngine engine)
             : base(engine)
-        { }
+        {
+            Engine.Script.AddScript(new MousePointerScript(this));
+        }
 
         public override void Draw()
         {
@@ -40,9 +42,11 @@ namespace Mindstep.EasterEgg.Engine.Input
 
         public override IEnumerator<float> ScriptContent()
         {
-            pointer.Update();
-
-            yield return 0;
+            while (true)
+            {
+                pointer.Update();
+                yield return 0;
+            }
         }
     }
 }

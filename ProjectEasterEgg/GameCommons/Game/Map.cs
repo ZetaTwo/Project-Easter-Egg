@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public interface IPhysicsManager
+    public class Map
     {
     }
 }

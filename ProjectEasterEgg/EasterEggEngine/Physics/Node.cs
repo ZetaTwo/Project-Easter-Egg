@@ -5,17 +5,22 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    class Node : IHasNeighbours<Node>
+    public class Node : IHasNeighbours<Node>
     {
-        private int x { get; }
-        private int y { get; }
-        private int z { get; }
+        int x;
+        public int X { get { return x; } }
+
+        int y;
+        public int Y { get { return y; } }
+
+        int z;
+        public int Z  { get { return z; } }
 
         Node[][][] worldMatrix;
 
-        IEnumerable<Node> Neighbours { get { return this.getNeighbours(worldMatrix); } }
+        public IEnumerable<Node> Neighbours { get { return this.getNeighbours(worldMatrix); } }
 
-        public void Node(Node[][][] _worldMatrix)
+        public Node(Node[][][] _worldMatrix)
         {
             worldMatrix = _worldMatrix;
         }
@@ -24,60 +29,60 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             List<Node> neighbours = new List<Node>();
 
-            if(x != 0 && y != 0)
+            if(X != 0 && Y != 0)
             {
-                neighbours.Add(worldMatrix[x-1][y-1][z]);
-                neighbours.Add(worldMatrix[x-1][y][z]);
-                neighbours.Add(worldMatrix[x][y-1][z]);
-                neighbours.Add(worldMatrix[x+1][y-1][z]);
-                neighbours.Add(worldMatrix[x-1][y+1][z]);
-                neighbours.Add(worldMatrix[x+1][y][z]);
-                neighbours.Add(worldMatrix[x][y + 1][z]);
-                neighbours.Add(worldMatrix[x+1][y + 1][z]);
+                neighbours.Add(worldMatrix[X-1][Y-1][Z]);
+                neighbours.Add(worldMatrix[X-1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y-1][Z]);
+                neighbours.Add(worldMatrix[X+1][Y-1][Z]);
+                neighbours.Add(worldMatrix[X-1][Y+1][Z]);
+                neighbours.Add(worldMatrix[X+1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X+1][Y + 1][Z]);
             }
-            else if (x == 0)
+            else if (X == 0)
             {
-                neighbours.Add(worldMatrix[x][y - 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y - 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y][z]);
-                neighbours.Add(worldMatrix[x][y + 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y + 1][z]);
+                neighbours.Add(worldMatrix[X][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
             }
-            else if (y == 0)
+            else if (Y == 0)
             {
-                neighbours.Add(worldMatrix[x - 1][y][z]);
-                neighbours.Add(worldMatrix[x - 1][y + 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y][z]);
-                neighbours.Add(worldMatrix[x][y + 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y + 1][z]);
+                neighbours.Add(worldMatrix[X - 1][Y][Z]);
+                neighbours.Add(worldMatrix[X - 1][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
             }
-            else if (x == neighbours.Count)
+            else if (X == neighbours.Count)
             {
-                neighbours.Add(worldMatrix[x - 1][y - 1][z]);
-                neighbours.Add(worldMatrix[x - 1][y][z]);
-                neighbours.Add(worldMatrix[x][y - 1][z]);
-                neighbours.Add(worldMatrix[x - 1][y + 1][z]);
-                neighbours.Add(worldMatrix[x][y + 1][z]);
+                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X - 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X - 1][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X][Y + 1][Z]);
             }
-            else if (y == neighbours.Count)
+            else if (Y == neighbours.Count)
             {
-                neighbours.Add(worldMatrix[x - 1][y - 1][z]);
-                neighbours.Add(worldMatrix[x - 1][y][z]);
-                neighbours.Add(worldMatrix[x][y - 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y - 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y][z]);
+                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X - 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y][Z]);
             }
-            else if (x == 0 && y == 0)
+            else if (X == 0 && Y == 0)
             {
-                neighbours.Add(worldMatrix[x + 1][y + 1][z]);
-                neighbours.Add(worldMatrix[x + 1][y][z]);
-                neighbours.Add(worldMatrix[x][y + 1][z]);
+                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
+                neighbours.Add(worldMatrix[X + 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y + 1][Z]);
             }
-            else if (x == neighbours.Count && y == neighbours.Count)
+            else if (X == neighbours.Count && Y == neighbours.Count)
             {
-                neighbours.Add(worldMatrix[x - 1][y - 1][z]);
-                neighbours.Add(worldMatrix[x - 1][y][z]);
-                neighbours.Add(worldMatrix[x][y - 1][z]);
+                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
+                neighbours.Add(worldMatrix[X - 1][Y][Z]);
+                neighbours.Add(worldMatrix[X][Y - 1][Z]);
             }
 
             return neighbours;

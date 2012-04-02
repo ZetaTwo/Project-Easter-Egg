@@ -37,7 +37,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
     }
 
-    class Path<Node> : IEnumerable<Node>
+    public class Path<Node> : IEnumerable<Node>
     {
         public Node LastStep { get; private set; }
         public Path<Node> PreviousSteps { get; private set; }
@@ -73,8 +73,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
             throw new System.NotImplementedException();
         }
 
-       
-
         public float estimate(Node a, double b)
         {
             return 0;
@@ -83,7 +81,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         static public Path<Node> FindPath<Node>(
             Node start,
             Node destination,
-            Func<Node, double> estimate)2q6
+            Func<Node, double> estimate)
             where Node : IHasNeighbours<Node>
         {
             var closed = new HashSet<Node>();
