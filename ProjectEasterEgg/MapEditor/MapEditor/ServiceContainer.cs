@@ -1,4 +1,4 @@
-﻿#region File Description
+#region File Description
 //-----------------------------------------------------------------------------
 // ServiceContainer.cs
 //
@@ -19,7 +19,7 @@ namespace MapEditor
     /// to pass shared services between different components, for instance the
     /// ContentManager uses it to locate the IGraphicsDeviceService implementation.
     /// </summary>
-    public class ServiceProvider : IServiceProvider
+    public class ServiceContainer : IServiceProvider
     {
         Dictionary<Type, object> services = new Dictionary<Type, object>();
 

@@ -1,4 +1,4 @@
-﻿#region File Description
+#region File Description
 //-----------------------------------------------------------------------------
 // GraphicsDeviceService.cs
 //
@@ -108,7 +108,7 @@ namespace MapEditor
             }
         }
 
-
+        
         /// <summary>
         /// Resets the graphics device to whichever is bigger out of the specified
         /// resolution or its current size. This behavior means the device will
@@ -128,7 +128,7 @@ namespace MapEditor
                 DeviceReset(this, EventArgs.Empty);
         }
 
-
+        
         /// <summary>
         /// Gets the current graphics device.
         /// </summary>

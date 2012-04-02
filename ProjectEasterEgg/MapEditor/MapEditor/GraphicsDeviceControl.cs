@@ -1,4 +1,4 @@
-﻿#region File Description
+#region File Description
 //-----------------------------------------------------------------------------
 // GraphicsDeviceControl.cs
 //
@@ -56,12 +56,12 @@ namespace MapEditor
         /// This can be used with components such as the ContentManager,
         /// which use this service to look up the GraphicsDevice.
         /// </summary>
-        public ServiceProvider Services
+        public ServiceContainer Services
         {
             get { return services; }
         }
 
-        ServiceProvider services = new ServiceProvider();
+        ServiceContainer services = new ServiceContainer();
 
 
         #endregion
