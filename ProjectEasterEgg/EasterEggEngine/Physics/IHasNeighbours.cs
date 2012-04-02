@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Box : IBox, IHasNeighbours<Box>
+    interface IHasNeighbours<N>
     {
-        
+        IEnumerable<N> Neighbours { get; }
     }
 }
