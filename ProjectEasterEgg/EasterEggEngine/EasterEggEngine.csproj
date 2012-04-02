@@ -97,7 +97,6 @@
       <Name>GameCommons</Name>
     </ProjectReference>
   </ItemGroup>
-    <None Include="ClassDiagram2.cd" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
