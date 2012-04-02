@@ -1,14 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Mindstep.EasterEgg.Game;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -68,12 +60,15 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
-        public EggEngine()
+        public EggEngine(Script startScript)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            Services.AddService(typeof(IScriptEngine), new ScriptEngine());
+            ScriptEngine scriptEngine = new ScriptEngine(this);
+            scriptEngine.AddScript(startScript);
+            Services.AddService(typeof(IScriptEngine), scriptEngine);
+
             Services.AddService(typeof(IPhysicsManager), new PhysicsManager());
             Services.AddService(typeof(ISoundManager), new SoundManager());
             Services.AddService(typeof(IInputManager), new InputManager());
@@ -127,7 +122,7 @@ namespace Mindstep.EasterEgg.Engine
 
             // TODO: Add your update logic here
             Input.Update();
-            Script.Update();
+            Script.Update(gameTime);
 
             base.Update(gameTime);
         }

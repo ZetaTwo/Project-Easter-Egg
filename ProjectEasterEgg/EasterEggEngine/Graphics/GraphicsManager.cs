@@ -7,7 +7,18 @@ namespace Mindstep.EasterEgg.Engine
 {
     public class GraphicsManager : IGraphicsManager
     {
-        private List<IDrawable> drawableObjects;
+        private World currentWorld;
+
+        public World CurrentWorld
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
     
         public void Draw()
         {
@@ -22,6 +33,11 @@ namespace Mindstep.EasterEgg.Engine
         public void RemoveObject()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void AddObject()
+        {
+            throw new NotImplementedException();
         }
     }
 }

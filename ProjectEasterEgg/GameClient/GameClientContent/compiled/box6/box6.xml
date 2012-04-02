@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<animations>
+		<animation name="still" durations="1" />
+	</animations>
+	<boxes>
+		<box id="0" size="6" offset="0 0 0" />
+	</boxes>
+</root>

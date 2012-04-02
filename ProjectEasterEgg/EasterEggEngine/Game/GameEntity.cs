@@ -7,5 +7,9 @@ namespace Mindstep.EasterEgg.Engine
 {
     public class GameEntity : IDrawable
     {
+        public void Draw()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

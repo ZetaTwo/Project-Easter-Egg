@@ -10,7 +10,7 @@
   <Class Name="Mindstep.EasterEgg.Engine.GameEntity" Collapsed="true">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Game\GameEntity.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -18,15 +18,22 @@
   <Class Name="Mindstep.EasterEgg.Engine.GameEntitySolid" Collapsed="true">
     <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Game\GameEntitySolid.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.World" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Game\World.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="Mindstep.EasterEgg.Engine.GraphicsManager" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAgAAAAAAAAAAAAAIAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAACAAAAAAAgAAAAAAAQAABAEIAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Graphics\GraphicsManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -42,7 +49,7 @@
   <Class Name="Mindstep.EasterEgg.Engine.Box" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="3" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
       <FileName>Physics\Box.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -50,32 +57,26 @@
   <Class Name="Mindstep.EasterEgg.Engine.PhysicsManager" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="3" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAIAAAAAAA=</HashCode>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAABAAAAAAQAAAIAAAAAAA=</HashCode>
       <FileName>Physics\PhysicsManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="Mindstep.EasterEgg.Engine.Script" Collapsed="true">
+  <Class Name="Mindstep.EasterEgg.Engine.Script" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="4.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <HashCode>AAEAAAAAAAAAABAAAAAAAAAAAAAAAAAEBAAAAAQAAAA=</HashCode>
       <FileName>Script\Script.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Mindstep.EasterEgg.Engine.ScriptEngine" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAEBAAAAAQAAAA=</HashCode>
       <FileName>Script\ScriptEngine.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="Mindstep.EasterEgg.Engine.ScriptTask" Collapsed="true">
-    <Position X="8.25" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Script\ScriptTask.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Class Name="Mindstep.EasterEgg.Engine.Sound" Collapsed="true">
     <Position X="3" Y="2.5" Width="1.5" />
@@ -96,9 +97,37 @@
     <Position X="6.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>StorageManager.cs</FileName>
+      <FileName>Storage\StorageManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.ScriptState" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AaAAAAAAAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ScriptState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.Character">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.Dialogue">
+    <Position X="10.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAACAAAAAAQgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dialogue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mindstep.EasterEgg.Engine.DialogueChoice">
+    <Position X="10.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DialogueChoice.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Interface Name="Mindstep.EasterEgg.Engine.IDrawable" Collapsed="true">
     <Position X="4.75" Y="3.75" Width="1.5" />
@@ -107,11 +136,18 @@
       <FileName>Graphics\IDrawable.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="Mindstep.EasterEgg.Engine.IScriptEngine" Collapsed="true">
-    <Position X="8.25" Y="4.5" Width="1.5" />
+  <Interface Name="Mindstep.EasterEgg.Engine.IGraphicsManager" Collapsed="true">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAgAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\IGraphicsManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mindstep.EasterEgg.Engine.IInputManager" Collapsed="true">
+    <Position X="8.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Script\IScriptEngine.cs</FileName>
+      <FileName>Input\IInputManager.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Mindstep.EasterEgg.Engine.IPhysicsObject" Collapsed="true">
@@ -128,27 +164,6 @@
       <FileName>Physics\IBox.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="Mindstep.EasterEgg.Engine.IScript" Collapsed="true">
-    <Position X="6.5" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
-      <FileName>Script\IScript.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="Mindstep.EasterEgg.Engine.ISoundManager" Collapsed="true">
-    <Position X="3" Y="5.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAABAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Sound\ISoundManager.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="Mindstep.EasterEgg.Engine.IInputManager" Collapsed="true">
-    <Position X="8.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Input\IInputManager.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="Mindstep.EasterEgg.Engine.IPhysicsManager" Collapsed="true">
     <Position X="3" Y="4.5" Width="1.5" />
     <TypeIdentifier>
@@ -156,18 +171,39 @@
       <FileName>Physics\IPhysicsManager.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="Mindstep.EasterEgg.Engine.IGraphicsManager" Collapsed="true">
-    <Position X="6.5" Y="3.75" Width="1.5" />
+  <Interface Name="Mindstep.EasterEgg.Engine.IScript" Collapsed="true">
+    <Position X="6.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAgAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IGraphicsManager.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Script\IScript.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mindstep.EasterEgg.Engine.IScriptEngine" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Script\IScriptEngine.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mindstep.EasterEgg.Engine.ISoundManager" Collapsed="true">
+    <Position X="4.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sound\ISoundManager.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Mindstep.EasterEgg.Engine.IStorageManager" Collapsed="true">
-    <Position X="4.75" Y="5.25" Width="1.5" />
+    <Position X="6.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>IStorageManager.cs</FileName>
+      <FileName>Storage\IStorageManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mindstep.EasterEgg.Engine.IScriptTask" Collapsed="true">
+    <Position X="3" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IScriptTask.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

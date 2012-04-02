@@ -5,14 +5,12 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public interface IScript
+    public interface IScript : IEnumerable<float>
     {
-        bool Active
+        IScriptEngine Engine
         {
             get;
             set;
         }
-
-        void GetTask();
     }
 }

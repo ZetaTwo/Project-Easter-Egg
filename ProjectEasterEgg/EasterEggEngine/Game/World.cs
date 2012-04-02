@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public class ScriptTask
+    public class World
     {
+        private List<IDrawable> drawableObjects;
     }
 }

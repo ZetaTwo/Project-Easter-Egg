@@ -2,25 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public class Script
+    public abstract class Script : IScript
     {
-        public bool Active
+        IScriptEngine engine;
+        public IScriptEngine Engine
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
+            get { return engine; }
+            set { engine = value; }
         }
-    
-        public System.Collections.Generic.IEnumerable<ScriptTask> GetTask()
+
+        public IEnumerator<float> GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            return ScriptContent();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public abstract IEnumerator<float> ScriptContent();
+
+        protected float Wait(float duration)
+        {
+            return duration;
         }
     }
 }

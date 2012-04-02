@@ -13,5 +13,15 @@ namespace Mindstep.EasterEgg.Engine
         {
             throw new System.NotImplementedException();
         }
+
+        public void AddObject()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveObject()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

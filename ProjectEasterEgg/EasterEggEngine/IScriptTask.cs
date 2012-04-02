@@ -6,16 +6,14 @@ using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public interface IScriptEngine
+    public interface IScriptTask
     {
-        EggEngine Engine
+        bool Done
         {
             get;
+            set;
         }
-    
+
         void Update(GameTime gameTime);
-        void AddScript(IScript script);
-
-
     }
 }
