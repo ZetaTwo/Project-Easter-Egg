@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public interface IScript : IEnumerable<ScriptTask>
+    public interface IScript : IEnumerable<float>
     {
-        bool Active
+        IScriptEngine Engine
         {
             get;
             set;

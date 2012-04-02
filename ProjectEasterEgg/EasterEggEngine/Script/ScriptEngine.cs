@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -13,29 +14,30 @@ namespace Mindstep.EasterEgg.Engine
             get { return engine; }
         }
 
-        private List<IScript> scripts = new List<IScript>();
+        private List<ScriptState> scripts = new List<ScriptState>();
 
 
-        public ScriptEngine(EggEngine _engine, IScript startScript)
+        public ScriptEngine(EggEngine _engine)
         {
             engine = _engine;
-            scripts.Add(startScript);
         }
     
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            foreach (IScript script in scripts)
+            // execute all of our scripts
+            foreach (var scriptState in scripts)
             {
-                foreach(ScriptTask task in script)
-                {
-
-                }
+                scriptState.Execute(gameTime);
             }
+
+            // remove any completed scripts
+            scripts.RemoveAll(s => s.IsComplete);
         }
 
         public void AddScript(IScript script)
         {
-            scripts.Add(script);
+            script.Engine = this;
+            scripts.Add(new ScriptState(script));
         }
     }
 }

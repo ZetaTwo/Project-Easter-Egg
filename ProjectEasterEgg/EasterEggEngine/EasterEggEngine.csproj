@@ -67,6 +67,8 @@
     <Compile Include="Graphics\IGraphicsManager.cs" />
     <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="IScriptTask.cs" />
+    <Compile Include="ScriptState.cs" />
     <Compile Include="Storage\IStorageManager.cs" />
     <Compile Include="Physics\IPhysicsManager.cs" />
     <Compile Include="Script\IScriptEngine.cs" />
@@ -84,7 +86,9 @@
     <Compile Include="Storage\StorageManager.cs" />
     <Compile Include="Game\World.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameCommons\GameCommons.csproj">
       <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>

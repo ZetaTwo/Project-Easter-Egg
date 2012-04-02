@@ -8,9 +8,9 @@ namespace Mindstep.EasterEgg.Game.Scripts
 {
     class StartScript : Script
     {
-        public override IEnumerator<ScriptTask> ScriptContent()
+        public override IEnumerator<float> ScriptContent()
         {
-            throw new NotImplementedException();
+            yield return 0f;
         }
     }
 }

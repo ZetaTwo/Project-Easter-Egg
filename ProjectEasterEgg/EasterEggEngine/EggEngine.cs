@@ -65,7 +65,7 @@ namespace Mindstep.EasterEgg.Engine
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            ScriptEngine scriptEngine = new ScriptEngine(this, startScript);
+            ScriptEngine scriptEngine = new ScriptEngine(this);
             scriptEngine.AddScript(startScript);
             Services.AddService(typeof(IScriptEngine), scriptEngine);
 
@@ -122,7 +122,7 @@ namespace Mindstep.EasterEgg.Engine
 
             // TODO: Add your update logic here
             Input.Update();
-            Script.Update();
+            Script.Update(gameTime);
 
             base.Update(gameTime);
         }

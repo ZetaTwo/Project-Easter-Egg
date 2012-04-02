@@ -8,23 +8,14 @@ namespace Mindstep.EasterEgg.Engine
 {
     public abstract class Script : IScript
     {
-        public bool Active
+        IScriptEngine engine;
+        public IScriptEngine Engine
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-    
-        public System.Collections.Generic.IEnumerable<ScriptTask> GetTask()
-        {
-            throw new System.NotImplementedException();
+            get { return engine; }
+            set { engine = value; }
         }
 
-        public IEnumerator<ScriptTask> GetEnumerator()
+        public IEnumerator<float> GetEnumerator()
         {
             return ScriptContent();
         }
@@ -34,6 +25,6 @@ namespace Mindstep.EasterEgg.Engine
             return GetEnumerator();
         }
 
-        public abstract IEnumerator<ScriptTask> ScriptContent();
+        public abstract IEnumerator<float> ScriptContent();
     }
 }
