@@ -44,12 +44,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="compiled\box6\box6.xmll">
+    <None Include="compiled\box6\box6.xml">
       <Name>box6</Name>
-    </Compile>
-    <Compile Include="compiled\burningstick\burningstick.xmll">
+      <Importer>XmlImporter</Importer>
+    </None>
+    <None Include="compiled\burningstick\burningstick.xml">
       <Name>burningstick</Name>
-    </Compile>
+      <Importer>XmlImporter</Importer>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="compiled\burningstick\animations\burning\0\0.png">

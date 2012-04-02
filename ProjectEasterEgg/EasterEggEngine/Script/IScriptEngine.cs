@@ -8,6 +8,6 @@ namespace Mindstep.EasterEgg.Engine
     public interface IScriptEngine
     {
         void Update();
-        void AddScript(Script script);
+        void AddScript(IScript script);
     }
 }

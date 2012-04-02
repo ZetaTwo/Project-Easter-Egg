@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mindstep.EasterEgg.Engine;
 
-namespace Mindstep.EasterEgg.Engine
+namespace Mindstep.EasterEgg.Game.Scripts
 {
-    public class GameEntity : IDrawable
+    class StartScript : Script
     {
-        public void Draw()
+        public override IEnumerator<ScriptTask> ScriptContent()
         {
             throw new NotImplementedException();
         }

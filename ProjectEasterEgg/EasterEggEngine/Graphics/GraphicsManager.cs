@@ -34,5 +34,10 @@ namespace Mindstep.EasterEgg.Engine
         {
             throw new System.NotImplementedException();
         }
+
+        public void AddObject()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

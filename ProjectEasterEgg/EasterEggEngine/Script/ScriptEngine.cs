@@ -13,12 +13,13 @@ namespace Mindstep.EasterEgg.Engine
             get { return engine; }
         }
 
-        private List<IScript> scripts;
+        private List<IScript> scripts = new List<IScript>();
 
 
-        public ScriptEngine(EggEngine _engine)
+        public ScriptEngine(EggEngine _engine, IScript startScript)
         {
             engine = _engine;
+            scripts.Add(startScript);
         }
     
         public void Update()
@@ -27,6 +28,7 @@ namespace Mindstep.EasterEgg.Engine
             {
                 foreach(ScriptTask task in script)
                 {
+
                 }
             }
         }

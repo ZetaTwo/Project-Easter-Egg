@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public class Script : IScript
+    public abstract class Script : IScript
     {
         public bool Active
         {

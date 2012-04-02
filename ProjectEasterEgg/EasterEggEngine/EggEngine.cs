@@ -65,7 +65,7 @@ namespace Mindstep.EasterEgg.Engine
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            ScriptEngine scriptEngine = new ScriptEngine();
+            ScriptEngine scriptEngine = new ScriptEngine(this, startScript);
             scriptEngine.AddScript(startScript);
             Services.AddService(typeof(IScriptEngine), scriptEngine);
 
