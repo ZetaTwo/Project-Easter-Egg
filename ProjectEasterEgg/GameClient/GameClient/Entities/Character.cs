@@ -8,5 +8,14 @@ namespace Mindstep.EasterEgg.Game
 {
     public class Character : GameEntitySolid
     {
+        public Character(EggEngine engine)
+            : base(engine)
+        {
+        }
+
+        public override void Draw()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

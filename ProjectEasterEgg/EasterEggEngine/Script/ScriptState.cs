@@ -34,11 +34,8 @@ namespace Mindstep.EasterEgg.Engine
             {
                 bool finished = true;
 
-                do
-                {
-                    finished = !scriptEnumerator.MoveNext();
-                    sleep = scriptEnumerator.Current;
-                } while (sleep <= 0 && !finished);
+                finished = !scriptEnumerator.MoveNext();
+                sleep = scriptEnumerator.Current;
 
                 if (finished)
                 {

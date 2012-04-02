@@ -14,7 +14,7 @@ namespace Mindstep.EasterEgg.Engine
             get { return engine; }
         }
 
-        SoundManager(EggEngine _engine)
+        public SoundManager(EggEngine _engine)
         {
             engine = _engine;
         }
