@@ -26,5 +26,10 @@ namespace Mindstep.EasterEgg.Engine
         }
 
         public abstract IEnumerator<float> ScriptContent();
+
+        protected float Wait(float duration)
+        {
+            return duration;
+        }
     }
 }

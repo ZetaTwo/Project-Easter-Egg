@@ -59,6 +59,9 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character.cs" />
+    <Compile Include="Dialogue.cs" />
+    <Compile Include="DialogueChoice.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\GameEntity.cs" />
     <Compile Include="Game\GameEntitySolid.cs" />
@@ -80,7 +83,6 @@
     <Compile Include="Script\IScript.cs" />
     <Compile Include="Script\Script.cs" />
     <Compile Include="Script\ScriptEngine.cs" />
-    <Compile Include="Script\ScriptTask.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundEngine.cs" />
     <Compile Include="Storage\StorageManager.cs" />
