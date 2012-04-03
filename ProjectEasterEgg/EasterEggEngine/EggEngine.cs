@@ -12,20 +12,13 @@ namespace Mindstep.EasterEgg.Engine
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        World world;
 
         public ISoundManager Sound
         {
             get
             {
                 return Services.GetService(typeof(ISoundManager)) as ISoundManager;
-            }
-        }
-
-        public IGraphicsManager Graphics
-        {
-            get
-            {
-                return Services.GetService(typeof(IGraphicsManager)) as IGraphicsManager;
             }
         }
 
@@ -61,19 +54,16 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
-        public EggEngine(Script startScript)
+        public EggEngine(World _world)
         {
+            world = _world;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            ScriptEngine scriptEngine = new ScriptEngine(this);
-            scriptEngine.AddScript(startScript);
-            Services.AddService(typeof(IScriptEngine), scriptEngine);
-
+            Services.AddService(typeof(IScriptEngine), new ScriptEngine(this));
             Services.AddService(typeof(IPhysicsManager), new PhysicsManager());
             Services.AddService(typeof(ISoundManager), new SoundManager(this));
             Services.AddService(typeof(IInputManager), new InputManager(this));
-            Services.AddService(typeof(IGraphicsManager), new GraphicsManager());
         }
 
         /// <summary>
@@ -123,6 +113,7 @@ namespace Mindstep.EasterEgg.Engine
 
             // TODO: Add your update logic here
             Input.Update(gameTime);
+            world.Update(gameTime);
             Script.Update(gameTime);
 
             base.Update(gameTime);
@@ -137,7 +128,7 @@ namespace Mindstep.EasterEgg.Engine
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            Graphics.Draw();
+            world.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

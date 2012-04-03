@@ -8,9 +8,5 @@ namespace Mindstep.EasterEgg.Game
 {
     public class Player : Character
     {
-        public Player(EggEngine engine)
-            : base(engine)
-        {
-        }
     }
 }

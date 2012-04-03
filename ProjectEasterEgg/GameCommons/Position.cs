@@ -7,15 +7,32 @@ namespace Mindstep.EasterEgg.Commons
 {
     public class Position
     {
-        public int X;
-        public int Y;
-        public int Z;
+        private int x;
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        }
+
+        private int y;
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
+        }
+
+        private int z;
+        public int Z
+        {
+            get { return z; }
+            set { z = value; }
+        }
 
         public Position(int x, int y, int z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public Position Clone()
@@ -36,6 +53,26 @@ namespace Mindstep.EasterEgg.Commons
             }
 
             return p.X == X && p.Y == Y && p.Z == Z;
+        }
+
+        public static Position operator+(Position p1, Position p2)
+        {
+            return new Position(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
+        }
+
+        public static Position operator -(Position p1, Position p2)
+        {
+            return p1 + (-p2);
+        }
+
+        public static Position operator -(Position p)
+        {
+            return new Position(-p.X, -p.Y, -p.Z);
+        }
+
+        public static Position operator +(Position p)
+        {
+            return p;
         }
     }
 }

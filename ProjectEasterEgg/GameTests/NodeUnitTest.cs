@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mindstep.EasterEgg.Engine.Physics;
 
 namespace GameTests
 {
@@ -10,13 +11,17 @@ namespace GameTests
     /// Summary description for UnitTest1
     /// </summary>
     [TestClass]
-    public class UnitTest1
+    public class NodeUnitTest
     {
-        public UnitTest1()
+        int[][][] testMatrix1;
+
+        public NodeUnitTest()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+             testMatrix1 = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
+                                                         new int[] {0,0,0,0,0,0},
+                                                         new int[] {0,0,0,0,0,0},
+                                                         new int[] {0,0,0,0,0,0},
+                                                         new int[] {0,0,0,0,0,0}}};
         }
 
         private TestContext testContextInstance;
@@ -60,11 +65,11 @@ namespace GameTests
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestGetNeighbours()
         {
-            //
-            // TODO: Add test logic here
-            //
+            Node n = new Node(testMatrix1, 0);
+            n.getNeighbours(testMatrix1);
+            Console.WriteLine("hej");
         }
     }
 }

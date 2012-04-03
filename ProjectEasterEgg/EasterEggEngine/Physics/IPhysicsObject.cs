@@ -9,16 +9,7 @@ namespace Mindstep.EasterEgg.Engine
 {
     public interface IPhysicsObject
     {
-        Vector3 Position
-        {
-            get;
-            set;
-        }
-
-        List<Block> Blocks
-        {
-            get;
-            set;
-        }
+        Position Position { get; }
+        List<Block> Blocks { get; }
     }
 }
