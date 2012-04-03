@@ -13,15 +13,23 @@ namespace GameTests
     [TestClass]
     public class NodeUnitTest
     {
-        int[][][] testMatrix1;
+        Node[][][] testMatrix1;
 
         public NodeUnitTest()
         {
-             testMatrix1 = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
-                                                         new int[] {0,0,0,0,0,0},
-                                                         new int[] {0,0,0,0,0,0},
-                                                         new int[] {0,0,0,0,0,0},
-                                                         new int[] {0,0,0,0,0,0}}};
+             testMatrix1 = new Node[6][][];
+
+            for(int i = 0; i < 6; i++)
+            {
+                testMatrix1[i] = new Node[6][];
+                for(int k = 0; k < 6; k++)
+                {
+                    testMatrix1[i][k] = new Node[1];
+                    Node n = new Node(1,i,k,0);
+                    testMatrix1[i][k][0] = n;
+                }
+            }
+
         }
 
         private TestContext testContextInstance;
@@ -67,9 +75,10 @@ namespace GameTests
         [TestMethod]
         public void TestGetNeighbours()
         {
-            Node n = new Node(testMatrix1, 0);
-            n.getNeighbours(testMatrix1);
-            Console.WriteLine("hej");
+            Node n = new Node(testMatrix1, 0, 1, 1, 0);
+            List<Node> test = n.getNeighbours();
+            Assert.AreEqual(0, test.Count);
+            
         }
     }
 }
