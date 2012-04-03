@@ -21,11 +21,10 @@ namespace Mindstep.EasterEgg.MapEditor
     {
         private SpriteBatch spriteBatch;
         private SpriteEffects spriteEffect;
-        private Texture2D top;
-        private Texture2D topGrid;
-        private Point viewPos;
+        private Texture2D block;
+        private Texture2D grid;
+        private Point offsetToBlock00;
         private int gridSize;
-        private int blockSize;
         private float scale;
         public MainForm MainForm;
 
@@ -39,10 +38,10 @@ namespace Mindstep.EasterEgg.MapEditor
             spriteEffect = SpriteEffects.None;
 
             ContentManager Content = new ContentManager(Services, "MapEditorContent");
-            top = Content.Load<Texture2D>("top");
-            topGrid = Content.Load<Texture2D>("topGrid");
-            viewPos = new Point(Width/2, Height/2);
-            gridSize = topGrid.Width;
+            block = Content.Load<Texture2D>("topBlock");
+            grid = Content.Load<Texture2D>("topGrid");
+            offsetToBlock00 = new Point(Width/2, Height/2);
+            gridSize = grid.Width;
 
             // Hook the idle event to constantly redraw our animation.
             Application.Idle += delegate { Invalidate(); };
@@ -54,40 +53,68 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         protected override void Draw()
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            for (int x = viewPos.X%Width-Width; x < Width; x+=topGrid.Width)
+            int offsetX = offsetToBlock00.X/gridSize;
+            int offsetY = offsetToBlock00.Y/gridSize;
+            for (int x = 0; x <= Width/gridSize+1; x++)
             {
-                for (int y = viewPos.Y%Height-Height; y < Height; y += topGrid.Height)
+                for (int y = 0; y <= Height/gridSize+1; y++)
                 {
-                    spriteBatch.Draw(topGrid, new Vector2(x, y), null, Color.White, 0, Vector2.Zero, 1, spriteEffect, 1f);
+                    drawBox(grid, new Position(x - offsetX-1, y - offsetY-1, 0), Color.White, 1);
                 }
             }
 
-            foreach (Block block in MainForm.Blocks)
+            foreach (Block b in MainForm.Blocks)
             {
-                Vector2 coords = new Vector2(block.Offset.X, block.Offset.Y);
-                int height = block.Offset.Z-MainForm.CurrentHeight;
+                int height = b.Offset.Z-MainForm.CurrentHeight;
                 if (height == 0)
                 {
-                    spriteBatch.Draw(top, coords, null, Color.Green, 0, Vector2.Zero, 1, spriteEffect, 0);
+                    drawBox(block, b.Offset, Color.Green, 0);
                 }
                 else
                 {
-                    spriteBatch.Draw(top, coords, null, Color.Red, 0, Vector2.Zero, 1, spriteEffect, .5f);
+                    drawBox(block, b.Offset, Color.Red, .5f);
                 }
             }
             spriteBatch.End();
         }
 
-        public System.Drawing.Point getClosestGridPoint(System.Drawing.Point rp)
+        private void drawBox(Texture2D grid, Position pos, Color color, float depth)
         {
-            return new System.Drawing.Point(rp.X + gridSize - viewPos.X % gridSize - rp.X % gridSize, rp.Y - viewPos.Y % gridSize - rp.Y % gridSize);
+            Vector2 coords = getScreenCoord(pos);
+            spriteBatch.Draw(grid, coords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth);
         }
 
-        internal void toggleBlock(System.Drawing.Point p)
+        private Vector2 getScreenCoord(Position pos)
         {
+            int x = pos.X * gridSize + offsetToBlock00.X;
+            int y = pos.Y * gridSize + offsetToBlock00.Y;
+            return new Vector2(x, y);
+        }
+
+        public Point getClosestBlockCoord(Point p)
+        {
+            int x = p.X;
+            x -= offsetToBlock00.X % gridSize;
+            x -= x % gridSize;
+            x /= gridSize;
+            x -= offsetToBlock00.X/gridSize;
+            
+            int y = p.Y;
+            y -= offsetToBlock00.Y % gridSize;
+            y -= y % gridSize;
+            y /= gridSize;
+            y -= offsetToBlock00.Y / gridSize;
+
+            return new Point(x, y);
+        }
+
+        internal void toggleBlock(Point p)
+        {
+            //X and Y screen coordinates are swapped relative
+            //the way we want to represent this top view
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
             for (int i=0; i<MainForm.Blocks.Count; i++)
             {
