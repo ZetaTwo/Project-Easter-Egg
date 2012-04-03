@@ -64,6 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Conversions.cs" />
+    <Compile Include="MainView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>
