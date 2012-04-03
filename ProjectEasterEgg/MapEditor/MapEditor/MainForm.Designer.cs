@@ -1,4 +1,4 @@
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     partial class MainForm
     {
@@ -28,136 +28,60 @@ namespace MapEditor
         /// </summary>
         private void InitializeComponent()
         {
-            this.createblock = new System.Windows.Forms.Button();
-            this.blocksizelabel = new System.Windows.Forms.Label();
-            this.blocksize = new System.Windows.Forms.NumericUpDown();
-            this.vertexColor3 = new System.Windows.Forms.ComboBox();
-            this.vertexColor2 = new System.Windows.Forms.ComboBox();
-            this.vertexColor1 = new System.Windows.Forms.ComboBox();
-            this.topView = new MapEditor.TopView();
-            ((System.ComponentModel.ISupportInitialize)(this.blocksize)).BeginInit();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            this.upButton = new System.Windows.Forms.Button();
+            this.downButton = new System.Windows.Forms.Button();
+            this.layer = new System.Windows.Forms.TextBox();
+            this.layerLabel = new System.Windows.Forms.Label();
+            this.coords = new System.Windows.Forms.Label();
+            this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.SuspendLayout();
             // 
-            // createblock
+            // upButton
             // 
-            this.createblock.Location = new System.Drawing.Point(705, 190);
-            this.createblock.Name = "createblock";
-            this.createblock.Size = new System.Drawing.Size(75, 23);
-            this.createblock.TabIndex = 6;
-            this.createblock.Text = "Create block";
-            this.createblock.UseVisualStyleBackColor = true;
-            this.createblock.MouseDown += new System.Windows.Forms.MouseEventHandler(this.createblock_MouseDown);
-            this.createblock.MouseUp += new System.Windows.Forms.MouseEventHandler(this.createblock_MouseUp);
+            this.upButton.Image = ((System.Drawing.Image)(resources.GetObject("upButton.Image")));
+            this.upButton.Location = new System.Drawing.Point(562, 29);
+            this.upButton.Name = "upButton";
+            this.upButton.Size = new System.Drawing.Size(28, 28);
+            this.upButton.TabIndex = 8;
+            this.upButton.UseVisualStyleBackColor = true;
+            this.upButton.Click += new System.EventHandler(this.upButton_Click);
             // 
-            // blocksizelabel
+            // downButton
             // 
-            this.blocksizelabel.AutoSize = true;
-            this.blocksizelabel.Location = new System.Drawing.Point(726, 216);
-            this.blocksizelabel.Name = "blocksizelabel";
-            this.blocksizelabel.Size = new System.Drawing.Size(54, 13);
-            this.blocksizelabel.TabIndex = 5;
-            this.blocksizelabel.Text = "block size";
+            this.downButton.Image = ((System.Drawing.Image)(resources.GetObject("downButton.Image")));
+            this.downButton.Location = new System.Drawing.Point(562, 89);
+            this.downButton.Name = "downButton";
+            this.downButton.Size = new System.Drawing.Size(28, 28);
+            this.downButton.TabIndex = 9;
+            this.downButton.UseVisualStyleBackColor = true;
+            this.downButton.Click += new System.EventHandler(this.downButton_Click);
             // 
-            // blocksize
+            // layer
             // 
-            this.blocksize.Location = new System.Drawing.Point(744, 232);
-            this.blocksize.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.blocksize.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.blocksize.Name = "blocksize";
-            this.blocksize.Size = new System.Drawing.Size(36, 20);
-            this.blocksize.TabIndex = 4;
-            this.blocksize.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.blocksize.ValueChanged += new System.EventHandler(this.blocksize_ValueChanged);
+            this.layer.Location = new System.Drawing.Point(562, 63);
+            this.layer.Name = "layer";
+            this.layer.ReadOnly = true;
+            this.layer.Size = new System.Drawing.Size(28, 20);
+            this.layer.TabIndex = 10;
+            this.layer.Text = "0";
             // 
-            // vertexColor3
+            // layerLabel
             // 
-            this.vertexColor3.DropDownHeight = 500;
-            this.vertexColor3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.vertexColor3.FormattingEnabled = true;
-            this.vertexColor3.IntegralHeight = false;
-            this.vertexColor3.Items.AddRange(new object[] {
-            "BurlyWood",
-            "Chartreuse",
-            "Coral",
-            "CornflowerBlue",
-            "Cornsilk",
-            "Firebrick",
-            "Fuchsia",
-            "Goldenrod",
-            "Indigo",
-            "Tan",
-            "Teal",
-            "Thistle",
-            "Tomato"});
-            this.vertexColor3.Location = new System.Drawing.Point(677, 540);
-            this.vertexColor3.Name = "vertexColor3";
-            this.vertexColor3.Size = new System.Drawing.Size(103, 21);
-            this.vertexColor3.TabIndex = 3;
-            this.vertexColor3.SelectedIndexChanged += new System.EventHandler(this.vertexColor_SelectedIndexChanged);
+            this.layerLabel.AutoSize = true;
+            this.layerLabel.Location = new System.Drawing.Point(555, 13);
+            this.layerLabel.Name = "layerLabel";
+            this.layerLabel.Size = new System.Drawing.Size(33, 13);
+            this.layerLabel.TabIndex = 11;
+            this.layerLabel.Text = "Layer";
             // 
-            // vertexColor2
+            // coords
             // 
-            this.vertexColor2.DropDownHeight = 500;
-            this.vertexColor2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.vertexColor2.FormattingEnabled = true;
-            this.vertexColor2.IntegralHeight = false;
-            this.vertexColor2.Items.AddRange(new object[] {
-            "BurlyWood",
-            "Chartreuse",
-            "Coral",
-            "CornflowerBlue",
-            "Cornsilk",
-            "Firebrick",
-            "Fuchsia",
-            "Goldenrod",
-            "Indigo",
-            "Tan",
-            "Teal",
-            "Thistle",
-            "Tomato"});
-            this.vertexColor2.Location = new System.Drawing.Point(677, 513);
-            this.vertexColor2.Name = "vertexColor2";
-            this.vertexColor2.Size = new System.Drawing.Size(103, 21);
-            this.vertexColor2.TabIndex = 2;
-            this.vertexColor2.SelectedIndexChanged += new System.EventHandler(this.vertexColor_SelectedIndexChanged);
-            // 
-            // vertexColor1
-            // 
-            this.vertexColor1.DropDownHeight = 500;
-            this.vertexColor1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.vertexColor1.FormattingEnabled = true;
-            this.vertexColor1.IntegralHeight = false;
-            this.vertexColor1.Items.AddRange(new object[] {
-            "BurlyWood",
-            "Chartreuse",
-            "Coral",
-            "CornflowerBlue",
-            "Cornsilk",
-            "Firebrick",
-            "Fuchsia",
-            "Goldenrod",
-            "Indigo",
-            "Tan",
-            "Teal",
-            "Thistle",
-            "Tomato"});
-            this.vertexColor1.Location = new System.Drawing.Point(677, 486);
-            this.vertexColor1.Name = "vertexColor1";
-            this.vertexColor1.Size = new System.Drawing.Size(103, 21);
-            this.vertexColor1.TabIndex = 1;
-            this.vertexColor1.SelectedIndexChanged += new System.EventHandler(this.vertexColor_SelectedIndexChanged);
+            this.coords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.coords.Location = new System.Drawing.Point(694, 187);
+            this.coords.Name = "coords";
+            this.coords.Size = new System.Drawing.Size(98, 13);
+            this.coords.TabIndex = 12;
             // 
             // topView
             // 
@@ -166,22 +90,24 @@ namespace MapEditor
             this.topView.Size = new System.Drawing.Size(196, 184);
             this.topView.TabIndex = 7;
             this.topView.Text = "top view";
+            this.topView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.topView_Click);
+            this.topView.MouseLeave += new System.EventHandler(this.topView_MouseLeave);
+            this.topView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.topView_MouseMove);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 573);
-            this.Controls.Add(this.createblock);
+            this.Controls.Add(this.coords);
+            this.Controls.Add(this.layerLabel);
+            this.Controls.Add(this.layer);
+            this.Controls.Add(this.downButton);
+            this.Controls.Add(this.upButton);
             this.Controls.Add(this.topView);
-            this.Controls.Add(this.vertexColor3);
-            this.Controls.Add(this.blocksizelabel);
-            this.Controls.Add(this.blocksize);
-            this.Controls.Add(this.vertexColor1);
-            this.Controls.Add(this.vertexColor2);
             this.Name = "MainForm";
             this.Text = "WinForms Graphics Device";
-            ((System.ComponentModel.ISupportInitialize)(this.blocksize)).EndInit();
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.MainForm_Scroll);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -190,13 +116,12 @@ namespace MapEditor
         #endregion
 
         private SpriteFontControl spriteFontControl;
-        private System.Windows.Forms.ComboBox vertexColor1;
-        private System.Windows.Forms.ComboBox vertexColor3;
-        private System.Windows.Forms.ComboBox vertexColor2;
-        private System.Windows.Forms.NumericUpDown blocksize;
-        private System.Windows.Forms.Label blocksizelabel;
-        private System.Windows.Forms.Button createblock;
         private TopView topView;
+        private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.Button downButton;
+        private System.Windows.Forms.TextBox layer;
+        private System.Windows.Forms.Label layerLabel;
+        private System.Windows.Forms.Label coords;
     }
 }
 

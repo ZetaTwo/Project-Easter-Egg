@@ -20,6 +20,7 @@ Thumbs.db
 *.cachefile
 *.ilk
 *.log
+*.orig
 [Bb]in
 [Dd]ebug*/
 *.lib

@@ -8,7 +8,7 @@
     <ProjectGuid>{A8A938D0-3179-454F-B390-AA29F2606732}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapEditor</RootNamespace>
+    <RootNamespace>Mindstep.EasterEgg.MapEditor</RootNamespace>
     <AssemblyName>WinFormsGraphicsDevice</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -133,6 +133,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GameCommons\GameCommons.csproj">
+      <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
+      <Name>GameCommons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapEditorContentLibrary\MapEditorContentLibrary.csproj">
       <Project>{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}</Project>
       <Name>MapEditorContentLibrary</Name>

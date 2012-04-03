@@ -4,9 +4,11 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Mindstep.EasterEgg.Commons;
+using System;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     /// <summary>
     /// Example control inherits from GraphicsDeviceControl, which allows it to
@@ -20,12 +22,12 @@ namespace MapEditor
         private SpriteBatch spriteBatch;
         private SpriteEffects spriteEffect;
         private Texture2D top;
-        public bool draggingBlock;
         private Texture2D topGrid;
         private Point viewPos;
         private int gridSize;
         private int blockSize;
         private float scale;
+        public MainForm MainForm;
 
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace MapEditor
             ContentManager Content = new ContentManager(Services, "MapEditorContent");
             top = Content.Load<Texture2D>("top");
             topGrid = Content.Load<Texture2D>("topGrid");
-            viewPos = new Point(-1, -1);
+            viewPos = new Point(Width/2, Height/2);
             gridSize = topGrid.Width;
 
             // Hook the idle event to constantly redraw our animation.
@@ -55,27 +57,49 @@ namespace MapEditor
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            for (int x = viewPos.X; x < Width; x+=topGrid.Width)
+            for (int x = viewPos.X%Width-Width; x < Width; x+=topGrid.Width)
             {
-                for (int y = viewPos.Y; y < Height; y += topGrid.Height)
+                for (int y = viewPos.Y%Height-Height; y < Height; y += topGrid.Height)
                 {
                     spriteBatch.Draw(topGrid, new Vector2(x, y), null, Color.White, 0, Vector2.Zero, 1, spriteEffect, 1f);
                 }
             }
 
-            if (draggingBlock)
+            foreach (Block block in MainForm.Blocks)
             {
-                System.Drawing.Point p = PointToClient(MousePosition);
-                Vector2 closestPoint = new Vector2(p.X + viewPos.X - p.X % gridSize, p.Y + viewPos.Y - p.Y % gridSize);
-                //Vector2 pos = new Vector2(p.X - top.Width / 2, p.Y - top.Height / 2);
-                spriteBatch.Draw(top, closestPoint, null, Color.White, 0, Vector2.Zero, 1, spriteEffect, 0.5f);
+                Vector2 coords = new Vector2(block.Offset.X, block.Offset.Y);
+                int height = block.Offset.Z-MainForm.CurrentHeight;
+                if (height == 0)
+                {
+                    spriteBatch.Draw(top, coords, null, Color.Green, 0, Vector2.Zero, 1, spriteEffect, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(top, coords, null, Color.Red, 0, Vector2.Zero, 1, spriteEffect, .5f);
+                }
             }
             spriteBatch.End();
         }
 
-        internal void placeBlock()
+        public System.Drawing.Point getClosestGridPoint(System.Drawing.Point rp)
         {
-            
+            return new System.Drawing.Point(rp.X + gridSize - viewPos.X % gridSize - rp.X % gridSize, rp.Y - viewPos.Y % gridSize - rp.Y % gridSize);
+        }
+
+        internal void toggleBlock(System.Drawing.Point p)
+        {
+            Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
+            for (int i=0; i<MainForm.Blocks.Count; i++)
+            {
+                if (MainForm.Blocks[i].Offset.Equals(newPos))
+                {
+                    MainForm.Blocks.RemoveAt(i);
+                    return;
+                }
+            }
+
+            //no matching block found, so create one
+            MainForm.Blocks.Add(new Block(newPos));
         }
     }
 }

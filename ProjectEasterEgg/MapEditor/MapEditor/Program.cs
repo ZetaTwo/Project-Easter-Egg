@@ -12,7 +12,7 @@ using System;
 using System.Windows.Forms;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     /// <summary>
     /// The main entry point for the application.

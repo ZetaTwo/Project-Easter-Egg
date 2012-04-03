@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -14,22 +15,7 @@ namespace Mindstep.EasterEgg.Engine
             set;
         }
 
-        List<IBox> Boxes
-        {
-            get;
-            set;
-        }
-    }
-
-    public interface IBox
-    {
-        Vector3 Offset
-        {
-            get;
-            set;
-        }
-
-        int Size
+        List<Block> Blocks
         {
             get;
             set;

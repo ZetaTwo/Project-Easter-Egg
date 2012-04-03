@@ -11,12 +11,15 @@
 using System.Windows.Forms;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     // System.Drawing and the XNA Framework both define Color types.
     // To avoid conflicts, we define shortcut names for them both.
     using GdiColor = System.Drawing.Color;
     using XnaColor = Microsoft.Xna.Framework.Color;
+    using Microsoft.Xna.Framework;
+    using Mindstep.EasterEgg.Commons;
+    using System.Collections.Generic;
 
     
     /// <summary>
@@ -26,74 +29,51 @@ namespace MapEditor
     /// </summary>
     public partial class MainForm : Form
     {
+        public int CurrentHeight { get { return topViewHeight; } }
+
         public MainForm()
         {
             InitializeComponent();
-
-            vertexColor1.SelectedIndex = 1;
-            vertexColor2.SelectedIndex = 2;
-            vertexColor3.SelectedIndex = 4;
+            topView.MainForm = this;
         }
 
+        public List<Block> Blocks = new List<Block>();
+        private int topViewHeight = 0;
 
-        /// <summary>
-        /// Event handler updates the spinning triangle control when
-        /// one of the three vertex color combo boxes is altered.
-        /// </summary>
-        void vertexColor_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void upButton_Click(object sender, System.EventArgs e)
         {
-            // Which vertex was changed?
-            int vertexIndex;
-
-            if (sender == vertexColor1)
-                vertexIndex = 0;
-            else if (sender == vertexColor2)
-                vertexIndex = 1;
-            else if (sender == vertexColor3)
-                vertexIndex = 2;
-            else
-                return;
-
-            // Which color was selected?
-            ComboBox combo = (ComboBox)sender;
-
-            string colorName = combo.SelectedItem.ToString();
-
-            GdiColor gdiColor = GdiColor.FromName(colorName);
-
-            XnaColor xnaColor = new XnaColor(gdiColor.R, gdiColor.G, gdiColor.B);
+            topViewHeight++;
+            layer.Text = topViewHeight.ToString();
         }
 
-        private void mouseWheel(object sender, MouseEventArgs e)
+        private void downButton_Click(object sender, System.EventArgs e)
         {
-            System.Console.WriteLine(e.Delta);
+            topViewHeight--;
+            layer.Text = topViewHeight.ToString();
         }
 
-        private void spinningTriangleControl_MouseDown(object sender, MouseEventArgs e)
-        {
-            System.Console.WriteLine(e.Delta);
-        }
-
-        private void blocksize_ValueChanged(object sender, System.EventArgs e)
-        {
-            System.Console.WriteLine("change grid size if locked");
-        }
-
-        private void createblock_MouseDown(object sender, MouseEventArgs e)
+        private void topView_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                topView.draggingBlock = true;
+                topView.toggleBlock(topView.getClosestGridPoint(e.Location));
             }
         }
 
-        private void createblock_MouseUp(object sender, MouseEventArgs e)
+        private void MainForm_Scroll(object sender, ScrollEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                topView.draggingBlock = false;
-                topView.placeBlock();
-            }
+            System.Console.WriteLine(e.NewValue);
+        }
+
+        private void topView_MouseMove(object sender, MouseEventArgs e)
+        {
+            System.Drawing.Point p = topView.getClosestGridPoint(e.Location);
+            coords.Text = string.Format("X: {0,-5} Y: {0,-5:G}", p.X, p.Y);
+        }
+
+        private void topView_MouseLeave(object sender, System.EventArgs e)
+        {
+            coords.Text = "";
         }
     }
 }
