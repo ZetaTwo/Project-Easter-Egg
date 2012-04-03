@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Node : IHasNeighbours<Node>
+    public class Node //: IHasNeighbours<Node>
     {
         int x;
         public int X { get { return x; } }
@@ -14,7 +14,11 @@ namespace Mindstep.EasterEgg.Engine.Physics
         public int Y { get { return y; } }
 
         int z;
-        public int Z  { get { return z; } }
+        public int Z { get { return z; } }
+
+        
+
+        
 
         //0=walkable
         //1=not walkable
@@ -22,74 +26,57 @@ namespace Mindstep.EasterEgg.Engine.Physics
         //3=stair down
         public int type;
 
-        Node[][][] worldMatrix;
+        int[][][] worldMatrix;
 
-        public IEnumerable<Node> Neighbours { get { return this.getNeighbours(worldMatrix); } }
+        public IEnumerable<int> Neighbours { get { return this.getNeighbours(worldMatrix); } }
 
-        public Node(Node[][][] _worldMatrix, int _type)
+        public Node(int[][][] _worldMatrix, int _type)
         {
-            worldMatrix = _worldMatrix;
+            //worldMatrix = _worldMatrix;
             type = _type;
         }
 
-        private IEnumerable<Node> getNeighbours(Node[][][] worldMatrix)
+        public static void main(String[] args)
         {
-            List<Node> neighbours = new List<Node>();
+           int[][][] testMatrix = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0}}};
+            Node n = new Node(testMatrix, 0);
+            n.getNeighbours(testMatrix);
+            Console.WriteLine("hej");
 
-            if(X != 0 && Y != 0)
+        }
+
+        private IEnumerable<int> getNeighbours(int[][][] worldMatrix)
+        {
+            int[][] possibleNeighbours = new int[][] {
+                new int[] {-1,-1},
+                new int[] {-1,0},
+                new int[] {0,-1},
+                new int[] {1,0},
+                new int[] {0,1},
+                new int[] {1,1},
+                new int[] {-1,1},
+                new int[] {1,-1}
+            };
+            List<int> neighbours = new List<int>();
+
+            int width = worldMatrix[X].GetLength(0);
+            int bredth = worldMatrix[0].GetLength(Y);
+            int currentLevel = Z;
+
+            for (int i = 0; i < 9; i++)
             {
-                neighbours.Add(worldMatrix[X-1][Y-1][Z]);
-                neighbours.Add(worldMatrix[X-1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y-1][Z]);
-                neighbours.Add(worldMatrix[X+1][Y-1][Z]);
-                neighbours.Add(worldMatrix[X-1][Y+1][Z]);
-                neighbours.Add(worldMatrix[X+1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X+1][Y + 1][Z]);
-            }
-            else if (X == 0)
-            {
-                neighbours.Add(worldMatrix[X][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
-            }
-            else if (Y == 0)
-            {
-                neighbours.Add(worldMatrix[X - 1][Y][Z]);
-                neighbours.Add(worldMatrix[X - 1][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
-            }
-            else if (X == neighbours.Count)
-            {
-                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X - 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X - 1][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X][Y + 1][Z]);
-            }
-            else if (Y == neighbours.Count)
-            {
-                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X - 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y][Z]);
-            }
-            else if (X == 0 && Y == 0)
-            {
-                neighbours.Add(worldMatrix[X + 1][Y + 1][Z]);
-                neighbours.Add(worldMatrix[X + 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y + 1][Z]);
-            }
-            else if (X == neighbours.Count && Y == neighbours.Count)
-            {
-                neighbours.Add(worldMatrix[X - 1][Y - 1][Z]);
-                neighbours.Add(worldMatrix[X - 1][Y][Z]);
-                neighbours.Add(worldMatrix[X][Y - 1][Z]);
+                //Check for out of bounds
+                if ((this.X == 0 && possibleNeighbours[i][0] < 0) ||
+                    (this.X == width && possibleNeighbours[i][0] > 0) ||
+                    (Y == 0 && possibleNeighbours[i][1] < 0) ||
+                    (Y == bredth && possibleNeighbours[i][0] > 0))
+                    continue;
+                if(type == 0)
+                    neighbours.Add(worldMatrix[possibleNeighbours[i][0]][possibleNeighbours[i][1]][currentLevel]);
             }
 
             return neighbours;
