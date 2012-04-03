@@ -62,11 +62,14 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             return this.GetEnumerator();
         }
+
+        public object Last { get; set; }
     }
 
     public class PhysicsManager : IPhysicsManager
     {
         private List<IPhysicsObject> physicsObjects;
+        private int[][][] worldMatrix { get; set; }
 
         public void MoveObject(GameEntitySolid character, Vector3 endpoint, Map map)
         {
@@ -78,13 +81,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return 0;
         }
 
-        public int[][][] testMatrix = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0}}};
-
-        static public Path<Node> FindPath<Node>(
+        public Path<Node> FindPath<Node>(
             Node start,
             Node destination,
             Func<Node, double> estimate)

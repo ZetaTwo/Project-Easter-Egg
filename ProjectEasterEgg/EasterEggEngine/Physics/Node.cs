@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Node //: IHasNeighbours<Node>
+    public class Node : IHasNeighbours<Node>
     {
         int x;
         public int X { get { return x; } }
@@ -22,17 +22,21 @@ namespace Mindstep.EasterEgg.Engine.Physics
         //3=stair down
         public int type;
 
-        int[][][] worldMatrix;
 
-        public IEnumerable<int> Neighbours { get { return this.getNeighbours(worldMatrix); } }
+        public List<Node> Neighbours { get { return this.getNeighbours(); } }
 
-        public Node(int[][][] _worldMatrix, int _type)
+
+        public Node(int _type, int _x, int _y, int _z)
         {
-            //worldMatrix = _worldMatrix;
             type = _type;
+            x = _x;
+            y = _y;
+            z = _z;
+
+           
         }
 
-        public IEnumerable<int> getNeighbours(int[][][] worldMatrix)
+        public List<Node> getNeighbours()
         {
             int[][] possibleNeighbours = new int[][] {
                 new int[] {-1,-1},
@@ -44,22 +48,22 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 new int[] {-1,1},
                 new int[] {1,-1}
             };
-            List<int> neighbours = new List<int>();
+            List<Node> neighbours = new List<Node>();
+            int width = worldMatrix.Length;
+            int height = worldMatrix[0].Length;
+            int currentLevel = this.z;
 
-            int width = worldMatrix[X].GetLength(0);
-            int bredth = worldMatrix[0].GetLength(Y);
-            int currentLevel = Z;
-
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 8; i++)
             {
-                //Check for out of bounds
-                if ((this.X == 0 && possibleNeighbours[i][0] < 0) ||
-                    (this.X == width && possibleNeighbours[i][0] > 0) ||
-                    (Y == 0 && possibleNeighbours[i][1] < 0) ||
-                    (Y == bredth && possibleNeighbours[i][0] > 0))
+                //check for out of bounds
+                if ((this.x == 0 && possibleNeighbours[i][0] < 0) ||
+                    (this.x == width && possibleNeighbours[i][0] > 0) ||
+                    (this.y == 0 && possibleNeighbours[i][1] < 0) ||
+                    (this.y == height && possibleNeighbours[i][0] > 0))
                     continue;
-                if(type == 0)
-                    neighbours.Add(worldMatrix[possibleNeighbours[i][0]][possibleNeighbours[i][1]][currentLevel]);
+                Node possibleNeighbour = worldMatrix[this.X+possibleNeighbours[i][0]][this.Y+possibleNeighbours[i][1]][currentLevel];
+                if(possibleNeighbour.type != 1)
+                    neighbours.Add(possibleNeighbour);
             }
 
             return neighbours;
