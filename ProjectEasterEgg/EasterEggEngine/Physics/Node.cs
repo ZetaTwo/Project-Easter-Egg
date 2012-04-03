@@ -16,13 +16,20 @@ namespace Mindstep.EasterEgg.Engine.Physics
         int z;
         public int Z  { get { return z; } }
 
+        //0=walkable
+        //1=not walkable
+        //2=stair up
+        //3=stair down
+        public int type;
+
         Node[][][] worldMatrix;
 
         public IEnumerable<Node> Neighbours { get { return this.getNeighbours(worldMatrix); } }
 
-        public Node(Node[][][] _worldMatrix)
+        public Node(Node[][][] _worldMatrix, int _type)
         {
             worldMatrix = _worldMatrix;
+            type = _type;
         }
 
         private IEnumerable<Node> getNeighbours(Node[][][] worldMatrix)
