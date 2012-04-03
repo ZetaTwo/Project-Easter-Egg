@@ -71,8 +71,9 @@
     <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\MousePointer.cs" />
-    <Compile Include="Physics\IHasNeighbours.cs" />
     <Compile Include="Physics\Node.cs" />
+    <Compile Include="Physics\Path.cs" />
+    <Compile Include="Physics\PriorityQueue.cs" />
     <Compile Include="Script\Cutscene.cs" />
     <Compile Include="Script\Dialogue.cs" />
     <Compile Include="Script\ScriptState.cs" />
