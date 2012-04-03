@@ -31,12 +31,12 @@ namespace Mindstep.EasterEgg.Engine.Physics
             int[][] possibleNeighbours = new int[][] {
                 new int[] {-1, -1},
                 new int[] {-1, 0},
-                new int[] {0, -1},
-                new int[] {1, 0},
+                new int[] {-1, 1},
                 new int[] {0, 1},
                 new int[] {1, 1},
-                new int[] {-1, 1},
-                new int[] {1, -1}
+                new int[] {1, 0},
+                new int[] {1, -1},
+                new int[] {0, -1}
             };
             List<Node> neighbours = new List<Node>();
             int width = worldMatrix.Length - 1;
@@ -51,8 +51,23 @@ namespace Mindstep.EasterEgg.Engine.Physics
                     (Position.Y == 0 && possibleNeighbours[i][1] < 0) ||
                     (Position.Y == height && possibleNeighbours[i][1] > 0))
                     continue;
+
+                //Check if the current possible is available, it is only available if the next one is free.
                 Node possibleNeighbour = worldMatrix[Position.X + possibleNeighbours[i][0]][Position.Y + possibleNeighbours[i][1]][currentLevel];
-                if(possibleNeighbour.type != 1)
+                //Base case for a node.
+                Node possibleNext = new Node(1,new Position(-1,-1,-1));
+                if (i < 7)
+                    if(!((Position.X == 0 && possibleNeighbours[i+1][0] < 0) ||
+                        (Position.X == width && possibleNeighbours[i+1][0] > 0) ||
+                        (Position.Y == 0 && possibleNeighbours[i+1][1] < 0) ||
+                        (Position.Y == height && possibleNeighbours[i+1][1] > 0)))
+                        possibleNext = worldMatrix[Position.X + possibleNeighbours[i + 1][0]][Position.Y + possibleNeighbours[i + 1][1]][currentLevel];
+                else
+                {
+                    if (!(Position.X == 0 || Position.Y == 0))
+                        possibleNext = worldMatrix[Position.X + possibleNeighbours[0][0]][Position.Y + possibleNeighbours[0][1]][currentLevel];
+                }
+                if(possibleNeighbour.type != 1 && possibleNext.type != 1)
                     neighbours.Add(possibleNeighbour);
             }
 
