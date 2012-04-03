@@ -60,18 +60,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
-    <Compile Include="Dialogue.cs" />
-    <Compile Include="DialogueChoice.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\GameEntity.cs" />
     <Compile Include="Game\GameEntitySolid.cs" />
+    <Compile Include="Game\IGameEntity.cs" />
     <Compile Include="Graphics\GraphicsManager.cs" />
     <Compile Include="Graphics\IDrawable.cs" />
     <Compile Include="Graphics\IGraphicsManager.cs" />
     <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="IScriptTask.cs" />
-    <Compile Include="ScriptState.cs" />
+    <Compile Include="Input\MousePointer.cs" />
+    <Compile Include="Physics\IHasNeighbours.cs" />
+    <Compile Include="Physics\Node.cs" />
+    <Compile Include="Script\Dialogue.cs" />
+    <Compile Include="Script\ScriptState.cs" />
+    <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="Storage\IStorageManager.cs" />
     <Compile Include="Physics\IPhysicsManager.cs" />
     <Compile Include="Script\IScriptEngine.cs" />
@@ -83,7 +86,6 @@
     <Compile Include="Script\Script.cs" />
     <Compile Include="Script\ScriptEngine.cs" />
     <Compile Include="Sound\Sound.cs" />
-    <Compile Include="Sound\SoundEngine.cs" />
     <Compile Include="Storage\StorageManager.cs" />
     <Compile Include="Game\World.cs" />
   </ItemGroup>

@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Box : IBox, IHasNeighbours<Box>
+    public class Map
     {
-        
     }
 }

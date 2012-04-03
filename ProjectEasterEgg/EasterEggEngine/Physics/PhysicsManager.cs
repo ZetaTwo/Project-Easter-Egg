@@ -37,7 +37,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
     }
 
-    class Path<Node> : IEnumerable<Node>
+    public class Path<Node> : IEnumerable<Node>
     {
         public Node LastStep { get; private set; }
         public Path<Node> PreviousSteps { get; private set; }
@@ -72,8 +72,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             throw new System.NotImplementedException();
         }
-
-       
 
         public float estimate(Node a, double b)
         {

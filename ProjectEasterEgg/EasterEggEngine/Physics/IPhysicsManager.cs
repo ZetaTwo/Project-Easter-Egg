@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    interface IPhysicsManager
+    public interface IPhysicsManager
     {
     }
 }

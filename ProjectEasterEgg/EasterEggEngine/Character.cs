@@ -17,10 +17,19 @@ namespace Mindstep.EasterEgg.Engine
             {
             }
         }
+
+        public Character(EggEngine engine)
+            : base(engine)
+        { }
     
         public void Shout()
         {
             throw new System.NotImplementedException();
+        }
+
+        public override void Draw()
+        {
+            throw new NotImplementedException();
         }
     }
 }

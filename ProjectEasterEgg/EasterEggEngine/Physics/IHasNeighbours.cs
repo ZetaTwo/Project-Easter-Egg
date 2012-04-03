@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    interface IHasNeighbours<N>
+    public interface IHasNeighbours<N>
     {
         IEnumerable<N> Neighbours { get; }
     }

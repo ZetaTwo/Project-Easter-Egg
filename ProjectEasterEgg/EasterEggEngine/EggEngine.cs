@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mindstep.EasterEgg.Engine.Physics;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -70,8 +71,8 @@ namespace Mindstep.EasterEgg.Engine
             Services.AddService(typeof(IScriptEngine), scriptEngine);
 
             Services.AddService(typeof(IPhysicsManager), new PhysicsManager());
-            Services.AddService(typeof(ISoundManager), new SoundManager());
-            Services.AddService(typeof(IInputManager), new InputManager());
+            Services.AddService(typeof(ISoundManager), new SoundManager(this));
+            Services.AddService(typeof(IInputManager), new InputManager(this));
             Services.AddService(typeof(IGraphicsManager), new GraphicsManager());
         }
 
@@ -121,7 +122,7 @@ namespace Mindstep.EasterEgg.Engine
                 this.Exit();
 
             // TODO: Add your update logic here
-            Input.Update();
+            Input.Update(gameTime);
             Script.Update(gameTime);
 
             base.Update(gameTime);

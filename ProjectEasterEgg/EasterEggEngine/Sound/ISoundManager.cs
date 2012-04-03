@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mindstep.EasterEgg.Engine
 {
     public interface ISoundManager
     {
-        void PlaySound();
+        void PlaySound(string soundName);
 
-        Sound GetSound();
+        SoundEffect GetSound(string soundName);
     }
 }

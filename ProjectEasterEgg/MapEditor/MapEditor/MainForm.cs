@@ -70,5 +70,10 @@ namespace Mindstep.EasterEgg.MapEditor
             System.Drawing.Point p = topView.getClosestGridPoint(e.Location);
             coords.Text = string.Format("X: {0,-5} Y: {0,-5:G}", p.X, p.Y);
         }
+
+        private void topView_MouseLeave(object sender, System.EventArgs e)
+        {
+            coords.Text = "";
+        }
     }
 }

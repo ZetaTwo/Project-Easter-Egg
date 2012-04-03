@@ -82,7 +82,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.coords.Name = "coords";
             this.coords.Size = new System.Drawing.Size(98, 13);
             this.coords.TabIndex = 12;
-            this.coords.Text = "X:-   Y:-";
             // 
             // topView
             // 
@@ -92,6 +91,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.topView.TabIndex = 7;
             this.topView.Text = "top view";
             this.topView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.topView_Click);
+            this.topView.MouseLeave += new System.EventHandler(this.topView_MouseLeave);
             this.topView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.topView_MouseMove);
             // 
             // MainForm

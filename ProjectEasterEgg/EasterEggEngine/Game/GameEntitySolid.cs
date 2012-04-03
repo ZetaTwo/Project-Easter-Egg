@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public class GameEntitySolid : GameEntity, IPhysicsObject
+    public abstract class GameEntitySolid : GameEntity, IPhysicsObject
     {
-        public Microsoft.Xna.Framework.Vector3 Position
+        public Vector3 Position
         {
             get
             {
@@ -31,5 +32,9 @@ namespace Mindstep.EasterEgg.Engine
                 throw new NotImplementedException();
             }
         }
+
+        public GameEntitySolid(EggEngine engine)
+            : base(engine)
+        { }
     }
 }
