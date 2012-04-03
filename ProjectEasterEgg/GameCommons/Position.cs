@@ -40,6 +40,16 @@ namespace Mindstep.EasterEgg.Commons
             return new Position(X, Y, Z);
         }
 
+        public float Length()
+        {
+            return (float)Math.Sqrt(X * X + Y * Y + Z * Z);
+        }
+
+        public override string ToString()
+        {
+            return "[Position " + X + "," + Y + "," + Z + "]";
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)

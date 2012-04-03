@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Mindstep.EasterEgg.Commons;
 using System;
+using System.Collections.Generic;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -64,27 +65,38 @@ namespace Mindstep.EasterEgg.MapEditor
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
+            BoundingBoxInt boundingBox = new BoundingBoxInt();
+
+            List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
             {
                 for (int y = -5; y < 10; y += 1)
                 {
-                    drawBlock(grid, new Position(x, y, -1));
+                    Position tilePos = new Position(x, y, -1);
+                    tiles.Add(tilePos);
+                    boundingBox.addPos(tilePos);
                 }
             }
+            foreach (Position tilePos in tiles)
+            {
+                drawBlock(grid, boundingBox, Color.White, tilePos);
+            }
+            System.Console.WriteLine(boundingBox.Min);
+
+            boundingBox.addPos(MainForm.Blocks.ToPositions());
 
             foreach (Block b in MainForm.Blocks)
             {
-                drawBlock(block, b.Offset);
+                drawBlock(block, boundingBox, Color.Red, b.Offset);
             }
             spriteBatch.End();
         }
 
-        private void drawBlock(Texture2D image, Position pos)
+        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos)
         {
-            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.Blocks.ToPositions());
             float depth = boundingBox.getDepth(pos);
             Vector2 screenCoords = Transform.ToScreen(pos, tileHeight, tileWidth, blockHeight, center).toVector2();
-            spriteBatch.Draw(image, screenCoords, null, Color.Red, 0, Vector2.Zero, 1, spriteEffect, depth);
+            spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth);
         }
     }
 }
