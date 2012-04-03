@@ -78,6 +78,12 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return 0;
         }
 
+        public int[][][] testMatrix = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0},
+                                                                    new int[] {0,0,0,0,0,0}}};
+
         static public Path<Node> FindPath<Node>(
             Node start,
             Node destination,
