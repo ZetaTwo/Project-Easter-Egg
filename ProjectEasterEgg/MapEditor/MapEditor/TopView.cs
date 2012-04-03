@@ -54,7 +54,7 @@ namespace Mindstep.EasterEgg.MapEditor
         protected override void Draw()
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             int offsetX = offsetToBlock00.X/gridSize;
             int offsetY = offsetToBlock00.Y/gridSize;
