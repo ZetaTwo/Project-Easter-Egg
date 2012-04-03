@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Engine.Game;
+using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons.Game;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public abstract class GameEntity : IGameEntity, IDrawable
+    public abstract class GameEntity : IEntityUpdate
     {
-        public abstract void Draw();
-
         EggEngine engine;
         public EggEngine Engine
         {
             get { return engine; }
         }
 
-        public GameEntity(EggEngine _engine)
+        public void Initialize(EggEngine _engine)
         {
             engine = _engine;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            throw new NotImplementedException();
         }
     }
 }

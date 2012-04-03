@@ -3,6 +3,7 @@ using Mindstep.EasterEgg;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Engine;
 using Mindstep.EasterEgg.Game.Scripts;
+using Mindstep.EasterEgg.Game.Game;
 
 namespace GameClient
 {
@@ -14,7 +15,7 @@ namespace GameClient
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game game = new EggEngine(new StartScript()))
+            using (Game game = new EggEngine(new GameWorld()))
             {
                 game.Run();
             }

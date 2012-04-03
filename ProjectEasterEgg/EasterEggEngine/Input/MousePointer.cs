@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace Mindstep.EasterEgg.Engine.Input
 {
-    class MousePointer : GameEntity
+    public class MousePointer : GameEntityDrawable
     {
         Vector2 position;
         public Vector2 Position
@@ -14,13 +16,7 @@ namespace Mindstep.EasterEgg.Engine.Input
             get { return position; }
         }
 
-        public MousePointer(EggEngine engine)
-            : base(engine)
-        {
-            Engine.Script.AddScript(new MousePointerScript(this));
-        }
-
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
             throw new NotImplementedException();
         }
@@ -28,25 +24,6 @@ namespace Mindstep.EasterEgg.Engine.Input
         public void Update()
         {
             position += Engine.Input.MouseDelta;
-        }
-    }
-
-    class MousePointerScript : Script
-    {
-        MousePointer pointer;
-
-        public MousePointerScript(MousePointer _pointer)
-        {
-            pointer = _pointer;
-        }
-
-        public override IEnumerator<float> ScriptContent()
-        {
-            while (true)
-            {
-                pointer.Update();
-                yield return 0;
-            }
         }
     }
 }

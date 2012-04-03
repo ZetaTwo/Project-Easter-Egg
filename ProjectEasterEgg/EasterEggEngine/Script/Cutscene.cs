@@ -5,8 +5,14 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public interface IDrawable
+    abstract class Cutscene : Script
     {
-        void Draw();
+        void BeginCutscene()
+        {
+        }
+
+        void EndCutscene()
+        {
+        }
     }
 }

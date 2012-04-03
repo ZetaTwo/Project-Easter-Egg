@@ -4,18 +4,15 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace Mindstep.EasterEgg.Engine
 {
-    public abstract class GameEntitySolid : GameEntity, IPhysicsObject
+    public abstract class GameEntitySolid : GameEntityDrawable, IPhysicsObject
     {
-        public Vector3 Position
+        public Position Position
         {
             get
-            {
-                throw new NotImplementedException();
-            }
-            set
             {
                 throw new NotImplementedException();
             }
@@ -27,14 +24,6 @@ namespace Mindstep.EasterEgg.Engine
             {
                 throw new NotImplementedException();
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
         }
-
-        public GameEntitySolid(EggEngine engine)
-            : base(engine)
-        { }
     }
 }

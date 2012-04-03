@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -18,16 +19,12 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
-        public Character(EggEngine engine)
-            : base(engine)
-        { }
-    
         public void Shout()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
             throw new NotImplementedException();
         }
