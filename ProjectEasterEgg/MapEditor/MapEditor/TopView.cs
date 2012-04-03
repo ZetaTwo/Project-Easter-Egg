@@ -118,7 +118,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
             for (int i=0; i<MainForm.Blocks.Count; i++)
             {
-                if (MainForm.Blocks[i].Offset.Equals(newPos))
+                if (MainForm.Blocks[i].Offset == newPos)
                 {
                     MainForm.Blocks.RemoveAt(i);
                     return;

@@ -8,10 +8,16 @@ using Mindstep.EasterEgg.Commons.Game;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    class GameMap : Map
+    public class GameMap : Map
     {
         EggEngine engine;
 
+        private Node[][][] worldMatrix;
+        public Node[][][] WorldMatrix
+        {
+            get { return worldMatrix; }
+            set { worldMatrix = value; }
+        }
         List<IEntityUpdate> updateObjects = new List<IEntityUpdate>();
 
         public void Update(GameTime gameTime)

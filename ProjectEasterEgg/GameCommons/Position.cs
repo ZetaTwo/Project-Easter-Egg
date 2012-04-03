@@ -65,6 +65,16 @@ namespace Mindstep.EasterEgg.Commons
             return p.X == X && p.Y == Y && p.Z == Z;
         }
 
+        public static bool operator==(Position p1, Position p2)
+        {
+            return p1.Equals(p2);
+        }
+
+        public static bool operator !=(Position p1, Position p2)
+        {
+            return !(p1 == p2);
+        }
+
         public static Position operator+(Position p1, Position p2)
         {
             return new Position(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);

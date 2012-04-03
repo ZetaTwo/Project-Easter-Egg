@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mindstep.EasterEgg.Engine.Physics;
+using Mindstep.EasterEgg.Commons;
 
 namespace GameTests
 {
@@ -25,7 +26,7 @@ namespace GameTests
                 for(int k = 0; k < 6; k++)
                 {
                     testMatrix1[i][k] = new Node[1];
-                    Node n = new Node(1,i,k,0);
+                    Node n = new Node(1, new Position(i, k, 0));
                     testMatrix1[i][k][0] = n;
                 }
             }
@@ -75,8 +76,8 @@ namespace GameTests
         [TestMethod]
         public void TestGetNeighbours()
         {
-            Node n = new Node(testMatrix1, 0, 1, 1, 0);
-            List<Node> test = n.getNeighbours();
+            Node n = new Node(0, new Position(1, 1, 0));
+            List<Node> test = n.getNeighbours(testMatrix1);
             Assert.AreEqual(0, test.Count);
             
         }
