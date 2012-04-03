@@ -68,14 +68,14 @@ namespace Mindstep.EasterEgg.MapEditor
 
             foreach (Block b in MainForm.Blocks)
             {
-                int height = b.Offset.Z-MainForm.CurrentHeight;
+                int height = b.Position.Z-MainForm.CurrentHeight;
                 if (height == 0)
                 {
-                    drawBox(block, b.Offset, Color.Green, 0);
+                    drawBox(block, b.Position, Color.Green, 0);
                 }
                 else
                 {
-                    drawBox(block, b.Offset, Color.Red, .5f);
+                    drawBox(block, b.Position, Color.Red, .5f);
                 }
             }
             spriteBatch.End();
@@ -118,7 +118,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
             for (int i=0; i<MainForm.Blocks.Count; i++)
             {
-                if (MainForm.Blocks[i].Offset == newPos)
+                if (MainForm.Blocks[i].Position == newPos)
                 {
                     MainForm.Blocks.RemoveAt(i);
                     return;

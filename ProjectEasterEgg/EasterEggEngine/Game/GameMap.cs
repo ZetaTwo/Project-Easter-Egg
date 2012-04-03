@@ -5,6 +5,7 @@ using System.Text;
 using Mindstep.EasterEgg.Engine.Physics;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.Game;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
@@ -12,8 +13,8 @@ namespace Mindstep.EasterEgg.Engine.Game
     {
         EggEngine engine;
 
-        private Node[][][] worldMatrix;
-        public Node[][][] WorldMatrix
+        private Block[][][] worldMatrix;
+        public Block[][][] WorldMatrix
         {
             get { return worldMatrix; }
             set { worldMatrix = value; }

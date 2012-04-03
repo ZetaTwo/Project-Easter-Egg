@@ -9,38 +9,42 @@ using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Commons
 {
+    public enum BlockType { WALKABLE, SOLID, STAIRS_UP, STAIRS_DOWN };
+    public enum BlockFaces { LEFT, RIGHT, TOP };
+
     public class Block
     {
-        BlockType type;
-        internal BlockType Type
+        private Position position;
+        public Position Position
+        {
+            get
+            {
+                return position;
+            }
+        }
+
+        Texture2D texture;
+
+        private BlockType type;
+        public BlockType Type
         {
             get { return type; }
         }
 
-        private Position offset;
-        public Position Offset
+        public Block(Position position)
+            : this(BlockType.SOLID, position)
         {
-            get
-            {
-                return offset;
-            }
         }
 
-        public Block(Position offset)
-        {
-            this.type = null;
-            this.offset = offset;
-        }
-
-        internal Block(BlockType type, Position offset)
+        public Block(BlockType type, Position position)
         {
             this.type = type;
-            this.offset = offset;
+            this.position = position;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Position position)
+        public void Draw(SpriteBatch spriteBatch, Position origin)
         {
-            spriteBatch.Draw(Type.GetFrame(0f), SpriteHelper.toScreen(position + Offset), Color.White);
+            spriteBatch.Draw(texture, SpriteHelper.toScreen(origin + Position), Color.White);
         }
     }
 }

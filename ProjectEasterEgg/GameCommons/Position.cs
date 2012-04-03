@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -26,6 +27,13 @@ namespace Mindstep.EasterEgg.Commons
         {
             get { return z; }
             set { z = value; }
+        }
+
+        public Position(Vector3 position)
+        {
+            X = (int)position.X;
+            Y = (int)position.Y;
+            Z = (int)position.Z;
         }
 
         public Position(int x, int y, int z)

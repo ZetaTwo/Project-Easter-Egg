@@ -92,7 +92,7 @@ namespace Mindstep.EasterEgg.MapEditor
             foreach (Block b in MainForm.Blocks)
             {
                 Color color;
-                if (b.Offset.Z == MainForm.CurrentHeight)
+                if (b.Position.Z == MainForm.CurrentHeight)
                 {
                     color = Color.Green;
                 }
@@ -100,7 +100,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     color = Color.Red;
                 }
-                drawBlock(block, boundingBox, color, b.Offset);
+                drawBlock(block, boundingBox, color, b.Position);
             }
             spriteBatch.End();
         }
