@@ -82,5 +82,33 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             topViewPanel.Visible = showTopView.Checked;
         }
+
+        private void toolStripButton1_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (toolStripButton1.Checked)
+            {
+                mainView.Load("mainBlock31", "mainGrid31");
+            }
+            else
+            {
+                mainView.Load("mainBlock31odd", "mainGrid31odd");
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            Exporter.Save(Blocks, saveFileDialog.FileName);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            saveFileDialog.ShowDialog();
+        }
+
+        private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            System.Console.WriteLine(saveFileDialog.FileName);
+            //Exporter.Save( blocks);
+        }
     }
 }

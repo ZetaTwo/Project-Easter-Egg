@@ -32,17 +32,22 @@ namespace Mindstep.EasterEgg.MapEditor
         private int blockHeight;
 
 
+        protected override void Initialize()
+        {
+            Load("mainBlock31", "mainGrid31");
+        }
+
         /// <summary>
         /// Initializes the control.
         /// </summary>
-        protected override void Initialize()
+        public void Load(string blockS, string gridS)
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteEffect = SpriteEffects.None;
 
             ContentManager Content = new ContentManager(Services, "MapEditorContent");
-            block = Content.Load<Texture2D>("mainBlock");
-            grid = Content.Load<Texture2D>("mainGrid");
+            block = Content.Load<Texture2D>(blockS);
+            grid = Content.Load<Texture2D>(gridS);
             if (!block.Bounds.Equals(grid.Bounds))
             {
                 throw new Exception("mainBlock and mainGrid image size mismatch.");
@@ -81,13 +86,21 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
-            System.Console.WriteLine(boundingBox.Min);
 
             boundingBox.addPos(MainForm.Blocks.ToPositions());
 
             foreach (Block b in MainForm.Blocks)
             {
-                drawBlock(block, boundingBox, Color.Red, b.Offset);
+                Color color;
+                if (b.Offset.Z == MainForm.CurrentHeight)
+                {
+                    color = Color.Green;
+                }
+                else
+                {
+                    color = Color.Red;
+                }
+                drawBlock(block, boundingBox, color, b.Offset);
             }
             spriteBatch.End();
         }
