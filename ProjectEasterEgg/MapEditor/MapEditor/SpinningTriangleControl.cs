@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     /// <summary>
     /// Example control inherits from GraphicsDeviceControl, which allows it to

@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     /// <summary>
     /// Container class implements the IServiceProvider interface. This is used

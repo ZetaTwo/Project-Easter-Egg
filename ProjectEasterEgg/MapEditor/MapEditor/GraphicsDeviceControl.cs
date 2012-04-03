@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
 #endregion
 
-namespace MapEditor
+namespace Mindstep.EasterEgg.MapEditor
 {
     // System.Drawing and the XNA Framework both define Color and Rectangle
     // types. To avoid conflicts, we specify exactly which ones to use.

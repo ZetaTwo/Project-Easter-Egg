@@ -76,8 +76,7 @@
     <Compile Include="Physics\IPhysicsManager.cs" />
     <Compile Include="Script\IScriptEngine.cs" />
     <Compile Include="Sound\ISoundManager.cs" />
-    <Compile Include="Physics\Box.cs" />
-    <Compile Include="Physics\IBox.cs" />
+    <Compile Include="Physics\IPhysicsObject.cs" />
     <Compile Include="Physics\PhysicsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Script\IScript.cs" />
