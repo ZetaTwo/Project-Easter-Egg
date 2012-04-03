@@ -18,6 +18,11 @@ namespace Mindstep.EasterEgg.Commons
             this.Z = z;
         }
 
+        public Position Clone()
+        {
+            return new Position(X, Y, Z);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)

@@ -9,6 +9,7 @@
 
 #region Using Statements
 using System.Windows.Forms;
+using System.Linq;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -35,6 +36,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             InitializeComponent();
             topView.MainForm = this;
+            mainView.MainForm = this;
         }
 
         public List<Block> Blocks = new List<Block>();
@@ -52,11 +54,17 @@ namespace Mindstep.EasterEgg.MapEditor
             layer.Text = topViewHeight.ToString();
         }
 
+        private void topView_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point p = topView.getClosestBlockCoord(e.Location.toXnaPoint());
+            coords.Text = "X:" + p.X + "   Y:" + p.Y;
+        }
+
         private void topView_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                topView.toggleBlock(topView.getClosestGridPoint(e.Location));
+                topView.toggleBlock(topView.getClosestBlockCoord(e.Location.toXnaPoint()));
             }
         }
 
@@ -65,15 +73,14 @@ namespace Mindstep.EasterEgg.MapEditor
             System.Console.WriteLine(e.NewValue);
         }
 
-        private void topView_MouseMove(object sender, MouseEventArgs e)
-        {
-            System.Drawing.Point p = topView.getClosestGridPoint(e.Location);
-            coords.Text = string.Format("X: {0,-5} Y: {0,-5:G}", p.X, p.Y);
-        }
-
         private void topView_MouseLeave(object sender, System.EventArgs e)
         {
             coords.Text = "";
+        }
+
+        private void showTopView_CheckChanged(object sender, System.EventArgs e)
+        {
+            topViewPanel.Visible = showTopView.Checked;
         }
     }
 }
