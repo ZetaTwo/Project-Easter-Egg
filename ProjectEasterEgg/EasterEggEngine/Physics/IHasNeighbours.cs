@@ -7,6 +7,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
 {
     public interface IHasNeighbours<N>
     {
-        IEnumerable<N> Neighbours { get; }
+        List<N> Neighbours { get; }
     }
 }

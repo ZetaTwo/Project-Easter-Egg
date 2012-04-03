@@ -22,18 +22,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
         //3=stair down
         public int type;
 
-        Node[][][] worldMatrix;
 
-        public IEnumerable<Node> Neighbours { get { return this.getNeighbours(); } }
+        public List<Node> Neighbours { get { return this.getNeighbours(); } }
 
-        public Node(Node[][][] _worldMatrix, int _type, int _x , int _y , int _z)
-        {
-            worldMatrix = _worldMatrix;
-            type = _type;
-            x = _x;
-            y = _y;
-            z = _z;
-        }
 
         public Node(int _type, int _x, int _y, int _z)
         {
@@ -41,6 +32,8 @@ namespace Mindstep.EasterEgg.Engine.Physics
             x = _x;
             y = _y;
             z = _z;
+
+           
         }
 
         public List<Node> getNeighbours()

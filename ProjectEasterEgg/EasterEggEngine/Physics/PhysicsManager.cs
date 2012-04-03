@@ -69,6 +69,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
     public class PhysicsManager : IPhysicsManager
     {
         private List<IPhysicsObject> physicsObjects;
+        private int[][][] worldMatrix { get; set; }
 
         public void MoveObject(GameEntitySolid character, Vector3 endpoint, Map map)
         {

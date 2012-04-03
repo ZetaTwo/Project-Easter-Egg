@@ -22,7 +22,7 @@ namespace GameTests
                 for(int k = 0; k < 6; k++)
                 {
                     testMatrix1[i][k] = new Node[1];
-                    Node n = new Node(1,i,k,0);
+                    Node n = new Node(0,i,k,0);
                     testMatrix1[i][k][0] = n;
                 }
             }
@@ -32,11 +32,16 @@ namespace GameTests
         [TestMethod]
         public void FindPathTestMethod()
         {
+       
             Node n = new Node(testMatrix1, 0, 1, 1, 0);
             Node end = new Node(0,4,4,0);
             PhysicsManager p = new PhysicsManager();
-            Path<Node> path = p.FindPath(n, end,e => estimate(n, end));
+            Path<Node> path = p.FindPath<Node>(n, end,e => estimate(n, end));
             Assert.AreEqual(null, path);
+            List<Node> k = (List<Node>)n.Neighbours;
+            List<Node> a = n.getNeighbours();
+            Assert.AreEqual(a.ElementAt(a.Count - 1), k.ElementAt(k.Count - 1));
+            a.ElementAt(a.Count - 1);
         }
 
         public int estimate(Node start, Node end)
