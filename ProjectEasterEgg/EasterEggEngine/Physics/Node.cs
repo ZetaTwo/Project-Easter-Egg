@@ -16,10 +16,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
         int z;
         public int Z { get { return z; } }
 
-        
-
-        
-
         //0=walkable
         //1=not walkable
         //2=stair up
@@ -36,20 +32,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             type = _type;
         }
 
-        public static void main(String[] args)
-        {
-           int[][][] testMatrix = new int[][][] { new int[][] { new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0},
-                                                                    new int[] {0,0,0,0,0,0}}};
-            Node n = new Node(testMatrix, 0);
-            n.getNeighbours(testMatrix);
-            Console.WriteLine("hej");
-
-        }
-
-        private IEnumerable<int> getNeighbours(int[][][] worldMatrix)
+        public IEnumerable<int> getNeighbours(int[][][] worldMatrix)
         {
             int[][] possibleNeighbours = new int[][] {
                 new int[] {-1,-1},
