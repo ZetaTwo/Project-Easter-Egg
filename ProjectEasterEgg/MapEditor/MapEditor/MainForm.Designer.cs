@@ -29,30 +29,38 @@ namespace Mindstep.EasterEgg.MapEditor
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.showTopView = new System.Windows.Forms.ToolStripButton();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topViewPanel = new System.Windows.Forms.Panel();
             this.coords = new System.Windows.Forms.Label();
-            this.downButton = new System.Windows.Forms.Button();
-            this.layerLabel = new System.Windows.Forms.Label();
             this.upButton = new System.Windows.Forms.Button();
+            this.layerLabel = new System.Windows.Forms.Label();
+            this.downButton = new System.Windows.Forms.Button();
             this.layer = new System.Windows.Forms.TextBox();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.topViewPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showTopView});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(792, 25);
-            this.toolStrip1.TabIndex = 15;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showTopView,
+            this.toolStripButton1});
+            this.toolStrip.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStrip.Size = new System.Drawing.Size(792, 25);
+            this.toolStrip.TabIndex = 15;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // showTopView
             // 
@@ -68,21 +76,52 @@ namespace Mindstep.EasterEgg.MapEditor
             this.showTopView.Text = "Show Top View";
             this.showTopView.CheckedChanged += new System.EventHandler(this.showTopView_CheckChanged);
             // 
-            // menuStrip1
+            // toolStripButton1
             // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(792, 24);
-            this.menuStrip1.TabIndex = 16;
-            this.menuStrip1.Text = "menuStrip1";
+            this.toolStripButton1.CheckOnClick = true;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.CheckedChanged += new System.EventHandler(this.toolStripButton1_CheckedChanged);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(792, 24);
+            this.menuStrip.TabIndex = 16;
+            this.menuStrip.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // topViewPanel
             // 
+            this.topViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.topViewPanel.Controls.Add(this.topView);
             this.topViewPanel.Controls.Add(this.coords);
-            this.topViewPanel.Controls.Add(this.downButton);
-            this.topViewPanel.Controls.Add(this.layerLabel);
             this.topViewPanel.Controls.Add(this.upButton);
+            this.topViewPanel.Controls.Add(this.layerLabel);
+            this.topViewPanel.Controls.Add(this.downButton);
             this.topViewPanel.Controls.Add(this.layer);
             this.topViewPanel.Location = new System.Drawing.Point(560, 49);
             this.topViewPanel.Name = "topViewPanel";
@@ -97,15 +136,15 @@ namespace Mindstep.EasterEgg.MapEditor
             this.coords.Size = new System.Drawing.Size(98, 13);
             this.coords.TabIndex = 12;
             // 
-            // downButton
+            // upButton
             // 
-            this.downButton.Image = ((System.Drawing.Image)(resources.GetObject("downButton.Image")));
-            this.downButton.Location = new System.Drawing.Point(3, 16);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(24, 24);
-            this.downButton.TabIndex = 8;
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.downButton_Click);
+            this.upButton.Image = ((System.Drawing.Image)(resources.GetObject("upButton.Image")));
+            this.upButton.Location = new System.Drawing.Point(3, 16);
+            this.upButton.Name = "upButton";
+            this.upButton.Size = new System.Drawing.Size(24, 24);
+            this.upButton.TabIndex = 8;
+            this.upButton.UseVisualStyleBackColor = true;
+            this.upButton.Click += new System.EventHandler(this.upButton_Click);
             // 
             // layerLabel
             // 
@@ -116,15 +155,15 @@ namespace Mindstep.EasterEgg.MapEditor
             this.layerLabel.TabIndex = 11;
             this.layerLabel.Text = "Layer";
             // 
-            // upButton
+            // downButton
             // 
-            this.upButton.Image = ((System.Drawing.Image)(resources.GetObject("upButton.Image")));
-            this.upButton.Location = new System.Drawing.Point(3, 72);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(24, 24);
-            this.upButton.TabIndex = 9;
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.upButton_Click);
+            this.downButton.Image = ((System.Drawing.Image)(resources.GetObject("downButton.Image")));
+            this.downButton.Location = new System.Drawing.Point(3, 72);
+            this.downButton.Name = "downButton";
+            this.downButton.Size = new System.Drawing.Size(24, 24);
+            this.downButton.TabIndex = 9;
+            this.downButton.UseVisualStyleBackColor = true;
+            this.downButton.Click += new System.EventHandler(this.downButton_Click);
             // 
             // layer
             // 
@@ -134,6 +173,19 @@ namespace Mindstep.EasterEgg.MapEditor
             this.layer.Size = new System.Drawing.Size(24, 20);
             this.layer.TabIndex = 10;
             this.layer.Text = "0";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog_FileOk);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // topView
             // 
@@ -162,16 +214,18 @@ namespace Mindstep.EasterEgg.MapEditor
             this.ClientSize = new System.Drawing.Size(792, 566);
             this.Controls.Add(this.topViewPanel);
             this.Controls.Add(this.mainView);
-            this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.toolStrip);
+            this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Easter Egg Editor";
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.MainForm_Scroll);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.topViewPanel.ResumeLayout(false);
             this.topViewPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -182,17 +236,22 @@ namespace Mindstep.EasterEgg.MapEditor
         #endregion
 
         private SpriteFontControl spriteFontControl;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton showTopView;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private MainView mainView;
         private System.Windows.Forms.Panel topViewPanel;
         private TopView topView;
         private System.Windows.Forms.Label coords;
-        private System.Windows.Forms.Button downButton;
-        private System.Windows.Forms.Label layerLabel;
         private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.Label layerLabel;
+        private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.TextBox layer;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }
 
