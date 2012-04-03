@@ -9,105 +9,50 @@ using Mindstep.EasterEgg.Engine.Physics;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    class PriorityQueue<P, V>
-    {
-        private SortedDictionary<P, Queue<V>> list = new SortedDictionary<P, Queue<V>>();
-        public void Enqueue(P priority, V value)
-        {
-            Queue<V> q;
-            if (!list.TryGetValue(priority, out q))
-            {
-                q = new Queue<V>();
-                list.Add(priority, q);
-            }
-            q.Enqueue(value);
-        }
-        public V Dequeue()
-        {
-            // will throw if there isn’t any first element!
-            var pair = list.First();
-            var v = pair.Value.Dequeue();
-            if (pair.Value.Count == 0) // nothing left of the top priority.
-                list.Remove(pair.Key);
-            return v;
-        }
-        public bool IsEmpty
-        {
-            get { return !list.Any(); }
-        }
-    }
-
-    public class Path<Node> : IEnumerable<Node>
-    {
-        public Node LastStep { get; private set; }
-        public Path<Node> PreviousSteps { get; private set; }
-        public double TotalCost { get; private set; }
-        private Path(Node lastStep, Path<Node> previousSteps, double totalCost)
-        {
-            LastStep = lastStep;
-            PreviousSteps = previousSteps;
-            TotalCost = totalCost;
-        }
-        public Path(Node start) : this(start, null, 0) { }
-        public Path<Node> AddStep(Node step, double stepCost)
-        {
-            return new Path<Node>(step, this, TotalCost + stepCost);
-        }
-        public IEnumerator<Node> GetEnumerator()
-        {
-            for (Path<Node> p = this; p != null; p = p.PreviousSteps)
-                yield return p.LastStep;
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        public object Last { get; set; }
-    }
-
     public class PhysicsManager : IPhysicsManager
     {
-        private List<IPhysicsObject> physicsObjects;
-        private int[][][] worldMatrix { get; set; }
+        private GameMap currentMap;
+        public GameMap CurrentMap
+        {
+            get { return currentMap; }
+            set { currentMap = value; }
+        }
 
         public void MoveObject(GameEntitySolid character, Vector3 endpoint, Map map)
         {
             throw new System.NotImplementedException();
         }
 
-        public float estimate(Node a, double b)
+        public int estimate(Node start, Node end)
         {
-            return 0;
+            return (int)Math.Floor((end.Position - start.Position).Length());
         }
 
-        public Path<Node> FindPath<Node>(
-            Node start,
-            Node destination,
-            Func<Node, double> estimate)
-            where Node : IHasNeighbours<Node>
+        public Path FindPath(Node start, Node destination)
         {
             var closed = new HashSet<Node>();
-            var queue = new PriorityQueue<double, Path<Node>>();
-            queue.Enqueue(0, new Path<Node>(start));
+            var queue = new PriorityQueue<double, Path>();
+            queue.Enqueue(0, new Path(start));
             while (!queue.IsEmpty)
             {
                 var path = queue.Dequeue();
                 if (closed.Contains(path.LastStep))
+                {
                     continue;
-                if (path.LastStep.Equals(destination))
+                }
+                if (path.LastStep.Position == destination.Position)
+                {
                     return path;
+                }
                 closed.Add(path.LastStep);
-                foreach (Node n in path.LastStep.Neighbours)
+                foreach (Node node in path.LastStep.getNeighbours(CurrentMap.WorldMatrix))
                 {
                     double d = 1; //Distance between 2 squares in the grid
-                    var newPath = path.AddStep(n, d);
-                    queue.Enqueue(newPath.TotalCost + estimate(n), newPath);
+                    var newPath = path.AddStep(node, d);
+                    queue.Enqueue(newPath.TotalCost + estimate(node, destination), newPath);
                 }
             }
             return null;
         }
-
-
     }
 }

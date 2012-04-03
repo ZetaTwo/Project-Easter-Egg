@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Node : IHasNeighbours<Node>
+    public class Node
     {
-        int x;
-        public int X { get { return x; } }
-
-        int y;
-        public int Y { get { return y; } }
-
-        int z;
-        public int Z { get { return z; } }
+        private Position position;
+        public Position Position
+        {
+            get { return position; }
+        }
 
         //0=walkable
         //1=not walkable
@@ -22,46 +20,38 @@ namespace Mindstep.EasterEgg.Engine.Physics
         //3=stair down
         public int type;
 
-
-        public List<Node> Neighbours { get { return this.getNeighbours(); } }
-
-
-        public Node(int _type, int _x, int _y, int _z)
+        public Node(int _type, Position position)
         {
             type = _type;
-            x = _x;
-            y = _y;
-            z = _z;
-
-           
+            this.position = position;
         }
 
-        public List<Node> getNeighbours()
+        public List<Node> getNeighbours(Node[][][] worldMatrix)
         {
             int[][] possibleNeighbours = new int[][] {
-                new int[] {-1,-1},
-                new int[] {-1,0},
-                new int[] {0,-1},
-                new int[] {1,0},
-                new int[] {0,1},
-                new int[] {1,1},
-                new int[] {-1,1},
-                new int[] {1,-1}
+                new int[] {-1, -1},
+                new int[] {-1, 0},
+                new int[] {0, -1},
+                new int[] {1, 0},
+                new int[] {0, 1},
+                new int[] {1, 1},
+                new int[] {-1, 1},
+                new int[] {1, -1}
             };
             List<Node> neighbours = new List<Node>();
-            int width = worldMatrix.Length;
-            int height = worldMatrix[0].Length;
-            int currentLevel = this.z;
+            int width = worldMatrix.Length - 1;
+            int height = worldMatrix[0].Length - 1;
+            int currentLevel = Position.Z;
 
             for (int i = 0; i < 8; i++)
             {
                 //check for out of bounds
-                if ((this.x == 0 && possibleNeighbours[i][0] < 0) ||
-                    (this.x == width && possibleNeighbours[i][0] > 0) ||
-                    (this.y == 0 && possibleNeighbours[i][1] < 0) ||
-                    (this.y == height && possibleNeighbours[i][0] > 0))
+                if ((Position.X == 0 && possibleNeighbours[i][0] < 0) ||
+                    (Position.X == width && possibleNeighbours[i][0] > 0) ||
+                    (Position.Y == 0 && possibleNeighbours[i][1] < 0) ||
+                    (Position.Y == height && possibleNeighbours[i][1] > 0))
                     continue;
-                Node possibleNeighbour = worldMatrix[this.X+possibleNeighbours[i][0]][this.Y+possibleNeighbours[i][1]][currentLevel];
+                Node possibleNeighbour = worldMatrix[Position.X + possibleNeighbours[i][0]][Position.Y + possibleNeighbours[i][1]][currentLevel];
                 if(possibleNeighbour.type != 1)
                     neighbours.Add(possibleNeighbour);
             }
