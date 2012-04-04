@@ -24,12 +24,24 @@ namespace Mindstep.EasterEgg.Engine
             get { return pointer; }
         }
 
-        private List<GameMap> maps;
+        //private Camera camera;
+        SamplerState samplerState;
+
+        private List<GameMap> maps = new List<GameMap>();
         private GameMap currentMap;
         protected GameMap CurrentMap
         {
             get { return currentMap; }
-            set { currentMap = value; }
+            set
+            {
+                if (!maps.Contains(value))
+                {
+                    value.Initialize(Engine);
+                    maps.Add(value);
+                }
+
+                currentMap = value;
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -40,11 +52,18 @@ namespace Mindstep.EasterEgg.Engine
         public virtual void Initialize(EggEngine _engine)
         {
             engine = _engine;
+
+            samplerState = new SamplerState();
+            samplerState.Filter = TextureFilter.PointMipLinear;
+            samplerState.AddressU = TextureAddressMode.Clamp;
+            samplerState.AddressV = TextureAddressMode.Clamp;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Additive, samplerState, null, null, null, Matrix.Identity);
             CurrentMap.Draw(spriteBatch);
+            spriteBatch.End();
 
             DrawWorld(spriteBatch);
         }

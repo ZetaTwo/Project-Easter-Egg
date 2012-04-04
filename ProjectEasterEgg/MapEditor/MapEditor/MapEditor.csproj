@@ -66,6 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
+    <Compile Include="BlockDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BlockDetailsForm.Designer.cs">
+      <DependentUpon>BlockDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Exporter.cs" />
     <Compile Include="Conversions.cs" />
     <Compile Include="Frame.cs" />
@@ -96,6 +102,9 @@
     <Compile Include="SpriteFontControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="BlockDetailsForm.resx">
+      <DependentUpon>BlockDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

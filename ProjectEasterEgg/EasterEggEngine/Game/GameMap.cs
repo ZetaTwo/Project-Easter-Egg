@@ -8,17 +8,22 @@ using Mindstep.EasterEgg.Commons.Game;
 using Mindstep.EasterEgg.Commons;
 using EggEnginePipeline;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class GameMap : IEntityDrawable
+    public class GameMap : IEntityDrawable, IEnumerable<GameBlock>
     {
         EggEngine engine;
-
-        Position origin;
-        public Position Origin
+        public EggEngine Engine
         {
-            get { return origin; }
+            get { return engine; }
+        }
+
+        BoundingBoxInt bounds;
+        public BoundingBoxInt Bounds
+        {
+            get { return bounds; }
         }
 
         private List<IEntityDrawable> drawableObjects = new List<IEntityDrawable>();
@@ -34,13 +39,13 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public GameMap(Position min, Position max)
         {
-            origin = min;
-            worldMatrix = CreateWorldMatrix<GameBlock>(max - origin + new Position(1, 1, 1));
+            bounds = new BoundingBoxInt(new Position[] {min, max});
+            worldMatrix = CreateWorldMatrix<GameBlock>(max - min + new Position(1, 1, 1));
         }
 
         public GameMap(GameMapDTO data)
         {
-            origin = data.Origin;
+            bounds = new BoundingBoxInt(new Position[] {data.Min, data.Max});
             worldMatrix = CreateWorldMatrix<GameBlock>(new Position(data.WorldMatrix.Length,
                                                                     data.WorldMatrix[0].Length,
                                                                     data.WorldMatrix[0][0].Length));
@@ -53,7 +58,8 @@ namespace Mindstep.EasterEgg.Engine.Game
                     {
                         if (data.WorldMatrix[x][y][z] != null)
                         {
-                            worldMatrix[x][y][z] = new GameBlock(data.WorldMatrix[x][y][z].Type, data.WorldMatrix[x][y][z].Position);
+                            GameBlockDTO blockData = data.WorldMatrix[x][y][z];
+                            worldMatrix[x][y][z] = new GameBlock(blockData);
                         }
                     }
                 }
@@ -71,6 +77,11 @@ namespace Mindstep.EasterEgg.Engine.Game
         public void Initialize(EggEngine _engine)
         {
             engine = _engine;
+
+            foreach (GameBlock block in this)
+            {
+                block.Initialize(Engine);
+            }
         }
 
         public void AddUpdate(IEntityUpdate entity)
@@ -99,13 +110,11 @@ namespace Mindstep.EasterEgg.Engine.Game
             return matrix;
         }
 
-        
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (IEntityDrawable drawable in drawableObjects)
+            foreach (GameBlock block in this)
             {
-                drawable.Draw(spriteBatch);
+                block.Draw(spriteBatch, Bounds);
             }
 
             foreach (IEntityDrawable drawable in drawableObjects)
@@ -117,6 +126,28 @@ namespace Mindstep.EasterEgg.Engine.Game
         public void AddUpdate(IEntityDrawable entity)
         {
             drawableObjects.Add(entity);
+        }
+
+        public IEnumerator<GameBlock> GetEnumerator()
+        {
+            foreach (GameBlock[][] yList in WorldMatrix)
+            {
+                foreach (GameBlock[] zList in yList)
+                {
+                    foreach (GameBlock block in zList)
+                    {
+                        if (block != null)
+                        {
+                            yield return block;
+                        }
+                    }
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -7,12 +7,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    public struct SaveBlock
+    public class SaveBlock
     {
         public Position Position;
         public Texture2D Texture;
         public int id;
         public string script;
         public int type;
+
+        public SaveBlock(Position pos)
+        {
+            this.Position = pos;
+        }
     }
 }
