@@ -43,11 +43,11 @@ namespace Mindstep.EasterEgg.Commons
             return new Point((int)point.X, (int)point.Y);
         }
 
-        public static Vector3 fromScreen(Vector2 screen, int layer = 0)
+        public static Vector3 FromScreen(Vector2 screen, int layer = 0)
         {
             return new Vector3((TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) + TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
                                (TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) - TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
-                               0f);
+                               layer);
         }
 
         public static IEnumerable<Position> ToPositions(this IEnumerable<Block> blocks) {

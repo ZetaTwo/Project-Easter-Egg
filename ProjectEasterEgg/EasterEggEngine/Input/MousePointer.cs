@@ -23,7 +23,7 @@ namespace Mindstep.EasterEgg.Engine.Input
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, Color.White);
-            Vector3 position = CoordinateTransform.fromScreen(Position, 0);
+            Vector3 position = CoordinateTransform.FromScreen(Position, 0);
             spriteBatch.DrawString(font, position.ToString(), Position + Vector2.UnitX * 35, Color.White);
         }
 

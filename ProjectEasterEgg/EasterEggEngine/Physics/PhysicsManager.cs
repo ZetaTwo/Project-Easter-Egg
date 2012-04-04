@@ -142,9 +142,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
         public void ClickWorld(Vector2 screen, BlockAction action)
         {
             //The entry position
-            screen.Y *= 1;
+            //screen.Y *= 1;
             screen.X *= -1;
-            Vector3 position = CoordinateTransform.fromScreen(screen, -CurrentMap.Bounds.Min.Z + CurrentMap.Bounds.Max.Z);
+            Vector3 position = CoordinateTransform.FromScreen(screen, CurrentMap.Bounds.Max.Z - CurrentMap.Bounds.Min.Z);
             if (position.X < CurrentMap.Bounds.Min.X || position.X > CurrentMap.Bounds.Max.X ||
                position.Y < CurrentMap.Bounds.Min.Y || position.Y > CurrentMap.Bounds.Max.Y ||
                position.Z < CurrentMap.Bounds.Min.Z || position.Z > CurrentMap.Bounds.Max.Z)
