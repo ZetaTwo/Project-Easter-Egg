@@ -34,7 +34,7 @@ Floor - done
 Window - done
 
 --Living room--
-Soda - todo
+Sofa - todo
 TV - done
 Painting - done
 Doorway - todo
@@ -50,8 +50,8 @@ Candelabra - done
 Kitchen table - done
 Cupboards - done
 Sink - done
-Workspace - todo
-Fridge - todo
+Workspace - done
+Fridge - done
 Faucet - todo
 Microwave - todo
 Oven - todo
