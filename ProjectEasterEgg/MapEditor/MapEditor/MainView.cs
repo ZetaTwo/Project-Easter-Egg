@@ -107,9 +107,9 @@ namespace Mindstep.EasterEgg.MapEditor
         protected override void Draw()
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix * Matrix.CreateTranslation(offset.X, offset.Y, 0));
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.BlockPositions);
+            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.SaveBlocks.ToPositions());
 
             List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
@@ -127,7 +127,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
 
-            foreach (Position pos in MainForm.BlockPositions)
+            foreach (Position pos in MainForm.SaveBlocks.ToPositions())
             {
                 Color color;
                 if (pos.Z == MainForm.CurrentHeight)
@@ -141,16 +141,15 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(block, boundingBox, color, pos);
             }
 
-            for (int i = 0; i < MainForm.Textures.Count; i++)
+            for (int i = 0; i < MainForm.CurrentFrame.Textures.Count; i++)
             {
-                
-                Texture2DWithPos tex = MainForm.Textures[i];
-                float depth = 0.1f*(1 - (float)i / MainForm.Textures.Count);
-                Vector2 screenCoords = ProjectionToScreenSpace((tex.pos.ToVector2() * Zoom).ToXnaPoint());
-                spriteBatch.Draw(tex.Texture, screenCoords, null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth);
+
+                Texture2DWithPos tex = MainForm.CurrentFrame.Textures[i];
+                float depth = 0.1f * (1 - (float)i / MainForm.CurrentFrame.Textures.Count);
+                spriteBatch.Draw(tex.Texture, tex.Coord.ToVector2(), null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth);
                 if (MainForm.DrawTextureIndices())
                 {
-                    spriteBatch.DrawString(spriteFont, i.ToString(), screenCoords, Color.Green);
+                    spriteBatch.DrawString(spriteFont, i.ToString(), tex.Coord.ToVector2(), Color.Green);
                 }
             }
             spriteBatch.End();
@@ -160,8 +159,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
             Point projCoords = CoordinateTransform.ObjectToProjectionSpace(pos).toPoint();
-            Vector2 screenCoords = ProjectionToScreenSpace(projCoords);
-            spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
+            spriteBatch.Draw(image, projCoords.ToVector2(), null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
         }
 
         private void MainView_MouseDown(object sender, MouseEventArgs e)
@@ -172,9 +170,9 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             else if (e.Button == MouseButtons.Left)
             {
-                for (int i = MainForm.Textures.Count - 1; i >= 0; i--)
+                for (int i = MainForm.CurrentFrame.Textures.Count - 1; i >= 0; i--)
                 {
-                    Texture2DWithPos tex = MainForm.Textures[i];
+                    Texture2DWithPos tex = MainForm.CurrentFrame.Textures[i];
                     if (tex.Rectangle.Contains((e.Location.toVector2()-offset).toPoint()))
                     {
                         dragging = tex;
@@ -196,11 +194,6 @@ namespace Mindstep.EasterEgg.MapEditor
             return screenCoord.ToVector2() + offset;
         }
 
-        public Vector2 ProjectionToScreenSpace(Point projCoord)
-        {
-            return projCoord.ToVector2() + offset;
-        }
-
         private void MainView_MouseMove(object sender, MouseEventArgs e)
         {
             if (panning || dragging != null) {
@@ -208,13 +201,13 @@ namespace Mindstep.EasterEgg.MapEditor
                 int movedY = e.Location.Y - lastMouseLocation.Y;
                 if (panning)
                 {
-                    offset.X += movedX / Zoom;
-                    offset.Y += movedY / Zoom;
+                    offset.X += movedX;
+                    offset.Y += movedY;
                 }
                 else
                 {
-                    dragging.pos.X += movedX;
-                    dragging.pos.Y += movedY;
+                    dragging.Coord.X += movedX;
+                    dragging.Coord.Y += movedY;
                 }
                 lastMouseLocation = e.Location;
             }

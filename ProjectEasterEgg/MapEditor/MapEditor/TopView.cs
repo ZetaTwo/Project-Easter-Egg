@@ -52,7 +52,15 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                toggleBlock(getClosestBlockCoord(e.Location.toXnaPoint()));
+                toggleBlock(e.Location.toXnaPoint());
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                SaveBlock block = getBlockAt(PointToPosition(e.Location.toXnaPoint()));
+                if (block != null)
+                {
+                    new BlockDetailsForm(block);
+                }
             }
         }
 
@@ -85,7 +93,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            foreach (Position pos in MainForm.BlockPositions)
+            foreach (Position pos in MainForm.SaveBlocks.ToPositions())
             {
                 int height = pos.Z-MainForm.CurrentHeight;
                 if (height == 0)
@@ -135,22 +143,40 @@ namespace Mindstep.EasterEgg.MapEditor
             MainForm.changedSinceLastSave = true;
             MainForm.RefreshTitle();
 
-            //X and Y screen coordinates are swapped relative
-            //the way we want to represent this top view
-            Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
-            for (int i=0; i<MainForm.BlockPositions.Count; i++)
-            {
-                if (MainForm.BlockPositions[i] == newPos)
-                {
-                    MainForm.BlockPositions.RemoveAt(i);
-                    return;
-                }
-            }
+            Position newPos = PointToPosition(p);
 
-            //no matching block found, so create one
-            MainForm.BlockPositions.Add(newPos);
+            SaveBlock saveBlock = getBlockAt(newPos);
+            if (saveBlock == null)
+            {
+                //no matching block found, so create one
+                saveBlock = new SaveBlock(newPos);
+                MainForm.SaveBlocks.Add(saveBlock);
+            }
+            else
+            {
+                MainForm.SaveBlocks.Remove(saveBlock);
+            }
         }
 
+        private Position PointToPosition(Point p)
+        {
+            Point positionCoords = getClosestBlockCoord(p);
+            return new Position(positionCoords.X, positionCoords.Y, MainForm.CurrentHeight);
+        }
+
+        internal SaveBlock getBlockAt(Position pos)
+        {
+            //X and Y screen coordinates are swapped relative
+            //the way we want to represent this top view
+            for (int i=0; i<MainForm.SaveBlocks.Count; i++)
+            {
+                if (MainForm.SaveBlocks[i].Position == pos)
+                {
+                    return MainForm.SaveBlocks[i];
+                }
+            }
+            return null;
+        }
 
         public void MainView_MouseWheel(object sender, MouseEventArgs e)
         {
