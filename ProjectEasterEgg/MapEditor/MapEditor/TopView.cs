@@ -45,8 +45,16 @@ namespace Mindstep.EasterEgg.MapEditor
 
             // Hook the idle event to constantly redraw our animation.
             Application.Idle += delegate { Invalidate(); };
+            MouseClick += new MouseEventHandler(TopView_Click);
         }
 
+        private void TopView_Click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                toggleBlock(getClosestBlockCoord(e.Location.toXnaPoint()));
+            }
+        }
 
         /// <summary>
         /// Draws the control.
@@ -127,6 +135,19 @@ namespace Mindstep.EasterEgg.MapEditor
 
             //no matching block found, so create one
             MainForm.Blocks.Add(new Block(newPos));
+        }
+
+
+        public void MainView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                MainForm.CurrentHeight++;
+            }
+            else if (e.Delta < 0)
+            {
+                MainForm.CurrentHeight--;
+            }
         }
     }
 }

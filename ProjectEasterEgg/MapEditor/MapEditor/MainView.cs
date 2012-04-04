@@ -11,6 +11,28 @@ using System.Collections.Generic;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
+    class Zoom {
+        private static float[] zooms = { .5f, .75f, 1, 2, 4, 6, 8, 12, 16, 24, 32 };
+        private int zoomIndex = 2;
+        public Matrix Matrix = Matrix.Identity;
+        
+        public void In()
+        {
+            zoomIndex = Math.Min(zoomIndex + 1, zooms.Length - 1);
+            Matrix = Matrix.CreateScale(this);
+        }
+
+        public void Out()
+        {
+            zoomIndex = Math.Max(zoomIndex - 1, 0);
+            Matrix = Matrix.CreateScale(this);
+        }
+
+        public static implicit operator float(Zoom z) {
+            return zooms[z.zoomIndex];
+        }
+    }
+
     /// <summary>
     /// Example control inherits from GraphicsDeviceControl, which allows it to
     /// render using a GraphicsDevice. This control shows how to draw animating
@@ -24,17 +46,31 @@ namespace Mindstep.EasterEgg.MapEditor
         private SpriteEffects spriteEffect;
         private Texture2D block;
         private Texture2D grid;
-        private Point center { get { return new Point(Width / 2, Height / 2); } }
-        private float scale;
+        private Vector2 center;
+        private Vector2 offset;
+
         public MainForm MainForm;
         private int tileHeight;
         private int tileWidth;
         private int blockHeight;
+        private bool draggingView;
+        private System.Drawing.Point lastMouseLocation;
+        private SamplerState samplerState;
+
+        public Zoom Zoom = new Zoom();
 
 
         protected override void Initialize()
         {
             Load("mainBlock31", "mainGrid31");
+            MouseDown += new MouseEventHandler(MainView_MouseDown);
+            MouseUp += new MouseEventHandler(MainView_MouseUp);
+            MouseMove += new MouseEventHandler(MainView_MouseMove);
+
+            samplerState = new SamplerState();
+            samplerState.Filter = TextureFilter.PointMipLinear;
+            samplerState.AddressU = TextureAddressMode.Clamp;
+            samplerState.AddressV = TextureAddressMode.Clamp;
         }
 
         /// <summary>
@@ -55,7 +91,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
             blockHeight = block.Height - (block.Width + 1) / 2;
             tileWidth = block.Width;
-            tileHeight = block.Bounds.Height - blockHeight;
+            tileHeight = block.Height - blockHeight;
+            center = new Vector2((Width-tileWidth) / 2, (Height-block.Height) / 2);
+            offset = new Vector2(0, 0);
 
             // Hook the idle event to constantly redraw our animation.
             Application.Idle += delegate { Invalidate(); };
@@ -68,9 +106,9 @@ namespace Mindstep.EasterEgg.MapEditor
         protected override void Draw()
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix);
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt();
+            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.Blocks.ToPositions());
 
             List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
@@ -82,12 +120,11 @@ namespace Mindstep.EasterEgg.MapEditor
                     boundingBox.addPos(tilePos);
                 }
             }
+
             foreach (Position tilePos in tiles)
             {
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
-
-            boundingBox.addPos(MainForm.Blocks.ToPositions());
 
             foreach (Block b in MainForm.Blocks)
             {
@@ -108,8 +145,43 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos)
         {
             float depth = boundingBox.getDepth(pos);
-            Vector2 screenCoords = Transform.ToScreen(pos, tileHeight, tileWidth, blockHeight, center).toVector2();
-            spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth);
+            Vector2 screenCoords = Transform.ToScreen(pos, tileHeight, tileWidth, blockHeight, (center+offset).toPoint()).toVector2();
+            spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
+        }
+
+        private void MainView_MouseDown(object sender, MouseEventArgs e)
+        {
+            draggingView = true;
+            lastMouseLocation = e.Location;
+        }
+
+        private void MainView_MouseUp(object sender, MouseEventArgs e)
+        {
+            draggingView = false;
+        }
+
+        private void MainView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (draggingView)
+            {
+                offset.X += (e.Location.X - lastMouseLocation.X) / Zoom ;
+                offset.Y += (e.Location.Y - lastMouseLocation.Y) / Zoom ;
+                lastMouseLocation = e.Location;
+            }
+        }
+
+        public void MainView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                Zoom.In();
+                MainForm.RefreshTitle();
+            }
+            else if (e.Delta < 0)
+            {
+                Zoom.Out();
+                MainForm.RefreshTitle();
+            }
         }
     }
 }
