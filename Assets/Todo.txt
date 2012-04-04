@@ -1,0 +1,57 @@
+--General--
+Door - done
+Window - done
+
+
+--Bedroom--
+Bed - Done
+Comic Book - Done
+Wardrobe with clothes - Done
+Pillow - Done
+Wallpaper - todo
+Alarm clock - Done
+Lamp - Done
+Nightstand/Drawer - Done
+
+--Master bedroom--
+Bed - todo
+Drawer/nightstand - Done
+Lamps - Done
+Wallpaper - Done
+
+--Suzy's room--
+Crib - done
+Drawer - todo
+
+--Hallway first floor--
+Floors - done
+Coat hanger - todo
+Staircase - done
+Doorway - todo, will wait and see how it should look.
+
+--Hallway second floor--
+Floor - done
+Window - done
+
+--Living room--
+Soda - todo
+TV - done
+Painting - done
+Doorway - todo
+
+--Dining hall--
+Dining table - done
+Chairs - todo
+Windows - done
+Doorway - todo
+Candelabra - done
+
+--Kitchen--
+Kitchen table - todo
+Cupboards - todo
+Sink - todo
+Workspace - todo
+Fridge - todo
+Faucet - todo
+Microwave - todo
+Oven - todo
