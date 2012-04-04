@@ -223,21 +223,21 @@ using Microsoft.Xna.Framework.Content;
             }
         }
 
-        private Point lastImportedTexturePos = new Point(100, 100);
+        private Point lastImportedTextureOffset = new Point(100, 100);
         private void importImage(string fileName)
         {
-            int nextX = lastImportedTexturePos.X + 50;
-            int nextY = lastImportedTexturePos.Y + 50;
             Texture2DWithPos tex = new Texture2DWithPos();
-            if (nextX < mainView.Width - 300 ||
-                nextY < mainView.Height - 300)
+            Point textureOffset;
+            if (lastImportedTextureOffset.X > 400)
             {
-                tex.pos = new Point(100, 100);
+                textureOffset = (lastImportedTextureOffset.toVector2() + new Vector2(50, 50)).toPoint();
             }
             else
             {
-                tex.pos = new Point(nextX, nextY);
+                textureOffset = new Point(100, 100);
             }
+            tex.pos = textureOffset;//ScreenToProjectionSpace(textureOffset);
+            
             tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
             Textures.Add(tex);
         }
