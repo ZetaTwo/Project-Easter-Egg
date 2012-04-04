@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Mindstep.EasterEgg.Engine.Game;
-using System.Collections;
-using Mindstep.EasterEgg.Engine.Physics;
 using Mindstep.EasterEgg.Commons;
+using Mindstep.EasterEgg.Engine.Game;
 using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Engine.Physics
@@ -113,7 +109,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
         #endregion
 
-        public void ClickWorld(Vector2 screen)
+        public void ClickWorld(Vector2 screen, BlockAction action)
         {
             //The direction in which we are going
             Vector3 delta = -new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f))));
@@ -131,8 +127,8 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
                 if (currentBlock.Interactable)
                 {
-                    //currentBlock.Interact();
-                    //return
+                    currentBlock.Interact(action);
+                    return;
                 }
 
                 if (currentBlock.Type == BlockType.SOLID)

@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace Mindstep.EasterEgg.Engine
 {
     public enum BlockAction { INSPECT, INTERACT };
 
-    public abstract class BlockScript : Script
+    public abstract class ScriptBlock : Script
     {
+        GameBlock block;
         BlockAction action;
 
-        public BlockScript(BlockAction action, string name) : base(name)
+        public void Prepare(GameBlock block, BlockAction action)
         {
+            this.block = block;
             this.action = action;
         }
 

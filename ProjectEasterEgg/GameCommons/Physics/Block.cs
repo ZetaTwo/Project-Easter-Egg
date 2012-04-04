@@ -9,9 +9,6 @@ using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Commons
 {
-    public enum BlockType { WALKABLE, SOLID, STAIRS_UP, STAIRS_DOWN };
-    public enum BlockFaces { LEFT, RIGHT, TOP };
-
     public class Block
     {
         private Position position;
