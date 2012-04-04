@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    struct SaveBlock
+    public struct SaveBlock
     {
         public Position Position;
         public Texture2D Texture;

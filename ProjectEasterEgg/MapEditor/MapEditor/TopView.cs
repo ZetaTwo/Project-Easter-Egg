@@ -85,7 +85,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            foreach (Position pos in MainForm.BlockPositions)
+            foreach (Position pos in MainForm.SaveBlocks.ToPositions())
             {
                 int height = pos.Z-MainForm.CurrentHeight;
                 if (height == 0)
@@ -138,17 +138,18 @@ namespace Mindstep.EasterEgg.MapEditor
             //X and Y screen coordinates are swapped relative
             //the way we want to represent this top view
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
-            for (int i=0; i<MainForm.BlockPositions.Count; i++)
+            for (int i=0; i<MainForm.SaveBlocks.Count; i++)
             {
-                if (MainForm.BlockPositions[i] == newPos)
+                if (MainForm.SaveBlocks[i].Position == newPos)
                 {
-                    MainForm.BlockPositions.RemoveAt(i);
+                    MainForm.SaveBlocks.RemoveAt(i);
                     return;
                 }
             }
-
+            SaveBlock saveBlock = new SaveBlock();
+            saveBlock.Position = newPos;
             //no matching block found, so create one
-            MainForm.BlockPositions.Add(newPos);
+            MainForm.SaveBlocks.Add(saveBlock);
         }
 
 

@@ -47,8 +47,9 @@ using Microsoft.Xna.Framework.Content;
             }
         }
 
-        public List<Position> BlockPositions = new List<Position>();
-        public List<Texture2DWithPos> Textures = new List<Texture2DWithPos>();
+        public List<SaveBlock> SaveBlocks = new List<SaveBlock>();
+        private IEnumerable<Animation> animations;
+        public Frame CurrentFrame = new Frame();
         public bool changedSinceLastSave;
 
         public readonly ServiceContainer Services;
@@ -74,10 +75,6 @@ using Microsoft.Xna.Framework.Content;
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
-
-            Texture2DWithPos texture = new Texture2DWithPos();
-            texture.Texture = Content.Load<Texture2D>("mainBlock31");
-            Textures.Add(texture);
         }
 
         private void SetupContentManager()
@@ -168,7 +165,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void saveClicked()
         {
-            if (BlockPositions.Count == 0)
+            if (SaveBlocks.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -180,7 +177,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void saveAsClicked()
         {
-            if (BlockPositions.Count == 0)
+            if (SaveBlocks.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -197,7 +194,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void save()
         {
-            Exporter.CompileModel(BlockPositions, Textures, saveFileDialog.FileName);
+            Exporter.SaveModel(SaveBlocks, animations, saveFileDialog.FileName);
             lastSavedDoc = saveFileDialog.FileName;
             changedSinceLastSave = false;
             RefreshTitle();
@@ -230,16 +227,16 @@ using Microsoft.Xna.Framework.Content;
             Point textureOffset;
             if (lastImportedTextureOffset.X > 400)
             {
-                textureOffset = (lastImportedTextureOffset.toVector2() + new Vector2(50, 50)).toPoint();
+                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).toPoint();
             }
             else
             {
                 textureOffset = new Point(100, 100);
             }
-            tex.pos = textureOffset;//ScreenToProjectionSpace(textureOffset);
+            tex.Coord = textureOffset;//ScreenToProjectionSpace(textureOffset);
             
             tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
-            Textures.Add(tex);
+            CurrentFrame.Textures.Add(tex);
         }
         #endregion
 

@@ -10,13 +10,14 @@ namespace Mindstep.EasterEgg.MapEditor
     public class Texture2DWithPos
     {
         public Texture2D Texture;
-        public Point pos;
+        public Point Coord;
+        public string Name;
 
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle(pos.X, pos.Y, Texture.Width, Texture.Height);
+                return new Rectangle(Coord.X, Coord.Y, Texture.Width, Texture.Height);
             }
         }
     }
