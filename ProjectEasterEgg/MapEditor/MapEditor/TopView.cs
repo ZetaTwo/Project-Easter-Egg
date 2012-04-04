@@ -40,13 +40,37 @@ namespace Mindstep.EasterEgg.MapEditor
             ContentManager Content = new ContentManager(Services, "MapEditorContent");
             block = Content.Load<Texture2D>("topBlock");
             grid = Content.Load<Texture2D>("topGrid");
+            Texture2DWithPos texture = new Texture2DWithPos();
+            texture.Texture = Content.Load<Texture2D>("mainBlock31");
+            MainForm.Textures.Add(texture);
             offsetToBlock00 = new Point(Width/2, Height/2);
             gridSize = grid.Width;
 
             // Hook the idle event to constantly redraw our animation.
             Application.Idle += delegate { Invalidate(); };
+            MouseClick += new MouseEventHandler(TopView_MouseClick);
+            MouseMove += new MouseEventHandler(TopView_MouseMove);
+            MouseLeave += new EventHandler(TopView_MouseLeave);
         }
 
+        private void TopView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                toggleBlock(getClosestBlockCoord(e.Location.toXnaPoint()));
+            }
+        }
+
+        private void TopView_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point p = getClosestBlockCoord(e.Location.toXnaPoint());
+            MainForm.setTopViewCoordLabel("X:" + p.X + "   Y:" + p.Y);
+        }
+
+        private void TopView_MouseLeave(object sender, EventArgs e)
+        {
+            MainForm.setTopViewCoordLabel("");
+        }
 
         /// <summary>
         /// Draws the control.
@@ -66,16 +90,16 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            foreach (Block b in MainForm.Blocks)
+            foreach (Position pos in MainForm.BlockPositions)
             {
-                int height = b.Offset.Z-MainForm.CurrentHeight;
+                int height = pos.Z-MainForm.CurrentHeight;
                 if (height == 0)
                 {
-                    drawBox(block, b.Offset, Color.Green, 0);
+                    drawBox(block, pos, Color.Green, 0);
                 }
                 else
                 {
-                    drawBox(block, b.Offset, Color.Red, .5f);
+                    drawBox(block, pos, Color.Red, .5f);
                 }
             }
             spriteBatch.End();
@@ -113,20 +137,36 @@ namespace Mindstep.EasterEgg.MapEditor
 
         internal void toggleBlock(Point p)
         {
+            MainForm.changedSinceLastSave = true;
+            MainForm.RefreshTitle();
+
             //X and Y screen coordinates are swapped relative
             //the way we want to represent this top view
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
-            for (int i=0; i<MainForm.Blocks.Count; i++)
+            for (int i=0; i<MainForm.BlockPositions.Count; i++)
             {
-                if (MainForm.Blocks[i].Offset == newPos)
+                if (MainForm.BlockPositions[i] == newPos)
                 {
-                    MainForm.Blocks.RemoveAt(i);
+                    MainForm.BlockPositions.RemoveAt(i);
                     return;
                 }
             }
 
             //no matching block found, so create one
-            MainForm.Blocks.Add(new Block(newPos));
+            MainForm.BlockPositions.Add(newPos);
+        }
+
+
+        public void MainView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                MainForm.CurrentHeight++;
+            }
+            else if (e.Delta < 0)
+            {
+                MainForm.CurrentHeight--;
+            }
         }
     }
 }

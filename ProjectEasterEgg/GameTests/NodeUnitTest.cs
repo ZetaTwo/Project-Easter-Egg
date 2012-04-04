@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mindstep.EasterEgg.Engine.Physics;
 using Mindstep.EasterEgg.Commons;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace GameTests
 {
@@ -14,20 +15,20 @@ namespace GameTests
     [TestClass]
     public class NodeUnitTest
     {
-        Node[][][] testMatrix1;
+        PhysicsManager physics;
 
         public NodeUnitTest()
         {
-             testMatrix1 = new Node[6][][];
+            physics = new PhysicsManager();
+            GameMap map = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
+            physics.CurrentMap = map;
 
-            for(int i = 0; i < 6; i++)
+            for(int x = 0; x < 6; x++)
             {
-                testMatrix1[i] = new Node[6][];
-                for(int k = 0; k < 6; k++)
+                for(int y = 0; y < 6; y++)
                 {
-                    testMatrix1[i][k] = new Node[1];
-                    Node n = new Node(1, new Position(i, k, 0));
-                    testMatrix1[i][k][0] = n;
+                    GameBlock n = new GameBlock(BlockType.SOLID, new Position(x, y, 0));
+                    physics.CurrentMap.WorldMatrix[x][y][0] = n;
                 }
             }
 
@@ -76,8 +77,8 @@ namespace GameTests
         [TestMethod]
         public void TestGetNeighbours()
         {
-            Node n = new Node(0, new Position(1, 1, 0));
-            List<Node> test = n.getNeighbours(testMatrix1);
+            GameBlock node = new GameBlock(0, new Position(1, 1, 0));
+            List<GameBlock> test = physics.GetNeighbours(node);
             Assert.AreEqual(0, test.Count);
             
         }

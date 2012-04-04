@@ -11,36 +11,25 @@ namespace Mindstep.EasterEgg.Commons
 {
     public class Block
     {
-        BlockType type;
-        internal BlockType Type
-        {
-            get { return type; }
-        }
-
-        private Position offset;
-        public Position Offset
+        private Position position;
+        public Position Position
         {
             get
             {
-                return offset;
+                return position;
             }
         }
 
-        public Block(Position offset)
+        Texture2D texture;
+
+        public Block(Position position)
         {
-            this.type = null;
-            this.offset = offset;
+            this.position = position;
         }
 
-        internal Block(BlockType type, Position offset)
+        public void Draw(SpriteBatch spriteBatch, Position origin)
         {
-            this.type = type;
-            this.offset = offset;
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Position position)
-        {
-            spriteBatch.Draw(Type.GetFrame(0f), SpriteHelper.toScreen(position + Offset), Color.White);
+            spriteBatch.Draw(texture, SpriteHelper.toScreen(origin + Position), Color.White);
         }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Game\GameWorld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Scripts\ScriptBlockExample.cs" />
     <Compile Include="Scripts\ExampleDialogue.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,10 @@
     <ProjectReference Include="..\..\EasterEggEngine\EasterEggEngine.csproj">
       <Project>{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}</Project>
       <Name>EasterEggEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GameCommons\GameCommons.csproj">
+      <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
+      <Name>GameCommons</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameClientContent\GameClientContent.contentproj">
       <Name>GameClientContent %28Content%29</Name>

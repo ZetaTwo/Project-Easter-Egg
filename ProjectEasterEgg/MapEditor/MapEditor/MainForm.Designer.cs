@@ -35,6 +35,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topViewPanel = new System.Windows.Forms.Panel();
             this.coords = new System.Windows.Forms.Label();
             this.upButton = new System.Windows.Forms.Button();
@@ -42,7 +43,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.downButton = new System.Windows.Forms.Button();
             this.layer = new System.Windows.Forms.TextBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
             this.toolStrip.SuspendLayout();
@@ -58,7 +58,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip.Size = new System.Drawing.Size(792, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1092, 25);
             this.toolStrip.TabIndex = 15;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -93,7 +93,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(792, 24);
+            this.menuStrip.Size = new System.Drawing.Size(1092, 24);
             this.menuStrip.TabIndex = 16;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -114,6 +114,15 @@ namespace Mindstep.EasterEgg.MapEditor
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
             // topViewPanel
             // 
             this.topViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -123,7 +132,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.topViewPanel.Controls.Add(this.layerLabel);
             this.topViewPanel.Controls.Add(this.downButton);
             this.topViewPanel.Controls.Add(this.layer);
-            this.topViewPanel.Location = new System.Drawing.Point(560, 49);
+            this.topViewPanel.Location = new System.Drawing.Point(860, 49);
             this.topViewPanel.Name = "topViewPanel";
             this.topViewPanel.Size = new System.Drawing.Size(232, 208);
             this.topViewPanel.TabIndex = 18;
@@ -176,16 +185,9 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             // saveFileDialog
             // 
+            this.saveFileDialog.Filter = "Egg model files (*.egg)|*.egg";
+            this.saveFileDialog.Title = "Save As";
             this.saveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog_FileOk);
-            // 
-            // saveAsToolStripMenuItem
-            // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.S)));
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // topView
             // 
@@ -194,24 +196,24 @@ namespace Mindstep.EasterEgg.MapEditor
             this.topView.Size = new System.Drawing.Size(196, 184);
             this.topView.TabIndex = 7;
             this.topView.Text = "top view";
-            this.topView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.topView_Click);
-            this.topView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.topView_MouseMove);
             // 
             // mainView
             // 
+            this.mainView.AllowDrop = true;
             this.mainView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainView.Location = new System.Drawing.Point(0, 49);
             this.mainView.Name = "mainView";
-            this.mainView.Size = new System.Drawing.Size(792, 517);
+            this.mainView.Size = new System.Drawing.Size(1092, 717);
             this.mainView.TabIndex = 17;
             this.mainView.Text = "mainView";
+            this.mainView.DragDrop += new System.Windows.Forms.DragEventHandler(this.mainView_DragDrop);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(792, 566);
+            this.ClientSize = new System.Drawing.Size(1092, 766);
             this.Controls.Add(this.topViewPanel);
             this.Controls.Add(this.mainView);
             this.Controls.Add(this.toolStrip);
@@ -221,7 +223,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Easter Egg Editor";
-            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.MainForm_Scroll);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.menuStrip.ResumeLayout(false);

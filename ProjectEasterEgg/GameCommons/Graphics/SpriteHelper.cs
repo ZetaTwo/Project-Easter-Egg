@@ -9,8 +9,10 @@ namespace Mindstep.EasterEgg.Engine.Graphics
 {
     public class SpriteHelper
     {
-        public const int TILE_WIDTH = 124; //126 - 2
-        public const int TILE_HEIGHT = 62; //64 - 2
+        public const int TILE_WIDTH = 125;
+        public const int TILE_HEIGHT = 63;
+
+        public const int BLOCK_HEIGHT = 77;
 
         public const int NUM_LAYERS = 20;
 
@@ -31,11 +33,13 @@ namespace Mindstep.EasterEgg.Engine.Graphics
             }
         }
 
-        public static Position fromScreen(Vector2 screen)
+        public static Vector3 fromScreen(Vector2 screen, int layer = 0)
         {
-            return new Position((int)(TILE_WIDTH * screen.Y + TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
-                               (int)(TILE_WIDTH * screen.Y - TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
-                               0);
+            return new Vector3((TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) + TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
+                               (TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) - TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
+                               0f);
         }
+
+
     }
 }

@@ -6,28 +6,28 @@ using System.Collections;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    public class Path : IEnumerable<Node>
+    public class Path<T> : IEnumerable<T>
     {
-        public Node LastStep { get; private set; }
-        public Path PreviousSteps { get; private set; }
+        public T LastStep { get; private set; }
+        public Path<T> PreviousSteps { get; private set; }
         public double TotalCost { get; private set; }
 
-        private Path(Node lastStep, Path previousSteps, double totalCost)
+        private Path(T lastStep, Path<T> previousSteps, double totalCost)
         {
             LastStep = lastStep;
             PreviousSteps = previousSteps;
             TotalCost = totalCost;
         }
 
-        public Path(Node start) : this(start, null, 0) { }
-        public Path AddStep(Node step, double stepCost)
+        public Path(T start) : this(start, null, 0) { }
+        public Path<T> AddStep(T step, double stepCost)
         {
-            return new Path(step, this, TotalCost + stepCost);
+            return new Path<T>(step, this, TotalCost + stepCost);
         }
 
-        public IEnumerator<Node> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            for (Path p = this; p != null; p = p.PreviousSteps)
+            for (Path<T> p = this; p != null; p = p.PreviousSteps)
                 yield return p.LastStep;
         }
 

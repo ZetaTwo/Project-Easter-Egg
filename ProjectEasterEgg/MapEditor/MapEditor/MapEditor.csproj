@@ -62,13 +62,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Exporter.cs" />
     <Compile Include="Conversions.cs" />
     <Compile Include="MainView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SaveBlock.cs" />
+    <Compile Include="Texture2DWithPos.cs" />
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>

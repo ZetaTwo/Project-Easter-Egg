@@ -21,6 +21,7 @@ namespace Mindstep.EasterEgg.MapEditor
     using Microsoft.Xna.Framework;
     using Mindstep.EasterEgg.Commons;
     using System.Collections.Generic;
+    using System;
 
     
     /// <summary>
@@ -30,48 +31,70 @@ namespace Mindstep.EasterEgg.MapEditor
     /// </summary>
     public partial class MainForm : Form
     {
-        public int CurrentHeight { get { return topViewHeight; } }
+        private static string TITLE = "Easter Egg Editor - ";
+        private string lastSavedDoc;
+        private int currentHeight = 0;
+        public int CurrentHeight
+        {
+            get { return currentHeight; }
+            set
+            {
+                currentHeight = value;
+                layer.Text = currentHeight.ToString();
+            }
+        }
+
+        public List<Position> BlockPositions = new List<Position>();
+        public List<Texture2DWithPos> Textures = new List<Texture2DWithPos>();
+        public bool changedSinceLastSave;
 
         public MainForm()
         {
             InitializeComponent();
             topView.MainForm = this;
             mainView.MainForm = this;
+            MouseWheel += new MouseEventHandler(mouseWheel);
+            RefreshTitle();
         }
-
-        public List<Block> Blocks = new List<Block>();
-        private int topViewHeight = 0;
 
         private void upButton_Click(object sender, System.EventArgs e)
         {
-            topViewHeight++;
-            layer.Text = topViewHeight.ToString();
+            CurrentHeight++;
         }
 
         private void downButton_Click(object sender, System.EventArgs e)
         {
-            topViewHeight--;
-            layer.Text = topViewHeight.ToString();
+            CurrentHeight--;
         }
 
-        private void topView_MouseMove(object sender, MouseEventArgs e)
+        #region zoom (mousewheel)
+        private void mouseWheel(object sender, MouseEventArgs e)
         {
-            Point p = topView.getClosestBlockCoord(e.Location.toXnaPoint());
-            coords.Text = "X:" + p.X + "   Y:" + p.Y;
-        }
-
-        private void topView_Click(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
+            if (GetChildAtPoint(e.Location) == topViewPanel)
             {
-                topView.toggleBlock(topView.getClosestBlockCoord(e.Location.toXnaPoint()));
+                topView.MainView_MouseWheel(sender, e);
+            }
+            else if (GetChildAtPoint(e.Location) == mainView)
+            {
+                mainView.MainView_MouseWheel(sender, e);
             }
         }
+        #endregion
 
-        private void MainForm_Scroll(object sender, ScrollEventArgs e)
+        public void RefreshTitle()
         {
-            System.Console.WriteLine(e.NewValue);
+            string doc = lastSavedDoc;
+            if (doc == null)
+            {
+                doc = "Untitled";
+            }
+            if (changedSinceLastSave)
+            {
+                doc += "*";
+            }
+            Text = TITLE + doc.Split(' ').Last() + " [" + Math.Round(mainView.Zoom*100, 0) + "%]";
         }
+
 
         private void topView_MouseLeave(object sender, System.EventArgs e)
         {
@@ -95,20 +118,72 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+
+
+        #region save buttons
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Exporter.Save(Blocks, saveFileDialog.FileName);
+            if (lastSavedDoc == null)
+            {
+                saveAsClicked();
+            }
+            else
+            {
+                saveClicked();
+            }
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            saveFileDialog.ShowDialog();
+            saveAsClicked();
+        }
+
+        private void saveClicked()
+        {
+            if (BlockPositions.Count == 0)
+            {
+                MessageBox.Show("You can't save an empty model!", "Save error");
+            }
+            else
+            {
+                save();
+            }
+        }
+
+        private void saveAsClicked()
+        {
+            if (BlockPositions.Count == 0)
+            {
+                MessageBox.Show("You can't save an empty model!", "Save error");
+            }
+            else
+            {
+                saveFileDialog.ShowDialog();
+            }
         }
 
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            System.Console.WriteLine(saveFileDialog.FileName);
-            //Exporter.Save( blocks);
+            save();
+        }
+
+        private void save()
+        {
+            Exporter.CompileModel(BlockPositions, Textures, saveFileDialog.FileName);
+            lastSavedDoc = saveFileDialog.FileName;
+            changedSinceLastSave = false;
+            RefreshTitle();
+        }
+        #endregion
+
+        private void mainView_DragDrop(object sender, DragEventArgs e)
+        {
+            System.Console.WriteLine("asd");
+        }
+
+        internal void setTopViewCoordLabel(string s)
+        {
+            coords.Text = s;
         }
     }
 }
