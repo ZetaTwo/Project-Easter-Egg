@@ -16,24 +16,19 @@ namespace GameTests
     public class NodeUnitTest
     {
         PhysicsManager physics;
-        GameBlock[][][] testMatrix1;
 
         public NodeUnitTest()
         {
             physics = new PhysicsManager();
-            GameMap map = new GameMap();
+            GameMap map = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
             physics.CurrentMap = map;
 
-            testMatrix1 = new GameBlock[6][][];
-
-            for(int i = 0; i < 6; i++)
+            for(int x = 0; x < 6; x++)
             {
-                testMatrix1[i] = new GameBlock[6][];
-                for(int k = 0; k < 6; k++)
+                for(int y = 0; y < 6; y++)
                 {
-                    testMatrix1[i][k] = new GameBlock[1];
-                    GameBlock n = new GameBlock(BlockType.SOLID, new Position(i, k, 0));
-                    testMatrix1[i][k][0] = n;
+                    GameBlock n = new GameBlock(BlockType.SOLID, new Position(x, y, 0));
+                    physics.CurrentMap.WorldMatrix[x][y][0] = n;
                 }
             }
 
@@ -82,8 +77,6 @@ namespace GameTests
         [TestMethod]
         public void TestGetNeighbours()
         {
-            physics.CurrentMap.WorldMatrix = testMatrix1;
-
             GameBlock node = new GameBlock(0, new Position(1, 1, 0));
             List<GameBlock> test = physics.GetNeighbours(node);
             Assert.AreEqual(0, test.Count);

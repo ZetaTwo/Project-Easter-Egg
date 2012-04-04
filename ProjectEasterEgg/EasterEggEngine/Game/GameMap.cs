@@ -13,6 +13,12 @@ namespace Mindstep.EasterEgg.Engine.Game
     {
         EggEngine engine;
 
+        Position origin;
+        public Position Origin
+        {
+            get { return origin; }
+        }
+
         private GameBlock[][][] worldMatrix;
         public GameBlock[][][] WorldMatrix
         {
@@ -21,6 +27,12 @@ namespace Mindstep.EasterEgg.Engine.Game
         }
         List<IEntityUpdate> updateObjects = new List<IEntityUpdate>();
 
+        public GameMap(Position min, Position max)
+        {
+            origin = min;
+            worldMatrix = CreateWorldMatrix(max - origin + new Position(1, 1, 1));
+        }
+        
         public void Update(GameTime gameTime)
         {
             foreach (IEntityUpdate update in updateObjects)
@@ -42,6 +54,22 @@ namespace Mindstep.EasterEgg.Engine.Game
         public void RemoveUpdate(IEntityUpdate entity)
         {
             updateObjects.Remove(entity);
+        }
+
+        private static GameBlock[][][] CreateWorldMatrix(Position size)
+        {
+            GameBlock[][][] matrix = new GameBlock[size.X][][];
+
+            for (int x = 0; x < size.X; x++)
+            {
+                matrix[x] = new GameBlock[size.Y][];
+                for (int y = 0; y < size.Y; y++)
+                {
+                    matrix[x][y] = new GameBlock[size.Z];
+                }
+            }
+
+            return matrix;
         }
     }
 }
