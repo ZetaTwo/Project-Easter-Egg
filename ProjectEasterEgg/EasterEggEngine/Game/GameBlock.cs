@@ -9,9 +9,6 @@ using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public enum BlockType { WALKABLE, SOLID, STAIRS_UP, STAIRS_DOWN };
-    public enum BlockFaces { LEFT, RIGHT, TOP };
-
     public class GameBlock : Block
     {
         EggEngine engine;
@@ -55,9 +52,6 @@ namespace Mindstep.EasterEgg.Engine.Game
         }
 
         private BlockType type;
-        private EggEnginePipeline.GameBlockDTO blockData;
-        private BlockType blockType;
-        private Commons.Position neighbourPosition;
         public BlockType Type
         {
             get { return type; }
