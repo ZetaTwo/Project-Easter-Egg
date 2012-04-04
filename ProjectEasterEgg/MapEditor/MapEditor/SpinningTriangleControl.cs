@@ -41,7 +41,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// <summary>
         /// Initializes the control.
         /// </summary>
-        protected override void Initialize()
+        protected void Initialize()
         {
             // Create our effect.
             effect = new BasicEffect(GraphicsDevice);
