@@ -25,24 +25,19 @@ namespace Mindstep.EasterEgg.MapEditor
         private Texture2D grid;
         private Point offsetToBlock00;
         private int gridSize;
-        private float scale;
-        public MainForm MainForm;
-
+        private MainForm MainForm;
 
         /// <summary>
         /// Initializes the control.
         /// </summary>
-        protected override void Initialize()
+        public void Initialize(MainForm mainForm)
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.MainForm = mainForm;
+            spriteBatch = new SpriteBatch(MainForm.GraphicsDevice);
             spriteEffect = SpriteEffects.None;
 
-            ContentManager Content = new ContentManager(Services, "MapEditorContent");
-            block = Content.Load<Texture2D>("topBlock");
-            grid = Content.Load<Texture2D>("topGrid");
-            Texture2DWithPos texture = new Texture2DWithPos();
-            texture.Texture = Content.Load<Texture2D>("mainBlock31");
-            MainForm.Textures.Add(texture);
+            block = MainForm.Content.Load<Texture2D>("topBlock");
+            grid = MainForm.Content.Load<Texture2D>("topGrid");
             offsetToBlock00 = new Point(Width/2, Height/2);
             gridSize = grid.Width;
 

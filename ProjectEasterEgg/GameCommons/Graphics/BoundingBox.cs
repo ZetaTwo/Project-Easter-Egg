@@ -61,7 +61,7 @@ namespace Mindstep.EasterEgg.Commons
         /// </summary>
         /// <param name="pos">Position to calculate distance to camera plane of</param>
         /// <returns>A value between 0.1 and 0.9, where higher is farther away</returns>
-        public float getDepth(Position pos)
+        public float getRelativeDepthOf(Position pos)
         {
             float fullLength = (Max - Min).Length();
             /* Moving forward one step in X when viewed from directly above

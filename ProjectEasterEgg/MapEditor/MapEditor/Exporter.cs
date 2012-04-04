@@ -30,6 +30,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 SaveBlock saveBlock = new SaveBlock();
                 saveBlock.Position = pos;
                 saveBlock.id = i++;
+                saveBlock.type = 1;
                 saveBlock.Texture = textures.First().Texture;
                 saveBlocks.Add(saveBlock);
             }
@@ -42,15 +43,6 @@ namespace Mindstep.EasterEgg.MapEditor
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
             doc.Add(root);
-            {
-                XElement imports = new XElement("imports");
-                root.Add(imports);
-                /* foreach model, add
-                 * <imports>
-                 *   <model offset="0 0 5">katt<model>
-                 * </imports>
-                 */
-            }
 
             {
                 BoundingBoxInt boundingBox = new BoundingBoxInt(blocks.ToPositions());
@@ -62,6 +54,16 @@ namespace Mindstep.EasterEgg.MapEditor
                 boundingElement.Add(maxElement);
                 minElement.Value = boundingBox.Min.GetSaveString();
                 maxElement.Value = boundingBox.Max.GetSaveString();
+            }
+
+            {
+                XElement imports = new XElement("imports");
+                root.Add(imports);
+                /* foreach model, add
+                 * <imports>
+                 *   <model offset="0 0 5">katt<model>
+                 * </imports>
+                 */
             }
 
             {
@@ -95,6 +97,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     
                     blockElement.SetAttributeValue("id", i++);
                     blockElement.SetAttributeValue("offset", block.Position.GetSaveString());
+                    blockElement.SetAttributeValue("type", block.type);
                     if (!string.IsNullOrEmpty(block.script)) {
                         blockElement.SetAttributeValue("script", "ScriptBlock"+block.script);
                     }

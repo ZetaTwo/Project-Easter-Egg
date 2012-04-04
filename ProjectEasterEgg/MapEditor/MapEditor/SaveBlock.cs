@@ -13,5 +13,6 @@ namespace Mindstep.EasterEgg.MapEditor
         public Texture2D Texture;
         public int id;
         public string script;
+        public int type;
     }
 }

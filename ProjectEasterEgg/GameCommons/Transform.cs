@@ -8,14 +8,14 @@ namespace Mindstep.EasterEgg.Commons
 {
     public static class Transform
     {
-        public static Point ToScreen(Position map, int tileHeight, int tileWidth, int blockHeight, Point offset)
+        public static Point ObjectToProjectionSpace(Position map, int tileHeight, int tileWidth, int blockHeight)
         {
             tileWidth /= 2;
             tileHeight /= 2;
             int x = -map.X * tileWidth + map.Y * tileWidth;
             int y = map.X * tileHeight + map.Y * tileHeight - map.Z * blockHeight;
 
-            return new Point(x + offset.X, y + offset.Y);
+            return new Point(x, y);
         }
 
         public static Vector2 toVector2(this Point point)
