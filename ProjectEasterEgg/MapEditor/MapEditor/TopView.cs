@@ -54,6 +54,10 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 toggleBlock(getClosestBlockCoord(e.Location.toXnaPoint()));
             }
+            else if (e.Button == MouseButtons.Right)
+            {
+                new BlockDetailsForm();
+            }
         }
 
         private void TopView_MouseMove(object sender, MouseEventArgs e)
@@ -134,23 +138,28 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             MainForm.changedSinceLastSave = true;
             MainForm.RefreshTitle();
+            /*
+            if (MainForm.BlockPositions.Remove(getBlockAt(p)))
+            {
+                //no matching block found, so create one
+                MainForm.BlockPositions.Add(new Block(p));
+            }*/
+        }
 
+        internal Block getBlockAt(Point p)
+        {
             //X and Y screen coordinates are swapped relative
             //the way we want to represent this top view
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
-            for (int i=0; i<MainForm.BlockPositions.Count; i++)
+            for (int i = 0; i < MainForm.BlockPositions.Count; i++)
             {
                 if (MainForm.BlockPositions[i] == newPos)
                 {
-                    MainForm.BlockPositions.RemoveAt(i);
-                    return;
+                    return new Block(MainForm.BlockPositions[i]);
                 }
             }
-
-            //no matching block found, so create one
-            MainForm.BlockPositions.Add(newPos);
+            return null
         }
-
 
         public void MainView_MouseWheel(object sender, MouseEventArgs e)
         {
