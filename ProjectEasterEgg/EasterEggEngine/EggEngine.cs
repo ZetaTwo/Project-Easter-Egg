@@ -54,6 +54,14 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
+        public World World
+        {
+            get
+            {
+                return world;
+            }
+        }
+
         public EggEngine(World _world)
         {
             world = _world;
@@ -61,9 +69,9 @@ namespace Mindstep.EasterEgg.Engine
             Content.RootDirectory = "Content";
 
             Services.AddService(typeof(IScriptEngine), new ScriptEngine(this));
-            Services.AddService(typeof(IPhysicsManager), new PhysicsManager());
+            Services.AddService(typeof(IPhysicsManager), new PhysicsManager(this));
             Services.AddService(typeof(ISoundManager), new SoundManager(this));
-            Services.AddService(typeof(IInputManager), new InputManager(this));
+            Services.AddService(typeof(IInputManager), new InputManager());
         }
 
         /// <summary>
@@ -79,6 +87,7 @@ namespace Mindstep.EasterEgg.Engine
             base.Initialize();
 
             world.Initialize(this);
+            Input.Initialize(this);
         }
 
         /// <summary>
@@ -127,7 +136,7 @@ namespace Mindstep.EasterEgg.Engine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Red);
 
             // TODO: Add your drawing code here
             world.Draw(spriteBatch);

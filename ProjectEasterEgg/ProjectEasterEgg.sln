@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTests", "GameTests\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEnginePipeline", "EggEnginePipeline\EggEnginePipeline.csproj", "{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}"
 EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "EggEngineContent", "EggEngineContent\EggEngineContent.contentproj", "{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ProjectEasterEgg.vsmdi
@@ -135,6 +137,12 @@ Global
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|Mixed Platforms.Build.0 = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|x86.ActiveCfg = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|x86.Build.0 = Release|x86
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

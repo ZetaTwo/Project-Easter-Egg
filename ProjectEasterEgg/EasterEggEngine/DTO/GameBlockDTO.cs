@@ -12,7 +12,7 @@ namespace EggEnginePipeline
     {
         public string scriptName = null;
         public Position Position;
-        Texture2D Texture;
+        public string Texture;
         public BlockType Type;
     }
 }

@@ -100,6 +100,11 @@
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EggEngineContent\EggEngineContent.contentproj">
+      <Project>{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}</Project>
+      <Name>EggEngineContent</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
     <ProjectReference Include="..\GameCommons\GameCommons.csproj">
       <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
       <Name>GameCommons</Name>

@@ -17,10 +17,10 @@ namespace Mindstep.EasterEgg.Commons
 
         public static Vector2 ObjectToProjectionSpace(Position map)
         {
-            float x = map.Y * TILE_WIDTH / 2 - map.X * TILE_WIDTH / 2;
-            float y = map.X * TILE_HEIGHT / 2 + map.Y * TILE_HEIGHT / 2 - map.Z * BLOCK_HEIGHT;
+            int x = (-map.X + map.Y) * (int)(TILE_WIDTH / 2);
+            int y = (map.X + map.Y) * (int)(TILE_HEIGHT / 2) - map.Z * BLOCK_HEIGHT;
 
-            return new Vector2(x, y);
+            return new Vector2(x,y);
         }
 
         public static Vector2 ToVector2(this Point point)

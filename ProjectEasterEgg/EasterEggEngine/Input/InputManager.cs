@@ -19,29 +19,36 @@ namespace Mindstep.EasterEgg.Engine
         MouseState currentMouseState;
         MouseState previousMouseState;
 
+        Vector2 Origin;
         public Vector2 MouseDelta
         {
             get
             {
-                return new Vector2(currentMouseState.X - previousMouseState.X,
-                                   currentMouseState.Y - previousMouseState.Y);
+                return new Vector2(currentMouseState.X, currentMouseState.Y) - Origin;
             }
         }
 
         public bool ClickLeft { get { return currentMouseState.LeftButton == ButtonState.Pressed; } }
         public bool ClickRight { get { return currentMouseState.RightButton == ButtonState.Pressed; } }
 
-        public InputManager(EggEngine _engine)
+        public InputManager()
+        {
+        }
+
+        public void Initialize(EggEngine _engine)
         {
             engine = _engine;
+
+            Viewport view = Engine.GraphicsDevice.Viewport;
+            Origin = new Vector2(view.Width / 2, view.Height / 2);
         }
 
         public void Update(GameTime gameTime)
         {
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
-            Viewport view = Engine.GraphicsDevice.Viewport;
-            Mouse.SetPosition(view.Width, view.Height);
+
+            Mouse.SetPosition((int)Origin.X, (int)Origin.Y);
         }
     }
 }

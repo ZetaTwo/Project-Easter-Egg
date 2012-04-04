@@ -47,11 +47,12 @@ namespace EggEnginePipeline
                     {
                         case "bounds":
                             xmlReader.ReadToDescendant("min"); //Read min
-                            gameMap.Origin = PositionFromString(xmlReader.ReadElementContentAsString());
+                            gameMap.Min = PositionFromString(xmlReader.ReadElementContentAsString());
 
                             xmlReader.ReadToNextSibling("max"); //Read max
-                            Position max = PositionFromString(xmlReader.ReadElementContentAsString());
-                            gameMap.WorldMatrix = GameMap.CreateWorldMatrix<GameBlockDTO>(max - gameMap.Origin + new Position(1, 1, 1));
+                            gameMap.Max = PositionFromString(xmlReader.ReadElementContentAsString());
+
+                            gameMap.WorldMatrix = GameMap.CreateWorldMatrix<GameBlockDTO>(gameMap.Max - gameMap.Min + new Position(1, 1, 1));
 
                             break;
                         case "imports":
@@ -70,12 +71,14 @@ namespace EggEnginePipeline
                                 {
                                     case "block":
                                         //xmlReader.MoveToAttribute("offset");
-                                        Position pos = - gameMap.Origin + PositionFromString(blocksReader.GetAttribute("offset"));
+                                        Position pos = - gameMap.Min + PositionFromString(blocksReader.GetAttribute("offset"));
 
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = new GameBlockDTO();
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Position = pos;
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = blocksReader.GetAttribute("script");
+                                        //gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = blocksReader.GetAttribute("script");
+                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = "Example";
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Type = BlockType.SOLID;
+                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Texture = "block31";
                                         break;
                                     default:
                                         break;
