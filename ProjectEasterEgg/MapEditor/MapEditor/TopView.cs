@@ -45,8 +45,16 @@ namespace Mindstep.EasterEgg.MapEditor
 
             // Hook the idle event to constantly redraw our animation.
             Application.Idle += delegate { Invalidate(); };
+            MouseClick += new MouseEventHandler(TopView_Click);
         }
 
+        private void TopView_Click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                toggleBlock(getClosestBlockCoord(e.Location.toXnaPoint()));
+            }
+        }
 
         /// <summary>
         /// Draws the control.
@@ -68,14 +76,14 @@ namespace Mindstep.EasterEgg.MapEditor
 
             foreach (Block b in MainForm.Blocks)
             {
-                int height = b.Offset.Z-MainForm.CurrentHeight;
+                int height = b.Position.Z-MainForm.CurrentHeight;
                 if (height == 0)
                 {
-                    drawBox(block, b.Offset, Color.Green, 0);
+                    drawBox(block, b.Position, Color.Green, 0);
                 }
                 else
                 {
-                    drawBox(block, b.Offset, Color.Red, .5f);
+                    drawBox(block, b.Position, Color.Red, .5f);
                 }
             }
             spriteBatch.End();
@@ -118,7 +126,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Position newPos = new Position(p.X, p.Y, MainForm.CurrentHeight);
             for (int i=0; i<MainForm.Blocks.Count; i++)
             {
-                if (MainForm.Blocks[i].Offset.Equals(newPos))
+                if (MainForm.Blocks[i].Position.Equals(newPos))
                 {
                     MainForm.Blocks.RemoveAt(i);
                     return;
@@ -127,6 +135,19 @@ namespace Mindstep.EasterEgg.MapEditor
 
             //no matching block found, so create one
             MainForm.Blocks.Add(new Block(newPos));
+        }
+
+
+        public void MainView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                MainForm.CurrentHeight++;
+            }
+            else if (e.Delta < 0)
+            {
+                MainForm.CurrentHeight--;
+            }
         }
     }
 }

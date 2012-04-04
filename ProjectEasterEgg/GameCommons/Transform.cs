@@ -26,7 +26,7 @@ namespace Mindstep.EasterEgg.Commons
         public static IEnumerable<Position> ToPositions(this IEnumerable<Block> blocks) {
             foreach (Block block in blocks)
             {
-                yield return block.Offset;
+                yield return block.Position;
             }
         }
     }

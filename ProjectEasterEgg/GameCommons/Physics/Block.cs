@@ -17,30 +17,30 @@ namespace Mindstep.EasterEgg.Commons
             get { return type; }
         }
 
-        private Position offset;
-        public Position Offset
+        private Position position;
+        public Position Position
         {
             get
             {
-                return offset;
+                return position;
             }
         }
 
         public Block(Position offset)
         {
             this.type = null;
-            this.offset = offset;
+            this.position = offset;
         }
 
         internal Block(BlockType type, Position offset)
         {
             this.type = type;
-            this.offset = offset;
+            this.position = offset;
         }
 
         public void Draw(SpriteBatch spriteBatch, Position position)
         {
-            spriteBatch.Draw(Type.GetFrame(0f), SpriteHelper.toScreen(position + Offset), Color.White);
+            spriteBatch.Draw(Type.GetFrame(0f), SpriteHelper.toScreen(position + Position), Color.White);
         }
     }
 }

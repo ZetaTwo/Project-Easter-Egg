@@ -67,7 +67,7 @@ namespace Mindstep.EasterEgg.Commons
             /* Moving forward one step in X when viewed from directly above
              * moves you sqrt(2)/2 closer to the "bottom corner line".
              * However, when viewed from an angle (60 degrees tilted)
-             * you actually moved (sqrt(2)/2)/cos(30) closer to the screen.
+             * you actually moved (sqrt(2)/2)*cos(30) closer to the screen.
              * (sqrt(2)/2)*cos(30) = 0.6123724356957945245493210186764728479914868701641675
              *  
              *      / \
@@ -81,7 +81,8 @@ namespace Mindstep.EasterEgg.Commons
              * 1*cos(60) = 0.5
              * 
              */
-            float depth = (pos.X - Min.X + pos.Y - Min.Y) * 0.6123724356957945245493210186764728479914868701641675f;
+            float depth = (pos.X - Min.X) * 0.62f; //prioritize X over Y
+            depth += (pos.Y - Min.Y) * 0.608f;
             depth += (pos.Z - Min.Z) * 0.5f;
             return 0.9f - depth/fullLength*0.8f;
         }
