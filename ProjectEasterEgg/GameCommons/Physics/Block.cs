@@ -19,16 +19,9 @@ namespace Mindstep.EasterEgg.Commons
             }
         }
 
-        Texture2D texture;
-
         public Block(Position position)
         {
             this.position = position;
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Position origin)
-        {
-            spriteBatch.Draw(texture, CoordinateTransform.ObjectToProjectionSpace(origin + Position), Color.White);
         }
     }
 }

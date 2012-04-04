@@ -9,7 +9,8 @@ namespace EggEnginePipeline
 {
     public class GameMapDTO
     {
-        public Position Origin;
+        public Position Min;
+        public Position Max;
         public GameBlockDTO[][][] WorldMatrix;
     }
 }

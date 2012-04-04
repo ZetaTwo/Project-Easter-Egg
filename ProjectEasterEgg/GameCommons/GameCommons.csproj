@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Graphics\BoundingBox.cs" />
     <Compile Include="Graphics\IEntityDrawable.cs" />
+    <Compile Include="Graphics\SpriteHelper.cs" />
     <Compile Include="Physics\Block.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
