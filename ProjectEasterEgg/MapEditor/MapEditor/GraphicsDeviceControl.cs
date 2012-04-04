@@ -83,9 +83,6 @@ namespace Mindstep.EasterEgg.MapEditor
 
                 // Register the service, so components like ContentManager can find it.
                 services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
-
-                // Give derived classes a chance to initialize themselves.
-                Initialize();
             }
 
             base.OnCreateControl();
@@ -285,13 +282,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         #region Abstract Methods
 
-
-        /// <summary>
-        /// Derived classes override this to initialize their drawing code.
-        /// </summary>
-        protected abstract void Initialize();
-
-
+        
         /// <summary>
         /// Derived classes override this to draw themselves using the GraphicsDevice.
         /// </summary>

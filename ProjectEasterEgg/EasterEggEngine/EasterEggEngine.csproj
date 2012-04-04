@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="DTO\GameBlockDTO.cs" />
+    <Compile Include="DTO\GameMapDTO.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\Camera.cs" />
     <Compile Include="Game\GameBlock.cs" />
@@ -104,6 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ContentPipeline\" />
     <Folder Include="Graphics\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -46,28 +46,32 @@ namespace Mindstep.EasterEgg.MapEditor
         private SpriteEffects spriteEffect;
         private Texture2D block;
         private Texture2D grid;
-        private Vector2 center;
         private Vector2 offset;
 
-        public MainForm MainForm;
+        private MainForm MainForm;
         private int tileHeight;
         private int tileWidth;
         private int blockHeight;
-        private bool draggingView;
+        private bool panning;
         private System.Drawing.Point lastMouseLocation;
         private SamplerState samplerState;
 
         public Zoom Zoom = new Zoom();
+        private Texture2DWithPos dragging;
+        private SpriteFont spriteFont;
+        public bool drawTextureIndices = true;
 
-
-        protected override void Initialize()
+        public void Initialize(MainForm mainForm)
         {
+            this.MainForm = mainForm;
+            spriteBatch = new SpriteBatch(MainForm.GraphicsDevice);
+            spriteEffect = SpriteEffects.None;
+            spriteFont = MainForm.Content.Load<SpriteFont>("hudFont");
+
             Load("mainBlock31", "mainGrid31");
             MouseDown += new MouseEventHandler(MainView_MouseDown);
             MouseUp += new MouseEventHandler(MainView_MouseUp);
             MouseMove += new MouseEventHandler(MainView_MouseMove);
-            DragDrop += new DragEventHandler(MainView_DragDrop);
-            DragEnter += new DragEventHandler(MainView_DragEnter);
 
             samplerState = new SamplerState();
             samplerState.Filter = TextureFilter.PointMipLinear;
@@ -80,12 +84,8 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         public void Load(string blockS, string gridS)
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteEffect = SpriteEffects.None;
-
-            ContentManager Content = new ContentManager(Services, "MapEditorContent");
-            block = Content.Load<Texture2D>(blockS);
-            grid = Content.Load<Texture2D>(gridS);
+            block = MainForm.Content.Load<Texture2D>(blockS);
+            grid = MainForm.Content.Load<Texture2D>(gridS);
             if (!block.Bounds.Equals(grid.Bounds))
             {
                 throw new Exception("mainBlock and mainGrid image size mismatch.");
@@ -94,7 +94,6 @@ namespace Mindstep.EasterEgg.MapEditor
             blockHeight = block.Height - (block.Width + 1) / 2;
             tileWidth = block.Width;
             tileHeight = block.Height - blockHeight;
-            center = new Vector2((Width-tileWidth) / 2, (Height-block.Height) / 2);
             offset = new Vector2(0, 0);
 
             // Hook the idle event to constantly redraw our animation.
@@ -107,7 +106,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         protected override void Draw()
         {
-            GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix);
 
             BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.BlockPositions);
@@ -141,33 +140,82 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
                 drawBlock(block, boundingBox, color, pos);
             }
+
+            for (int i = 0; i < MainForm.Textures.Count; i++)
+            {
+                
+                Texture2DWithPos tex = MainForm.Textures[i];
+                float depth = 0.1f*(1 - (float)i / MainForm.Textures.Count);
+                Vector2 screenCoords = ProjectionToScreenSpace((tex.pos.ToVector2() * Zoom).ToXnaPoint());
+                spriteBatch.Draw(tex.Texture, screenCoords, null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth);
+                if (MainForm.DrawTextureIndices())
+                {
+                    spriteBatch.DrawString(spriteFont, i.ToString(), screenCoords, Color.Green);
+                }
+            }
             spriteBatch.End();
         }
 
         private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Microsoft.Xna.Framework.Color color, Position pos)
         {
-            float depth = boundingBox.getDepth(pos);
-            Vector2 screenCoords = Transform.ToScreen(pos, tileHeight, tileWidth, blockHeight, (center+offset).toPoint()).toVector2();
+            float depth = boundingBox.getRelativeDepthOf(pos);
+            Point projCoords = CoordinateTransform.ObjectToProjectionSpace(pos).toPoint();
+            Vector2 screenCoords = ProjectionToScreenSpace(projCoords);
             spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
         }
 
         private void MainView_MouseDown(object sender, MouseEventArgs e)
         {
-            draggingView = true;
+            if (e.Button == MouseButtons.Right)
+            {
+                panning = true;
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                for (int i = MainForm.Textures.Count - 1; i >= 0; i--)
+                {
+                    Texture2DWithPos tex = MainForm.Textures[i];
+                    if (tex.Rectangle.Contains((e.Location.toVector2()-offset).toPoint()))
+                    {
+                        dragging = tex;
+                        break;
+                    }
+                }
+            }
             lastMouseLocation = e.Location;
         }
 
         private void MainView_MouseUp(object sender, MouseEventArgs e)
         {
-            draggingView = false;
+            panning = false;
+            dragging = null;
+        }
+
+        public Vector2 ScreenToProjectionSpace(Point screenCoord)
+        {
+            return screenCoord.toVector2() + offset;
+        }
+
+        public Vector2 ProjectionToScreenSpace(Point projCoord)
+        {
+            return projCoord.ToVector2() + offset;
         }
 
         private void MainView_MouseMove(object sender, MouseEventArgs e)
         {
-            if (draggingView)
-            {
-                offset.X += (e.Location.X - lastMouseLocation.X) / Zoom ;
-                offset.Y += (e.Location.Y - lastMouseLocation.Y) / Zoom ;
+            if (panning || dragging != null) {
+                int movedX = e.Location.X - lastMouseLocation.X;
+                int movedY = e.Location.Y - lastMouseLocation.Y;
+                if (panning)
+                {
+                    offset.X += movedX / Zoom;
+                    offset.Y += movedY / Zoom;
+                }
+                else
+                {
+                    dragging.pos.X += movedX;
+                    dragging.pos.Y += movedY;
+                }
                 lastMouseLocation = e.Location;
             }
         }
@@ -184,26 +232,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 Zoom.Out();
                 MainForm.RefreshTitle();
             }
-        }
-
-        public void MainView_DragEnter(object sender, DragEventArgs e)
-        {
-            // As we are interested in Image data only
-            // we will check this as follows
-            if (e.Data.GetDataPresent(typeof(System.Drawing.Bitmap)))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-            System.Console.WriteLine(e.Data);
-        }
-
-        public void MainView_DragDrop(object sender, DragEventArgs e)
-        {
-            System.Console.WriteLine("drop!");
         }
     }
 }

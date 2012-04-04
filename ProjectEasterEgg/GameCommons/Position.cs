@@ -36,6 +36,11 @@ namespace Mindstep.EasterEgg.Commons
             Z = (int)position.Z;
         }
 
+        public Position()
+            : this(0, 0, 0)
+        {
+        }
+
         public Position(int x, int y, int z)
         {
             X = x;
@@ -105,6 +110,11 @@ namespace Mindstep.EasterEgg.Commons
         public static Position operator +(Position p)
         {
             return p;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
         }
     }
 }
