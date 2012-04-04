@@ -14,55 +14,25 @@ namespace GameTests
     {
         PhysicsManager physics;
 
-        GameBlock[][][] worldMatrix1;
-        GameBlock[][][] worldMatrix2;
+        GameMap map1;
+        GameMap map2;
 
         public FindPathUnitTest()
         {
-            GameMap map = new GameMap();
+            map1 = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
+            map2 = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
             physics = new PhysicsManager();
 
-            worldMatrix1 = new GameBlock[6][][];
-            worldMatrix2 = new GameBlock[6][][];
-
-            for(int i = 0; i < 6; i++)
-            {
-                worldMatrix1[i] = new GameBlock[6][];
-                worldMatrix2[i] = new GameBlock[6][];
-                for(int j = 0; j < 6; j++)
-                {
-                    worldMatrix1[i][j] = new GameBlock[1];
-                    worldMatrix2[i][j] = new GameBlock[1];
-
-                    GameBlock n = new GameBlock(0, new Position(i, j, 0));
-                    worldMatrix1[i][j][0] = n;
-
-                    if ((i == 2 && j == 2) ||
-                       (i == 3 && j == 2) ||
-                       (i == 3 && j == 3) ||
-                       (i == 3 && j == 4))
-                    {
-                        n = new GameBlock(BlockType.SOLID, new Position(i, j, 0));
-                    }
-                    else
-                    {
-                        n = new GameBlock(0, new Position(i, j, 0));
-                    }
-
-                    worldMatrix2[i][j][0] = n;
-
-
-                }
-            }
-            
-            map.WorldMatrix = worldMatrix1;
-            physics.CurrentMap = map;
+            map2.WorldMatrix[2][2][0] = new GameBlock(BlockType.SOLID, new Position(2, 2, 0));
+            map2.WorldMatrix[3][2][0] = new GameBlock(BlockType.SOLID, new Position(3, 2, 0));
+            map2.WorldMatrix[3][3][0] = new GameBlock(BlockType.SOLID, new Position(3, 3, 0));
+            map2.WorldMatrix[3][4][0] = new GameBlock(BlockType.SOLID, new Position(3, 4, 0));
         }
 
         [TestMethod]
         public void FindPathTestMethod1()
         {
-            physics.CurrentMap.WorldMatrix = worldMatrix1;
+            physics.CurrentMap = map1;
 
             GameBlock n = new GameBlock(0, new Position(1, 1, 0));
             GameBlock end = new GameBlock(0, new Position(4, 4, 0));
@@ -74,7 +44,7 @@ namespace GameTests
         [TestMethod]
         public void FindPathTestMethod2()
         {
-            physics.CurrentMap.WorldMatrix = worldMatrix2;
+            physics.CurrentMap = map2;
 
             GameBlock n = new GameBlock(0, new Position(1, 1, 0));
             GameBlock end = new GameBlock(0, new Position(4, 4, 0));
