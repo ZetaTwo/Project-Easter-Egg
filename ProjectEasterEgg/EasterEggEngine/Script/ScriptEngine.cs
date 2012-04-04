@@ -14,6 +14,12 @@ namespace Mindstep.EasterEgg.Engine
             get { return engine; }
         }
 
+        private ScriptFactory scriptLibrary = new ScriptFactory();
+        public ScriptFactory Library
+        {
+            get { return scriptLibrary; }
+        }
+
         private List<ScriptState> scripts = new List<ScriptState>();
 
 

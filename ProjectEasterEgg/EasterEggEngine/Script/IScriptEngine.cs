@@ -12,6 +12,11 @@ namespace Mindstep.EasterEgg.Engine
         {
             get;
         }
+
+        ScriptFactory Library
+        {
+            get;
+        }
     
         void Update(GameTime gameTime);
         void AddScript(IScript script);

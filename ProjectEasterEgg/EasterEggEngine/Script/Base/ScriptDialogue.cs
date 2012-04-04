@@ -8,11 +8,6 @@ namespace Mindstep.EasterEgg.Engine
 {
     public abstract class Dialogue : Script
     {
-        public Dialogue(string name)
-            : base(name)
-        {
-        }
-
         Character currentSpeaker;
         public Character CurrentSpeaker
         {

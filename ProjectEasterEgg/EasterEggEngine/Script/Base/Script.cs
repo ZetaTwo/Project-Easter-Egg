@@ -8,22 +8,11 @@ namespace Mindstep.EasterEgg.Engine
 {
     public abstract class Script : IScript
     {
-        string name;
-        public string Name
-        {
-            get { return name; }
-        }
-
         IScriptEngine engine;
         public IScriptEngine Engine
         {
             get { return engine; }
             set { engine = value; }
-        }
-
-        public Script(string name)
-        {
-            this.name = name;
         }
 
         public IEnumerator<float> GetEnumerator()
