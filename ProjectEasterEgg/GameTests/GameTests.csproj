@@ -54,6 +54,10 @@
       <Project>{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}</Project>
       <Name>EasterEggEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameCommons\GameCommons.csproj">
+      <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
+      <Name>GameCommons</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

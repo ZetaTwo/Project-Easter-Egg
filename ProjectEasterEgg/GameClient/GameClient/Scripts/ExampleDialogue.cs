@@ -8,6 +8,11 @@ namespace Mindstep.EasterEgg.Game.Scripts
 {
     class ExampleDialogue : Dialogue
     {
+        public ExampleDialogue()
+            : base("ExmpleDialogue")
+        {
+        }
+
         public override IEnumerator<float> ScriptContent()
         {
             foreach (float wait in Say("Hello there!", 20f, 1f)) { yield return wait; }

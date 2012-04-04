@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -26,6 +27,13 @@ namespace Mindstep.EasterEgg.Commons
         {
             get { return z; }
             set { z = value; }
+        }
+
+        public Position(Vector3 position)
+        {
+            X = (int)position.X;
+            Y = (int)position.Y;
+            Z = (int)position.Z;
         }
 
         public Position(int x, int y, int z)
@@ -63,6 +71,16 @@ namespace Mindstep.EasterEgg.Commons
             }
 
             return p.X == X && p.Y == Y && p.Z == Z;
+        }
+
+        public static bool operator==(Position p1, Position p2)
+        {
+            return p1.Equals(p2);
+        }
+
+        public static bool operator !=(Position p1, Position p2)
+        {
+            return !(p1 == p2);
         }
 
         public static Position operator+(Position p1, Position p2)

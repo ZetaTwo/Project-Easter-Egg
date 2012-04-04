@@ -59,8 +59,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockType.cs" />
-    <Compile Include="BoundingBox.cs" />
+    <Compile Include="Graphics\BoundingBox.cs" />
     <Compile Include="Game\Map.cs" />
     <Compile Include="Graphics\IEntityDrawable.cs" />
     <Compile Include="Graphics\SpriteHelper.cs" />

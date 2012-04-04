@@ -9,14 +9,11 @@ using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Commons
 {
+    public enum BlockType { WALKABLE, SOLID, STAIRS_UP, STAIRS_DOWN };
+    public enum BlockFaces { LEFT, RIGHT, TOP };
+
     public class Block
     {
-        BlockType type;
-        internal BlockType Type
-        {
-            get { return type; }
-        }
-
         private Position position;
         public Position Position
         {
@@ -26,21 +23,16 @@ namespace Mindstep.EasterEgg.Commons
             }
         }
 
-        public Block(Position offset)
+        Texture2D texture;
+
+        public Block(Position position)
         {
-            this.type = null;
-            this.position = offset;
+            this.position = position;
         }
 
-        internal Block(BlockType type, Position offset)
+        public void Draw(SpriteBatch spriteBatch, Position origin)
         {
-            this.type = type;
-            this.position = offset;
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Position position)
-        {
-            spriteBatch.Draw(Type.GetFrame(0f), SpriteHelper.toScreen(position + Position), Color.White);
+            spriteBatch.Draw(texture, SpriteHelper.toScreen(origin + Position), Color.White);
         }
     }
 }

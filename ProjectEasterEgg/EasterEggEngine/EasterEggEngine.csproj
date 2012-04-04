@@ -62,6 +62,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\GameBlock.cs" />
     <Compile Include="Game\GameEntity.cs" />
     <Compile Include="Game\GameEntityDrawable.cs" />
     <Compile Include="Game\GameEntitySolid.cs" />
@@ -71,8 +72,9 @@
     <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\MousePointer.cs" />
-    <Compile Include="Physics\IHasNeighbours.cs" />
-    <Compile Include="Physics\Node.cs" />
+    <Compile Include="Physics\Path.cs" />
+    <Compile Include="Physics\PriorityQueue.cs" />
+    <Compile Include="Script\BlockScript.cs" />
     <Compile Include="Script\Cutscene.cs" />
     <Compile Include="Script\Dialogue.cs" />
     <Compile Include="Script\ScriptState.cs" />

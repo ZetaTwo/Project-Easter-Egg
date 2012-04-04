@@ -6,108 +6,163 @@ using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Engine.Game;
 using System.Collections;
 using Mindstep.EasterEgg.Engine.Physics;
+using Mindstep.EasterEgg.Commons;
+using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
-    class PriorityQueue<P, V>
-    {
-        private SortedDictionary<P, Queue<V>> list = new SortedDictionary<P, Queue<V>>();
-        public void Enqueue(P priority, V value)
-        {
-            Queue<V> q;
-            if (!list.TryGetValue(priority, out q))
-            {
-                q = new Queue<V>();
-                list.Add(priority, q);
-            }
-            q.Enqueue(value);
-        }
-        public V Dequeue()
-        {
-            // will throw if there isn’t any first element!
-            var pair = list.First();
-            var v = pair.Value.Dequeue();
-            if (pair.Value.Count == 0) // nothing left of the top priority.
-                list.Remove(pair.Key);
-            return v;
-        }
-        public bool IsEmpty
-        {
-            get { return !list.Any(); }
-        }
-    }
-
-    public class Path<Node> : IEnumerable<Node>
-    {
-        public Node LastStep { get; private set; }
-        public Path<Node> PreviousSteps { get; private set; }
-        public double TotalCost { get; private set; }
-        private Path(Node lastStep, Path<Node> previousSteps, double totalCost)
-        {
-            LastStep = lastStep;
-            PreviousSteps = previousSteps;
-            TotalCost = totalCost;
-        }
-        public Path(Node start) : this(start, null, 0) { }
-        public Path<Node> AddStep(Node step, double stepCost)
-        {
-            return new Path<Node>(step, this, TotalCost + stepCost);
-        }
-        public IEnumerator<Node> GetEnumerator()
-        {
-            for (Path<Node> p = this; p != null; p = p.PreviousSteps)
-                yield return p.LastStep;
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        public object Last { get; set; }
-    }
-
     public class PhysicsManager : IPhysicsManager
     {
-        private List<IPhysicsObject> physicsObjects;
-        private int[][][] worldMatrix { get; set; }
+        int[][] possibleNeighbours = null;
+
+        private GameMap currentMap;
+        public GameMap CurrentMap
+        {
+            get { return currentMap; }
+            set { currentMap = value; }
+        }
+
+        public PhysicsManager()
+        {
+            possibleNeighbours = new int[][] {
+                                           new int[] {-1, -1},
+                                           new int[] {-1, 0},
+                                           new int[] {-1, 1},
+                                           new int[] {0, 1},
+                                           new int[] {1, 1},
+                                           new int[] {1, 0},
+                                           new int[] {1, -1},
+                                           new int[] {0, -1}
+            };
+        }
 
         public void MoveObject(GameEntitySolid character, Vector3 endpoint, Map map)
         {
             throw new System.NotImplementedException();
         }
 
-        public float estimate(Node a, double b)
+        #region Path Finding
+        public int Estimate(GameBlock start, GameBlock end)
         {
-            return 0;
+            return (int)Math.Floor((end.Position - start.Position).Length());
         }
 
-        public Path<Node> FindPath<Node>(
-            Node start,
-            Node destination,
-            Func<Node, double> estimate)
-            where Node : IHasNeighbours<Node>
+        public Path<GameBlock> FindPath(GameBlock start, GameBlock destination)
         {
-            var closed = new HashSet<Node>();
-            var queue = new PriorityQueue<double, Path<Node>>();
-            queue.Enqueue(0, new Path<Node>(start));
+            var closed = new HashSet<GameBlock>();
+            var queue = new PriorityQueue<double, Path<GameBlock>>();
+            queue.Enqueue(0, new Path<GameBlock>(start));
             while (!queue.IsEmpty)
             {
                 var path = queue.Dequeue();
                 if (closed.Contains(path.LastStep))
+                {
                     continue;
-                if (path.LastStep.Equals(destination))
+                }
+                if (path.LastStep.Position == destination.Position)
+                {
                     return path;
+                }
                 closed.Add(path.LastStep);
-                foreach (Node n in path.LastStep.Neighbours)
+                foreach (GameBlock node in GetNeighbours(path.LastStep))
                 {
                     double d = 1; //Distance between 2 squares in the grid
-                    var newPath = path.AddStep(n, d);
-                    queue.Enqueue(newPath.TotalCost + estimate(n), newPath);
+                    var newPath = path.AddStep(node, d);
+                    queue.Enqueue(newPath.TotalCost + Estimate(node, destination), newPath);
                 }
             }
             return null;
         }
 
+        public List<GameBlock> GetNeighbours(GameBlock node)
+        {
+            List<GameBlock> neighbours = new List<GameBlock>();
+            int width = CurrentMap.WorldMatrix.Length - 1;
+            int height = CurrentMap.WorldMatrix[0].Length - 1;
+            int currentLevel = node.Position.Z;
 
+            for (int i = 0; i < 8; i++)
+            {
+                //check for out of bounds
+                if ((node.Position.X == 0 && possibleNeighbours[i][0] < 0) ||
+                    (node.Position.X == width && possibleNeighbours[i][0] > 0) ||
+                    (node.Position.Y == 0 && possibleNeighbours[i][1] < 0) ||
+                    (node.Position.Y == height && possibleNeighbours[i][1] > 0))
+                    continue;
+
+                //Check if the current possible is available, it is only available if the next one is free.
+                GameBlock possibleNeighbour = CurrentMap.WorldMatrix[node.Position.X + possibleNeighbours[i][0]][node.Position.Y + possibleNeighbours[i][1]][currentLevel];
+                //Base case for a node.
+                GameBlock possibleNext = new GameBlock(BlockType.SOLID, new Position(-1, -1, -1));
+                if (i < 7)
+                    if (!((node.Position.X == 0 && possibleNeighbours[i + 1][0] < 0) ||
+                        (node.Position.X == width && possibleNeighbours[i + 1][0] > 0) ||
+                        (node.Position.Y == 0 && possibleNeighbours[i + 1][1] < 0) ||
+                        (node.Position.Y == height && possibleNeighbours[i + 1][1] > 0)))
+                        possibleNext = CurrentMap.WorldMatrix[node.Position.X + possibleNeighbours[i + 1][0]][node.Position.Y + possibleNeighbours[i + 1][1]][currentLevel];
+                    else
+                    {
+                        if (!(node.Position.X == 0 || node.Position.Y == 0))
+                            possibleNext = CurrentMap.WorldMatrix[node.Position.X + possibleNeighbours[0][0]][node.Position.Y + possibleNeighbours[0][1]][currentLevel];
+                    }
+                if (possibleNeighbour.Type != BlockType.SOLID && possibleNext.Type != BlockType.SOLID)
+                    neighbours.Add(possibleNeighbour);
+            }
+
+            return neighbours;
+        }
+        #endregion
+
+        public void ClickWorld(Vector2 screen)
+        {
+            //The direction in which we are going
+            Vector3 delta = -new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f))));
+            delta.Normalize();
+
+            //The entry position
+            Vector3 position = SpriteHelper.fromScreen(screen, CurrentMap.WorldMatrix[0][0].Length);
+
+            BlockFaces entry = BlockFaces.TOP;
+            while (position.Z >= 0)
+            {
+                //Choose the current Block
+                Position currentPosition = new Position(position);
+                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y][currentPosition.Z];
+
+                if (currentBlock.Interactable)
+                {
+                    //currentBlock.Interact();
+                    //return
+                }
+
+                if (currentBlock.Type == BlockType.SOLID)
+                {
+                    
+                }
+
+                //Proceed to next Block
+                //calculate step lengths in multiples of delta
+                float stepsX = (float)(Math.Floor(position.X) - position.X) / delta.X;
+                float stepsY = (float)(Math.Floor(position.Y) - position.Y) / delta.Y;
+                float stepsZ = (float)(Math.Floor(position.Z) - position.Z) / delta.Z;
+
+                //Check which is closest
+                if (stepsX < stepsY && stepsX < stepsZ) //X is closest
+                {
+                    position += delta * stepsX;
+                    entry = BlockFaces.LEFT;
+                }
+                else if (stepsY < stepsX && stepsY < stepsZ) //Y is closest
+                {
+                    position += delta * stepsY;
+                    entry = BlockFaces.RIGHT;
+                }
+                else //Z is closest
+                {
+                    position += delta * stepsZ;
+                    entry = BlockFaces.TOP;
+                }
+            }
+        }
     }
 }

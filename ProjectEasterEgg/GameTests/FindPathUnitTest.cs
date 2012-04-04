@@ -4,49 +4,83 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mindstep.EasterEgg.Engine.Physics;
+using Mindstep.EasterEgg.Commons;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace GameTests
 {
     [TestClass]
     public class FindPathUnitTest
     {
-        Node[][][] testMatrix1;
+        PhysicsManager physics;
+
+        GameBlock[][][] worldMatrix1;
+        GameBlock[][][] worldMatrix2;
 
         public FindPathUnitTest()
         {
-             testMatrix1 = new Node[6][][];
+            GameMap map = new GameMap();
+            physics = new PhysicsManager();
+
+            worldMatrix1 = new GameBlock[6][][];
+            worldMatrix2 = new GameBlock[6][][];
 
             for(int i = 0; i < 6; i++)
             {
-                testMatrix1[i] = new Node[6][];
-                for(int k = 0; k < 6; k++)
+                worldMatrix1[i] = new GameBlock[6][];
+                worldMatrix2[i] = new GameBlock[6][];
+                for(int j = 0; j < 6; j++)
                 {
-                    testMatrix1[i][k] = new Node[1];
-                    Node n = new Node(0,i,k,0);
-                    testMatrix1[i][k][0] = n;
+                    worldMatrix1[i][j] = new GameBlock[1];
+                    worldMatrix2[i][j] = new GameBlock[1];
+
+                    GameBlock n = new GameBlock(0, new Position(i, j, 0));
+                    worldMatrix1[i][j][0] = n;
+
+                    if ((i == 2 && j == 2) ||
+                       (i == 3 && j == 2) ||
+                       (i == 3 && j == 3) ||
+                       (i == 3 && j == 4))
+                    {
+                        n = new GameBlock(BlockType.SOLID, new Position(i, j, 0));
+                    }
+                    else
+                    {
+                        n = new GameBlock(0, new Position(i, j, 0));
+                    }
+
+                    worldMatrix2[i][j][0] = n;
+
+
                 }
             }
-
+            
+            map.WorldMatrix = worldMatrix1;
+            physics.CurrentMap = map;
         }
 
         [TestMethod]
-        public void FindPathTestMethod()
+        public void FindPathTestMethod1()
         {
-       
-            Node n = new Node(testMatrix1, 0, 1, 1, 0);
-            Node end = new Node(0,4,4,0);
-            PhysicsManager p = new PhysicsManager();
-            Path<Node> path = p.FindPath<Node>(n, end,e => estimate(n, end));
-            Assert.AreEqual(null, path);
-            List<Node> k = (List<Node>)n.Neighbours;
-            List<Node> a = n.getNeighbours();
-            Assert.AreEqual(a.ElementAt(a.Count - 1), k.ElementAt(k.Count - 1));
-            a.ElementAt(a.Count - 1);
+            physics.CurrentMap.WorldMatrix = worldMatrix1;
+
+            GameBlock n = new GameBlock(0, new Position(1, 1, 0));
+            GameBlock end = new GameBlock(0, new Position(4, 4, 0));
+            Path<GameBlock> path = physics.FindPath(n, end);
+
+            Assert.AreEqual(end.Position, path.LastStep.Position);
         }
 
-        public int estimate(Node start, Node end)
+        [TestMethod]
+        public void FindPathTestMethod2()
         {
-            return 0;
+            physics.CurrentMap.WorldMatrix = worldMatrix2;
+
+            GameBlock n = new GameBlock(0, new Position(1, 1, 0));
+            GameBlock end = new GameBlock(0, new Position(4, 4, 0));
+            Path<GameBlock> path = physics.FindPath(n, end);
+
+            Assert.AreEqual(end.Position, path.LastStep.Position);
         }
     }
 }
