@@ -25,7 +25,7 @@ namespace Mindstep.EasterEgg.Engine.Graphics
         {
             if (transform)
             {
-                return new Vector2(map.X * (TILE_WIDTH / 2) - map.Y * (TILE_WIDTH / 2), map.X * (TILE_HEIGHT / 2) + map.Y * (TILE_HEIGHT / 2) + map.Z);
+                return new Vector2(map.X * (TILE_WIDTH / 2) - map.Y * (TILE_WIDTH / 2), map.X * (TILE_HEIGHT / 2) + map.Y * (TILE_HEIGHT / 2) + map.Z * BLOCK_HEIGHT);
             }
             else
             {

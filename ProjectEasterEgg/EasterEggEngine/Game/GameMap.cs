@@ -6,10 +6,12 @@ using Mindstep.EasterEgg.Engine.Physics;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.Game;
 using Mindstep.EasterEgg.Commons;
+using EggEnginePipeline;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class GameMap : Map
+    public class GameMap : IDrawable
     {
         EggEngine engine;
 
@@ -19,18 +21,43 @@ namespace Mindstep.EasterEgg.Engine.Game
             get { return origin; }
         }
 
+        private List<IEntityDrawable> drawableObjects = new List<IEntityDrawable>();
+
         private GameBlock[][][] worldMatrix;
         public GameBlock[][][] WorldMatrix
         {
             get { return worldMatrix; }
             set { worldMatrix = value; }
         }
+
         List<IEntityUpdate> updateObjects = new List<IEntityUpdate>();
 
         public GameMap(Position min, Position max)
         {
             origin = min;
-            worldMatrix = CreateWorldMatrix(max - origin + new Position(1, 1, 1));
+            worldMatrix = CreateWorldMatrix<GameBlock>(max - origin + new Position(1, 1, 1));
+        }
+
+        public GameMap(GameMapDTO data)
+        {
+            origin = data.Origin;
+            worldMatrix = CreateWorldMatrix<GameBlock>(new Position(data.WorldMatrix.Length,
+                                                                    data.WorldMatrix[0].Length,
+                                                                    data.WorldMatrix[0][0].Length));
+
+            for (int x = 0; x < worldMatrix.Length; x++)
+            {
+                for (int y = 0; y < worldMatrix[0].Length; y++)
+                {
+                    for (int z = 0; z < worldMatrix[0][0].Length; z++)
+                    {
+                        if (data.WorldMatrix[x][y][z] != null)
+                        {
+                            worldMatrix[x][y][z] = new GameBlock(data.WorldMatrix[x][y][z].Type, data.WorldMatrix[x][y][z].Position);
+                        }
+                    }
+                }
+            }
         }
         
         public void Update(GameTime gameTime)
@@ -56,20 +83,35 @@ namespace Mindstep.EasterEgg.Engine.Game
             updateObjects.Remove(entity);
         }
 
-        private static GameBlock[][][] CreateWorldMatrix(Position size)
+        public static T[][][] CreateWorldMatrix<T>(Position size)
         {
-            GameBlock[][][] matrix = new GameBlock[size.X][][];
+            T[][][] matrix = new T[size.X][][];
 
             for (int x = 0; x < size.X; x++)
             {
-                matrix[x] = new GameBlock[size.Y][];
+                matrix[x] = new T[size.Y][];
                 for (int y = 0; y < size.Y; y++)
                 {
-                    matrix[x][y] = new GameBlock[size.Z];
+                    matrix[x][y] = new T[size.Z];
                 }
             }
 
             return matrix;
+        }
+
+        
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (IEntityDrawable drawable in drawableObjects)
+            {
+                drawable.Draw(spriteBatch);
+            }
+        }
+
+        public void AddUpdate(IEntityDrawable entity)
+        {
+            drawableObjects.Add(entity);
         }
     }
 }

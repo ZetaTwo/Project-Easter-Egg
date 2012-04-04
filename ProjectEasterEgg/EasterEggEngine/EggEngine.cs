@@ -77,6 +77,8 @@ namespace Mindstep.EasterEgg.Engine
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            world.Initialize(this);
         }
 
         /// <summary>
