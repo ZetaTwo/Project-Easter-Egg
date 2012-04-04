@@ -13,8 +13,8 @@ namespace Mindstep.EasterEgg.Engine.Game
     {
         EggEngine engine;
 
-        private Block[][][] worldMatrix;
-        public Block[][][] WorldMatrix
+        private GameBlock[][][] worldMatrix;
+        public GameBlock[][][] WorldMatrix
         {
             get { return worldMatrix; }
             set { worldMatrix = value; }

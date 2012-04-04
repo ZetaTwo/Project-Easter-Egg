@@ -42,16 +42,16 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
 
         #region Path Finding
-        public int Estimate(Block start, Block end)
+        public int Estimate(GameBlock start, GameBlock end)
         {
             return (int)Math.Floor((end.Position - start.Position).Length());
         }
 
-        public Path<Block> FindPath(Block start, Block destination)
+        public Path<GameBlock> FindPath(GameBlock start, GameBlock destination)
         {
-            var closed = new HashSet<Block>();
-            var queue = new PriorityQueue<double, Path<Block>>();
-            queue.Enqueue(0, new Path<Block>(start));
+            var closed = new HashSet<GameBlock>();
+            var queue = new PriorityQueue<double, Path<GameBlock>>();
+            queue.Enqueue(0, new Path<GameBlock>(start));
             while (!queue.IsEmpty)
             {
                 var path = queue.Dequeue();
@@ -64,7 +64,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
                     return path;
                 }
                 closed.Add(path.LastStep);
-                foreach (Block node in GetNeighbours(path.LastStep))
+                foreach (GameBlock node in GetNeighbours(path.LastStep))
                 {
                     double d = 1; //Distance between 2 squares in the grid
                     var newPath = path.AddStep(node, d);
@@ -74,9 +74,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return null;
         }
 
-        public List<Block> GetNeighbours(Block node)
+        public List<GameBlock> GetNeighbours(GameBlock node)
         {
-            List<Block> neighbours = new List<Block>();
+            List<GameBlock> neighbours = new List<GameBlock>();
             int width = CurrentMap.WorldMatrix.Length - 1;
             int height = CurrentMap.WorldMatrix[0].Length - 1;
             int currentLevel = node.Position.Z;
@@ -91,9 +91,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
                     continue;
 
                 //Check if the current possible is available, it is only available if the next one is free.
-                Block possibleNeighbour = CurrentMap.WorldMatrix[node.Position.X + possibleNeighbours[i][0]][node.Position.Y + possibleNeighbours[i][1]][currentLevel];
+                GameBlock possibleNeighbour = CurrentMap.WorldMatrix[node.Position.X + possibleNeighbours[i][0]][node.Position.Y + possibleNeighbours[i][1]][currentLevel];
                 //Base case for a node.
-                Block possibleNext = new Block(BlockType.SOLID, new Position(-1, -1, -1));
+                GameBlock possibleNext = new GameBlock(BlockType.SOLID, new Position(-1, -1, -1));
                 if (i < 7)
                     if (!((node.Position.X == 0 && possibleNeighbours[i + 1][0] < 0) ||
                         (node.Position.X == width && possibleNeighbours[i + 1][0] > 0) ||
@@ -127,8 +127,19 @@ namespace Mindstep.EasterEgg.Engine.Physics
             {
                 //Choose the current Block
                 Position currentPosition = new Position(position);
-                Block currentBlock = CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y][currentPosition.Z];
-                
+                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y][currentPosition.Z];
+
+                if (currentBlock.Interactable)
+                {
+                    //currentBlock.Interact();
+                    //return
+                }
+
+                if (currentBlock.Type == BlockType.SOLID)
+                {
+                    
+                }
+
                 //Proceed to next Block
                 //calculate step lengths in multiples of delta
                 float stepsX = (float)(Math.Floor(position.X) - position.X) / delta.X;
@@ -139,14 +150,17 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 if (stepsX < stepsY && stepsX < stepsZ) //X is closest
                 {
                     position += delta * stepsX;
+                    entry = BlockFaces.LEFT;
                 }
                 else if (stepsY < stepsX && stepsY < stepsZ) //Y is closest
                 {
                     position += delta * stepsY;
+                    entry = BlockFaces.RIGHT;
                 }
                 else //Z is closest
                 {
                     position += delta * stepsZ;
+                    entry = BlockFaces.TOP;
                 }
             }
         }

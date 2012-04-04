@@ -25,20 +25,8 @@ namespace Mindstep.EasterEgg.Commons
 
         Texture2D texture;
 
-        private BlockType type;
-        public BlockType Type
-        {
-            get { return type; }
-        }
-
         public Block(Position position)
-            : this(BlockType.SOLID, position)
         {
-        }
-
-        public Block(BlockType type, Position position)
-        {
-            this.type = type;
             this.position = position;
         }
 
