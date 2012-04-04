@@ -135,10 +135,10 @@ namespace Mindstep.EasterEgg.Engine.Physics
         public void ClickWorld(Vector2 screen, BlockAction action)
         {
             //The entry position
-            Vector3 position = CoordinateTransform.fromScreen(screen, CurrentMap.Origin.Z + CurrentMap.WorldMatrix[0][0].Length);
+            Vector3 position = CoordinateTransform.fromScreen(screen, CurrentMap.Bounds.Min.Z + CurrentMap.WorldMatrix[0][0].Length);
 
             BlockFaces entry = BlockFaces.TOP;
-            while (position.Z >= CurrentMap.Origin.Z)
+            while (position.Z >= CurrentMap.Bounds.Min.Z)
             {
                 //Choose the current Block
                 Position currentPosition = new Position(position);
@@ -220,7 +220,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
                     return current;
                 }
             }
-            while (position.Z >= CurrentMap.Origin.Z);
+            while (position.Z >= CurrentMap.Bounds.Min.Z);
 
             return null;
         }
