@@ -30,5 +30,13 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             return new Point((int)(p.X + .5f), (int)(p.Y + .5f));
         }
+
+        public static IEnumerable<Position> ToPositions(this IEnumerable<SaveBlock> blocks)
+        {
+            foreach (SaveBlock block in blocks)
+            {
+                yield return block.Position;
+            }
+        }
     }
 }

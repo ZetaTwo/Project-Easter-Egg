@@ -199,12 +199,14 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             // mainView
             // 
+            this.mainView.AllowDrop = true;
             this.mainView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainView.Location = new System.Drawing.Point(0, 49);
             this.mainView.Name = "mainView";
             this.mainView.Size = new System.Drawing.Size(1092, 717);
             this.mainView.TabIndex = 17;
             this.mainView.Text = "mainView";
+            this.mainView.DragDrop += new System.Windows.Forms.DragEventHandler(this.mainView_DragDrop);
             // 
             // MainForm
             // 

@@ -70,6 +70,8 @@
     <Compile Include="MainView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SaveBlock.cs" />
+    <Compile Include="Texture2DWithPos.cs" />
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>

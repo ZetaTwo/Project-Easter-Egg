@@ -75,6 +75,10 @@ namespace Mindstep.EasterEgg.Commons
 
         public static bool operator==(Position p1, Position p2)
         {
+            if ((object)p1 == null)
+            {
+                return (object)p2 == null;
+            }
             return p1.Equals(p2);
         }
 

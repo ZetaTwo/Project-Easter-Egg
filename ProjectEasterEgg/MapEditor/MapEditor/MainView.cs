@@ -66,6 +66,8 @@ namespace Mindstep.EasterEgg.MapEditor
             MouseDown += new MouseEventHandler(MainView_MouseDown);
             MouseUp += new MouseEventHandler(MainView_MouseUp);
             MouseMove += new MouseEventHandler(MainView_MouseMove);
+            DragDrop += new DragEventHandler(MainView_DragDrop);
+            DragEnter += new DragEventHandler(MainView_DragEnter);
 
             samplerState = new SamplerState();
             samplerState.Filter = TextureFilter.PointMipLinear;
@@ -105,10 +107,10 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         protected override void Draw()
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix);
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.Blocks.ToPositions());
+            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.BlockPositions);
 
             List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
@@ -126,10 +128,10 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
 
-            foreach (Block b in MainForm.Blocks)
+            foreach (Position pos in MainForm.BlockPositions)
             {
                 Color color;
-                if (b.Position.Z == MainForm.CurrentHeight)
+                if (pos.Z == MainForm.CurrentHeight)
                 {
                     color = Color.Green;
                 }
@@ -137,12 +139,12 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     color = Color.Red;
                 }
-                drawBlock(block, boundingBox, color, b.Position);
+                drawBlock(block, boundingBox, color, pos);
             }
             spriteBatch.End();
         }
 
-        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos)
+        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Microsoft.Xna.Framework.Color color, Position pos)
         {
             float depth = boundingBox.getDepth(pos);
             Vector2 screenCoords = Transform.ToScreen(pos, tileHeight, tileWidth, blockHeight, (center+offset).toPoint()).toVector2();
@@ -182,6 +184,26 @@ namespace Mindstep.EasterEgg.MapEditor
                 Zoom.Out();
                 MainForm.RefreshTitle();
             }
+        }
+
+        public void MainView_DragEnter(object sender, DragEventArgs e)
+        {
+            // As we are interested in Image data only
+            // we will check this as follows
+            if (e.Data.GetDataPresent(typeof(System.Drawing.Bitmap)))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+            System.Console.WriteLine(e.Data);
+        }
+
+        public void MainView_DragDrop(object sender, DragEventArgs e)
+        {
+            System.Console.WriteLine("drop!");
         }
     }
 }

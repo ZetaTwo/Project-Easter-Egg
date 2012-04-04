@@ -44,6 +44,10 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+        public List<Position> BlockPositions = new List<Position>();
+        public List<Texture2DWithPos> Textures = new List<Texture2DWithPos>();
+        public bool changedSinceLastSave;
+
         public MainForm()
         {
             InitializeComponent();
@@ -53,8 +57,6 @@ namespace Mindstep.EasterEgg.MapEditor
             RefreshTitle();
         }
 
-        public List<Block> Blocks = new List<Block>();
-
         private void upButton_Click(object sender, System.EventArgs e)
         {
             CurrentHeight++;
@@ -63,12 +65,6 @@ namespace Mindstep.EasterEgg.MapEditor
         private void downButton_Click(object sender, System.EventArgs e)
         {
             CurrentHeight--;
-        }
-
-        private void topView_MouseMove(object sender, MouseEventArgs e)
-        {
-            Point p = topView.getClosestBlockCoord(e.Location.toXnaPoint());
-            coords.Text = "X:" + p.X + "   Y:" + p.Y;
         }
 
         #region zoom (mousewheel)
@@ -91,6 +87,10 @@ namespace Mindstep.EasterEgg.MapEditor
             if (doc == null)
             {
                 doc = "Untitled";
+            }
+            if (changedSinceLastSave)
+            {
+                doc += "*";
             }
             Text = TITLE + doc.Split(' ').Last() + " [" + Math.Round(mainView.Zoom*100, 0) + "%]";
         }
@@ -118,11 +118,31 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+
+
+        #region save buttons
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             if (lastSavedDoc == null)
             {
-                saveFileDialog.ShowDialog();
+                saveAsClicked();
+            }
+            else
+            {
+                saveClicked();
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            saveAsClicked();
+        }
+
+        private void saveClicked()
+        {
+            if (BlockPositions.Count == 0)
+            {
+                MessageBox.Show("You can't save an empty model!", "Save error");
             }
             else
             {
@@ -130,9 +150,16 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void saveAsClicked()
         {
-            saveFileDialog.ShowDialog();
+            if (BlockPositions.Count == 0)
+            {
+                MessageBox.Show("You can't save an empty model!", "Save error");
+            }
+            else
+            {
+                saveFileDialog.ShowDialog();
+            }
         }
 
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -142,9 +169,21 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void save()
         {
-            Exporter.CompileModel(Blocks, saveFileDialog.FileName);
+            Exporter.CompileModel(BlockPositions, Textures, saveFileDialog.FileName);
             lastSavedDoc = saveFileDialog.FileName;
+            changedSinceLastSave = false;
             RefreshTitle();
+        }
+        #endregion
+
+        private void mainView_DragDrop(object sender, DragEventArgs e)
+        {
+            System.Console.WriteLine("asd");
+        }
+
+        internal void setTopViewCoordLabel(string s)
+        {
+            coords.Text = s;
         }
     }
 }

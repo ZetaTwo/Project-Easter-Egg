@@ -16,21 +16,54 @@ namespace Mindstep.EasterEgg.MapEditor
         private static string ResourceRelationshipType =
             "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
-        public static void Save(IEnumerable<Block> blocks)
+        internal static void SaveModel(IEnumerable<Position> blockPositions, IEnumerable<Texture2DWithPos> textures, string path)
         {
-            String path = "Content/save0.xml";
+
         }
 
-        internal static void SaveModel(List<Block> Blocks, string path)
+        private static IEnumerable<SaveBlock> SplitTextures(IEnumerable<Position> blockPositions, IEnumerable<Texture2DWithPos> textures)
         {
-            
+            List<SaveBlock> saveBlocks = new List<SaveBlock>();
+            int i = 0;
+            foreach (Position pos in blockPositions)
+            {
+                SaveBlock saveBlock = new SaveBlock();
+                saveBlock.Position = pos;
+                saveBlock.id = i++;
+                saveBlock.Texture = textures.First().Texture;
+                saveBlocks.Add(saveBlock);
+            }
+            return saveBlocks;
         }
 
-        internal static void CompileModel(List<Block> blocks, string path)
+        internal static void CompileModel(IEnumerable<Position> blockPositions, IEnumerable<Texture2DWithPos> textures, string path)
         {
+            IEnumerable<SaveBlock> blocks = SplitTextures(blockPositions, textures);
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
             doc.Add(root);
+            {
+                XElement imports = new XElement("imports");
+                root.Add(imports);
+                /* foreach model, add
+                 * <imports>
+                 *   <model offset="0 0 5">katt<model>
+                 * </imports>
+                 */
+            }
+
+            {
+                BoundingBoxInt boundingBox = new BoundingBoxInt(blocks.ToPositions());
+                XElement boundingElement = new XElement("bounds");
+                root.Add(boundingElement);
+                XElement minElement = new XElement("min");
+                XElement maxElement = new XElement("max");
+                boundingElement.Add(minElement);
+                boundingElement.Add(maxElement);
+                minElement.Value = boundingBox.Min.GetSaveString();
+                maxElement.Value = boundingBox.Max.GetSaveString();
+            }
+
             {
                 XElement animations = new XElement("animations");
                 root.Add(animations);
@@ -40,32 +73,32 @@ namespace Mindstep.EasterEgg.MapEditor
 
                 XElement frame = new XElement("frame");
                 frame.SetAttributeValue("duration", 0);
-                frame.SetValue("0");
                 animation.Add(frame);
+
+                foreach (SaveBlock block in blocks)
+                {
+                    XElement blockElement = new XElement("block");
+                    blockElement.SetAttributeValue("id", block.id);
+                    blockElement.SetAttributeValue("image", block.id);
+                    frame.Add(blockElement);
+                }
             }
+            
             {
                 XElement blocksElement = new XElement("blocks");
                 root.Add(blocksElement);
                 
                 int i=0;
-                foreach (Block block in blocks) {
+                foreach (SaveBlock block in blocks) {
                     XElement blockElement = new XElement("block");
                     blocksElement.Add(blockElement);
                     
                     blockElement.SetAttributeValue("id", i++);
                     blockElement.SetAttributeValue("offset", block.Position.GetSaveString());
+                    if (!string.IsNullOrEmpty(block.script)) {
+                        blockElement.SetAttributeValue("script", "ScriptBlock"+block.script);
+                    }
                 }
-            }
-            {
-                BoundingBoxInt boundingBox = new BoundingBoxInt(blocks.ToPositions());
-                XElement boundingElement = new XElement("bounds");
-                root.AddFirst(boundingElement);
-                XElement minElement = new XElement("min");
-                XElement maxElement = new XElement("max");
-                boundingElement.Add(minElement);
-                boundingElement.Add(maxElement);
-                minElement.Value = boundingBox.Min.GetSaveString();
-                maxElement.Value = boundingBox.Max.GetSaveString();
             }
             
             //doc.Save(path);
@@ -88,13 +121,12 @@ namespace Mindstep.EasterEgg.MapEditor
                 package.CreateRelationship(packagePartDocument.Uri, TargetMode.Internal, ResourceRelationshipType);
 
                 int i=0;
-                foreach (Block block in blocks)
+                foreach (SaveBlock block in blocks)
                 {
-                    PackagePart blockImage = package.CreatePart(new Uri("/frames/" + "i" + ".png", UriKind.Relative), "image/png");
-                    //Texture2D a;
-                    //a.SaveAsPng(blockImage.GetStream(), a.Width, a.Height);
+                    PackagePart blockImage = package.CreatePart(new Uri("/frames/" + i++ + ".png", UriKind.Relative), "image/png");
+                    Texture2D tex = block.Texture;
+                    tex.SaveAsPng(blockImage.GetStream(), tex.Width, tex.Height);
                     package.CreateRelationship(blockImage.Uri, TargetMode.Internal, ResourceRelationshipType);
-                    i++;
                 }
             }
             System.Console.WriteLine("Saved to: " + path);
