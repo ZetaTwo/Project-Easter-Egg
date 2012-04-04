@@ -47,9 +47,9 @@ Doorway - todo
 Candelabra - done
 
 --Kitchen--
-Kitchen table - todo
-Cupboards - todo
-Sink - todo
+Kitchen table - done
+Cupboards - done
+Sink - done
 Workspace - todo
 Fridge - todo
 Faucet - todo
