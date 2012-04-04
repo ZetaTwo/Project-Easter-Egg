@@ -8,20 +8,27 @@ namespace Mindstep.EasterEgg.Engine.Physics
 {
     public class PhysicsManager : IPhysicsManager
     {
+        EggEngine engine;
+        public EggEngine Engine
+        {
+            get { return engine; }
+        }
+
         //The direction in which we are going
         Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
 
         int[][] possibleNeighbours = null;
 
-        private GameMap currentMap;
         public GameMap CurrentMap
         {
-            get { return currentMap; }
-            set { currentMap = value; }
+            get { return Engine.World.CurrentMap; }
+            //set { world = value; }
         }
 
-        public PhysicsManager()
+        public PhysicsManager(EggEngine engine)
         {
+            this.engine = engine;
+
             possibleNeighbours = new int[][] {
                                            new int[] {-1, -1},
                                            new int[] {-1, 0},
@@ -135,22 +142,30 @@ namespace Mindstep.EasterEgg.Engine.Physics
         public void ClickWorld(Vector2 screen, BlockAction action)
         {
             //The entry position
-            Vector3 position = CoordinateTransform.fromScreen(screen, CurrentMap.Bounds.Min.Z + CurrentMap.WorldMatrix[0][0].Length);
+            screen.Y *= 1;
+            screen.X *= -1;
+            Vector3 position = CoordinateTransform.fromScreen(screen, -CurrentMap.Bounds.Min.Z + CurrentMap.Bounds.Max.Z);
+            if (position.X < CurrentMap.Bounds.Min.X || position.X > CurrentMap.Bounds.Max.X ||
+               position.Y < CurrentMap.Bounds.Min.Y || position.Y > CurrentMap.Bounds.Max.Y ||
+               position.Z < CurrentMap.Bounds.Min.Z || position.Z > CurrentMap.Bounds.Max.Z)
+            {
+                return;
+            }
 
             BlockFaces entry = BlockFaces.TOP;
             while (position.Z >= CurrentMap.Bounds.Min.Z)
             {
                 //Choose the current Block
-                Position currentPosition = new Position(position);
+                Position currentPosition = new Position(position) - CurrentMap.Bounds.Min;
                 GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y][currentPosition.Z];
 
-                if (currentBlock.Interactable)
+                if (currentBlock != null && currentBlock.Interactable)
                 {
                     currentBlock.Interact(action);
                     return;
                 }
 
-                if (currentBlock.Type == BlockType.SOLID)
+                if (currentBlock != null && currentBlock.Type == BlockType.SOLID)
                 {
                     ClickSolidBlock(currentPosition, entry);
                     return;
@@ -188,18 +203,22 @@ namespace Mindstep.EasterEgg.Engine.Physics
             float stepsZ = (float)(Math.Floor(position.Z) - position.Z) / delta.Z;
 
             //Check which is closest
-            if (stepsX < stepsY && stepsX < stepsZ) //X is closest
+            if (stepsX != 0 && stepsX < stepsY && stepsX < stepsZ) //X is closest
             {
                 position += delta * stepsX;
                 entry = BlockFaces.LEFT;
             }
-            else if (stepsY < stepsX && stepsY < stepsZ) //Y is closest
+            else if (stepsY != 0 && stepsY < stepsX && stepsY < stepsZ) //Y is closest
             {
                 position += delta * stepsY;
                 entry = BlockFaces.RIGHT;
             }
             else //Z is closest
             {
+                if (stepsZ == 0)
+                {
+                    stepsZ = 1f;
+                }
                 position += delta * stepsZ;
                 entry = BlockFaces.TOP;
             }

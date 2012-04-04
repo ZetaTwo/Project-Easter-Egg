@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mindstep.EasterEgg.Engine;
-using Mindstep.EasterEgg.Engine.Game;
 
-namespace Mindstep.EasterEgg.Game.Scripts
+namespace Mindstep.EasterEgg.Scripts
 {
     class ScriptBlockExample : ScriptBlock
     {
@@ -16,7 +13,10 @@ namespace Mindstep.EasterEgg.Game.Scripts
 
         public override IEnumerator<float> Interact()
         {
-            throw new NotImplementedException();
+            System.Console.WriteLine(this.Block.Position);
+            Engine.Engine.World.CurrentMap.WorldMatrix[Block.Position.X][Block.Position.Y][Block.Position.Z] = null;
+
+            yield break;
         }
     }
 }

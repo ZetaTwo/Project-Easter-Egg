@@ -75,7 +75,8 @@ namespace EggEnginePipeline
 
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = new GameBlockDTO();
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Position = pos;
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = blocksReader.GetAttribute("script");
+                                        //gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = blocksReader.GetAttribute("script");
+                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = "Example";
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Type = BlockType.SOLID;
                                         gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Texture = "block31";
                                         break;

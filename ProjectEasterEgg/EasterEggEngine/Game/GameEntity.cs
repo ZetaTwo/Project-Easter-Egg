@@ -16,14 +16,13 @@ namespace Mindstep.EasterEgg.Engine
             get { return engine; }
         }
 
-        public void Initialize(EggEngine _engine)
+        public virtual void Initialize(EggEngine _engine)
         {
             engine = _engine;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Mindstep.EasterEgg.Engine
         Vector2 MouseDelta { get; }
         bool ClickLeft { get; }
         bool ClickRight { get; }
+
+        void Initialize(EggEngine eggEngine);
     }
 }

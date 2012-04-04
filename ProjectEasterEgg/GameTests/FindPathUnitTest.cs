@@ -6,22 +6,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mindstep.EasterEgg.Engine.Physics;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Game;
+using Mindstep.EasterEgg.Engine;
 
 namespace GameTests
 {
     [TestClass]
     public class FindPathUnitTest
     {
-        PhysicsManager physics;
+        EggEngine engine;
 
         GameMap map1;
         GameMap map2;
 
         public FindPathUnitTest()
         {
+            engine = new EggEngine(new TestWorld());
+
             map1 = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
             map2 = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
-            physics = new PhysicsManager();
 
             map2.WorldMatrix[2][2][0] = new GameBlock(BlockType.SOLID, new Position(2, 2, 0));
             map2.WorldMatrix[3][2][0] = new GameBlock(BlockType.SOLID, new Position(3, 2, 0));
@@ -32,11 +34,11 @@ namespace GameTests
         [TestMethod]
         public void FindPathTestMethod1()
         {
-            physics.CurrentMap = map1;
+            engine.World.CurrentMap = map1;
 
             GameBlock n = new GameBlock(0, new Position(1, 1, 0));
             GameBlock end = new GameBlock(0, new Position(4, 4, 0));
-            Path<GameBlock> path = physics.FindPath(n, end);
+            Path<GameBlock> path = engine.Physics.FindPath(n, end);
 
             Assert.AreEqual(end.Position, path.LastStep.Position);
         }
@@ -44,11 +46,11 @@ namespace GameTests
         [TestMethod]
         public void FindPathTestMethod2()
         {
-            physics.CurrentMap = map2;
+            engine.World.CurrentMap = map2;
 
             GameBlock n = new GameBlock(0, new Position(1, 1, 0));
             GameBlock end = new GameBlock(0, new Position(4, 4, 0));
-            Path<GameBlock> path = physics.FindPath(n, end);
+            Path<GameBlock> path = engine.Physics.FindPath(n, end);
 
             Assert.AreEqual(end.Position, path.LastStep.Position);
         }
