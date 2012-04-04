@@ -53,8 +53,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentImporter1.cs" />
-    <Compile Include="ContentProcessor1.cs" />
+    <Compile Include="EggModelImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

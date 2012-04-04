@@ -33,7 +33,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// Initializes the control, creating the ContentManager
         /// and using it to load a SpriteFont.
         /// </summary>
-        protected override void Initialize()
+        protected void Initialize()
         {
             content = new ContentManager(Services, "Content");
 

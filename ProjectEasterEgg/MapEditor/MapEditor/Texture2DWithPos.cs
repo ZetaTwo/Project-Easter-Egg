@@ -7,9 +7,17 @@ using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    public struct Texture2DWithPos
+    public class Texture2DWithPos
     {
         public Texture2D Texture;
         public Point pos;
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle(pos.X, pos.Y, Texture.Width, Texture.Height);
+            }
+        }
     }
 }

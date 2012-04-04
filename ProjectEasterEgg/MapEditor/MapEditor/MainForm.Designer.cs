@@ -31,20 +31,22 @@ namespace Mindstep.EasterEgg.MapEditor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.showTopView = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topViewPanel = new System.Windows.Forms.Panel();
+            this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.coords = new System.Windows.Forms.Label();
             this.upButton = new System.Windows.Forms.Button();
             this.layerLabel = new System.Windows.Forms.Label();
             this.downButton = new System.Windows.Forms.Button();
             this.layer = new System.Windows.Forms.TextBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
+            this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.topViewPanel.SuspendLayout();
@@ -54,7 +56,7 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showTopView,
-            this.toolStripButton1});
+            this.drawTextureIndices});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -76,16 +78,17 @@ namespace Mindstep.EasterEgg.MapEditor
             this.showTopView.Text = "Show Top View";
             this.showTopView.CheckedChanged += new System.EventHandler(this.showTopView_CheckChanged);
             // 
-            // toolStripButton1
+            // drawTextureIndices
             // 
-            this.toolStripButton1.CheckOnClick = true;
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.CheckedChanged += new System.EventHandler(this.toolStripButton1_CheckedChanged);
+            this.drawTextureIndices.Checked = true;
+            this.drawTextureIndices.CheckOnClick = true;
+            this.drawTextureIndices.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.drawTextureIndices.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.drawTextureIndices.Image = ((System.Drawing.Image)(resources.GetObject("drawTextureIndices.Image")));
+            this.drawTextureIndices.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.drawTextureIndices.Name = "drawTextureIndices";
+            this.drawTextureIndices.Size = new System.Drawing.Size(23, 22);
+            this.drawTextureIndices.Text = "Draw Texture Indices";
             // 
             // menuStrip
             // 
@@ -101,7 +104,8 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem});
+            this.saveAsToolStripMenuItem,
+            this.importToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -123,6 +127,14 @@ namespace Mindstep.EasterEgg.MapEditor
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.importToolStripMenuItem.Text = "Import";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
             // topViewPanel
             // 
             this.topViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -136,6 +148,14 @@ namespace Mindstep.EasterEgg.MapEditor
             this.topViewPanel.Name = "topViewPanel";
             this.topViewPanel.Size = new System.Drawing.Size(232, 208);
             this.topViewPanel.TabIndex = 18;
+            // 
+            // topView
+            // 
+            this.topView.Location = new System.Drawing.Point(33, 3);
+            this.topView.Name = "topView";
+            this.topView.Size = new System.Drawing.Size(196, 184);
+            this.topView.TabIndex = 7;
+            this.topView.Text = "top view";
             // 
             // coords
             // 
@@ -189,14 +209,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.saveFileDialog.Title = "Save As";
             this.saveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog_FileOk);
             // 
-            // topView
-            // 
-            this.topView.Location = new System.Drawing.Point(33, 3);
-            this.topView.Name = "topView";
-            this.topView.Size = new System.Drawing.Size(196, 184);
-            this.topView.TabIndex = 7;
-            this.topView.Text = "top view";
-            // 
             // mainView
             // 
             this.mainView.AllowDrop = true;
@@ -206,7 +218,11 @@ namespace Mindstep.EasterEgg.MapEditor
             this.mainView.Size = new System.Drawing.Size(1092, 717);
             this.mainView.TabIndex = 17;
             this.mainView.Text = "mainView";
-            this.mainView.DragDrop += new System.Windows.Forms.DragEventHandler(this.mainView_DragDrop);
+            // 
+            // importFileDialog
+            // 
+            this.importFileDialog.Filter = "PNG (*.png)|*.png";
+            this.importFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.importFileDialog_FileOk);
             // 
             // MainForm
             // 
@@ -236,7 +252,6 @@ namespace Mindstep.EasterEgg.MapEditor
 
         #endregion
 
-        private SpriteFontControl spriteFontControl;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton showTopView;
         private System.Windows.Forms.MenuStrip menuStrip;
@@ -248,11 +263,13 @@ namespace Mindstep.EasterEgg.MapEditor
         private System.Windows.Forms.Label layerLabel;
         private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.TextBox layer;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton drawTextureIndices;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog importFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
     }
 }
 
