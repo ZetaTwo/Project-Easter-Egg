@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Engine;
 using Microsoft.Xna.Framework.Graphics;
-using Mindstep.EasterEgg.Engine.Graphics;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -29,7 +28,7 @@ namespace Mindstep.EasterEgg.Commons
 
         public void Draw(SpriteBatch spriteBatch, Position origin)
         {
-            spriteBatch.Draw(texture, SpriteHelper.toScreen(origin + Position), Color.White);
+            spriteBatch.Draw(texture, CoordinateTransform.ObjectToProjectionSpace(origin + Position), Color.White);
         }
     }
 }

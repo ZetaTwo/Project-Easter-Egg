@@ -49,6 +49,7 @@
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -61,12 +62,11 @@
   <ItemGroup>
     <Compile Include="Graphics\BoundingBox.cs" />
     <Compile Include="Graphics\IEntityDrawable.cs" />
-    <Compile Include="Graphics\SpriteHelper.cs" />
     <Compile Include="Physics\Block.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveLoad\SaveLoadExtensions.cs" />
-    <Compile Include="Transform.cs" />
+    <Compile Include="Graphics\CoordinateTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Game\" />

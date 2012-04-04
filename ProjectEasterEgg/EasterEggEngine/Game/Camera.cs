@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Mindstep.EasterEgg.Engine.Graphics;
 using Mindstep.EasterEgg.Game;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
@@ -23,7 +23,7 @@ namespace Mindstep.EasterEgg.Engine.Game
             get
             {
                 return Matrix.CreateTranslation(new Vector3(
-                  SpriteHelper.toScreen(-_player.Position) +
+                  CoordinateTransform.ObjectToProjectionSpace(-_player.Position) +
                   new Vector2(Engine.GraphicsDevice.Viewport.Width / 2,
                               Engine.GraphicsDevice.Viewport.Height / 2) -
                   Vector2.One * 64, 0));
