@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class GameMap : IDrawable
+    public class GameMap : IEntityDrawable
     {
         EggEngine engine;
 
@@ -103,6 +103,11 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            foreach (IEntityDrawable drawable in drawableObjects)
+            {
+                drawable.Draw(spriteBatch);
+            }
+
             foreach (IEntityDrawable drawable in drawableObjects)
             {
                 drawable.Draw(spriteBatch);

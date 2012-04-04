@@ -143,9 +143,10 @@ namespace Mindstep.EasterEgg.MapEditor
 
             for (int i = 0; i < MainForm.Textures.Count; i++)
             {
+                
                 Texture2DWithPos tex = MainForm.Textures[i];
                 float depth = 0.1f*(1 - (float)i / MainForm.Textures.Count);
-                Vector2 screenCoords = ProjectionToScreenSpace((tex.pos.toVector2()*Zoom).toPoint());
+                Vector2 screenCoords = ProjectionToScreenSpace((tex.pos.ToVector2() * Zoom).ToXnaPoint());
                 spriteBatch.Draw(tex.Texture, screenCoords, null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth);
                 if (MainForm.DrawTextureIndices())
                 {
@@ -158,7 +159,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Microsoft.Xna.Framework.Color color, Position pos)
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
-            Point projCoords = Transform.ObjectToProjectionSpace(pos, tileHeight, tileWidth, blockHeight);
+            Point projCoords = CoordinateTransform.ObjectToProjectionSpace(pos).toPoint();
             Vector2 screenCoords = ProjectionToScreenSpace(projCoords);
             spriteBatch.Draw(image, screenCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
         }
@@ -192,7 +193,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public Vector2 ProjectionToScreenSpace(Point projCoord)
         {
-            return projCoord.toVector2() + offset;
+            return projCoord.ToVector2() + offset;
         }
 
         private void MainView_MouseMove(object sender, MouseEventArgs e)

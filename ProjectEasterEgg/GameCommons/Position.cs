@@ -111,5 +111,10 @@ namespace Mindstep.EasterEgg.Commons
         {
             return p;
         }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
+        }
     }
 }
