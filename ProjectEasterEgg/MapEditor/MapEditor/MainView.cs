@@ -191,6 +191,11 @@ namespace Mindstep.EasterEgg.MapEditor
             dragging = null;
         }
 
+        public Vector2 ScreenToProjectionSpace(Point screenCoord)
+        {
+            return screenCoord.toVector2() + offset;
+        }
+
         public Vector2 ProjectionToScreenSpace(Point projCoord)
         {
             return projCoord.ToVector2() + offset;
