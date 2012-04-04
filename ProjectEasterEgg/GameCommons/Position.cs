@@ -36,6 +36,11 @@ namespace Mindstep.EasterEgg.Commons
             Z = (int)position.Z;
         }
 
+        public Position()
+            : this(0, 0, 0)
+        {
+        }
+
         public Position(int x, int y, int z)
         {
             X = x;

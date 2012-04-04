@@ -107,7 +107,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         protected override void Draw()
         {
-            GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix);
 
             BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.BlockPositions);

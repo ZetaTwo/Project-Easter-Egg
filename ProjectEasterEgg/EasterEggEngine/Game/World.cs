@@ -13,6 +13,10 @@ namespace Mindstep.EasterEgg.Engine
     public class World
     {
         EggEngine engine;
+        protected EggEngine Engine
+        {
+            get { return engine; }
+        }
 
         private MousePointer pointer;
         public MousePointer Pointer
@@ -22,10 +26,15 @@ namespace Mindstep.EasterEgg.Engine
 
         private List<GameMap> maps;
         private GameMap currentMap;
+        protected GameMap CurrentMap
+        {
+            get { return currentMap; }
+            set { currentMap = value; }
+        }
 
         public void Update(GameTime gameTime)
         {
-            currentMap.Update(gameTime);
+            CurrentMap.Update(gameTime);
         }
 
         public virtual void Initialize(EggEngine _engine)
@@ -35,7 +44,7 @@ namespace Mindstep.EasterEgg.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            currentMap.Draw(spriteBatch);
+            CurrentMap.Draw(spriteBatch);
 
             DrawWorld(spriteBatch);
         }

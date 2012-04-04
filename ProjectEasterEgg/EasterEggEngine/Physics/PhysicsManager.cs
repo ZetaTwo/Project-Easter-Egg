@@ -35,7 +35,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             };
         }
 
-        public void MoveObject(GameEntitySolid character, Vector3 endpoint, Map map)
+        public void MoveObject(GameEntitySolid character, Vector3 endpoint, GameMap map)
         {
             throw new System.NotImplementedException();
         }
