@@ -5,6 +5,7 @@ using System.Text;
 using Mindstep.EasterEgg.Engine;
 using Mindstep.EasterEgg.Engine.Game;
 using EggEnginePipeline;
+using Mindstep.EasterEgg.Engine.Input;
 
 namespace Mindstep.EasterEgg.Game.Game
 {
@@ -17,6 +18,11 @@ namespace Mindstep.EasterEgg.Game.Game
             //Add game content here
 
             CurrentMap = new GameMap(Engine.Content.Load<GameMapDTO>("Models/secondmodel"));
+            
+            pointer = new MousePointer();
+            pointer.Initialize(Engine);
+            AddUpdate(pointer);
+            AddDraw(pointer);
         }
     }
 }

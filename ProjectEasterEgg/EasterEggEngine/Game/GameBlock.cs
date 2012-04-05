@@ -23,24 +23,25 @@ namespace Mindstep.EasterEgg.Engine.Game
         string scriptName = null;
         public bool Interactable
         {
-            get { return scriptName != null; ; }
+            get { return scriptName != null; }
         }
 
-        public GameBlock(BlockType type, Position position, string texture)
+        public GameBlock(BlockType type, Position position, string texture, string script)
             : base(position)
         {
+            scriptName = "ScriptBlock" + script;
             textureName = texture;
             this.type = type;
         }
 
         public GameBlock(GameBlockDTO blockData)
-            : this(blockData.Type, blockData.Position, blockData.Texture)
+            : this(blockData.Type, blockData.Position, blockData.Texture, blockData.scriptName)
         {
 
         }
 
         public GameBlock(BlockType blockType, Position position)
-            : this(blockType, position, null)
+            : this(blockType, position, null, null)
         {
         }
 

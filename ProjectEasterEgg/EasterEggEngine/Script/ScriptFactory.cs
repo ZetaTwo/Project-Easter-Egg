@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Engine.Game;
+using System.Reflection;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -16,7 +17,8 @@ namespace Mindstep.EasterEgg.Engine
 
             if (!scriptLibrary.ContainsKey(key))
             {
-                scriptLibrary.Add(key, Type.GetType(key));
+                Type scriptType = Assembly.GetEntryAssembly().GetType("Mindstep.EasterEgg.Scripts." + key, true);
+                scriptLibrary.Add(key, scriptType);
                     
             }
 

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mindstep.EasterEgg.Engine.Physics;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Game;
+using Mindstep.EasterEgg.Engine;
 
 namespace GameTests
 {
@@ -15,13 +16,16 @@ namespace GameTests
     [TestClass]
     public class NodeUnitTest
     {
+        EggEngine engine;
         PhysicsManager physics;
 
         public NodeUnitTest()
         {
-            physics = new PhysicsManager();
+
+            engine = new EggEngine(new TestWorld());
+            
             GameMap map = new GameMap(new Position(0, 0, 0), new Position(5, 5, 0));
-            physics.CurrentMap = map;
+            engine.World.CurrentMap = map;
 
             for(int x = 0; x < 6; x++)
             {

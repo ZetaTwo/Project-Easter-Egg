@@ -11,7 +11,16 @@ namespace Mindstep.EasterEgg.Engine
     public abstract class ScriptBlock : Script
     {
         GameBlock block;
+        protected GameBlock Block
+        {
+            get { return block; }
+        }
+
         BlockAction action;
+        protected BlockAction Action
+        {
+            get { return action; }
+        }
 
         public void Prepare(GameBlock block, BlockAction action)
         {
