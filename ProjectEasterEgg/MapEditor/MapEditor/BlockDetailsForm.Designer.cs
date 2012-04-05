@@ -34,6 +34,10 @@
             this.okButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ScriptNameBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.CurrentBlockType = new System.Windows.Forms.Label();
+            this.CurrentScriptName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BlockValue
@@ -93,11 +97,51 @@
             this.ScriptNameBox.TabIndex = 7;
             this.ScriptNameBox.TextChanged += new System.EventHandler(this.ScriptNameBox_TextChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(157, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Current:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(157, 73);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Current: ";
+            // 
+            // CurrentBlockType
+            // 
+            this.CurrentBlockType.AutoSize = true;
+            this.CurrentBlockType.Location = new System.Drawing.Point(205, 72);
+            this.CurrentBlockType.Name = "CurrentBlockType";
+            this.CurrentBlockType.Size = new System.Drawing.Size(35, 13);
+            this.CurrentBlockType.TabIndex = 10;
+            this.CurrentBlockType.Text = "label4";
+            // 
+            // CurrentScriptName
+            // 
+            this.CurrentScriptName.AutoSize = true;
+            this.CurrentScriptName.Location = new System.Drawing.Point(205, 34);
+            this.CurrentScriptName.Name = "CurrentScriptName";
+            this.CurrentScriptName.Size = new System.Drawing.Size(35, 13);
+            this.CurrentScriptName.TabIndex = 11;
+            this.CurrentScriptName.Text = "label5";
+            // 
             // BlockDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.CurrentScriptName);
+            this.Controls.Add(this.CurrentBlockType);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.ScriptNameBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.okButton);
@@ -119,5 +163,9 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ScriptNameBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label CurrentBlockType;
+        private System.Windows.Forms.Label CurrentScriptName;
     }
 }
