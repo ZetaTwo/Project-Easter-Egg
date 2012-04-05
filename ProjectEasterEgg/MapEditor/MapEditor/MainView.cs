@@ -159,9 +159,8 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Microsoft.Xna.Framework.Color color, Position pos)
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
-            Point projCoords = CoordinateTransform.ObjectToProjectionSpace(pos).toPoint();
-            Vector2 screenCoords = CoordinateTransform.ToScreen(pos, tileHeight, tileWidth, blockHeight, offset.ToXnaPoint()).ToVector2();
-            spriteBatch.Draw(image, projCoords.ToVector2(), null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
+            Vector2 projCoords = CoordinateTransform.ObjectToProjectionSpace(pos);
+            spriteBatch.Draw(image, projCoords, null, color, 0, Vector2.Zero, 1, spriteEffect, depth / Zoom);
         }
 
         private void MainView_MouseDown(object sender, MouseEventArgs e)
@@ -175,7 +174,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 for (int i = mainForm.AnimationManager.CurrentFrame.Textures.Count - 1; i >= 0; i--)
                 {
                     Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
-                    if (tex.Rectangle.Contains((e.Location.toVector2()-offset).toPoint()))
+                    if (tex.Rectangle.Contains((e.Location.toVector2()-offset).ToPoint()))
                     {
                         dragging = tex;
                         break;

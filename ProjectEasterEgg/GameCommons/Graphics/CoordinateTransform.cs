@@ -13,24 +13,12 @@ namespace Mindstep.EasterEgg.Commons
 
         public const int BLOCK_HEIGHT = 77;
 
-        public const int NUM_LAYERS = 20;
-
         public static Vector2 ObjectToProjectionSpace(Position map)
         {
             int x = (-map.X + map.Y) * (int)(TILE_WIDTH / 2);
             int y = (map.X + map.Y) * (int)(TILE_HEIGHT / 2) - map.Z * BLOCK_HEIGHT;
 
             return new Vector2(x,y);
-        }
-
-        public static Point ToScreen(Position map, int tileHeight, int tileWidth, int blockHeight, Point offset)
-        {
-            tileWidth /= 2;
-            tileHeight /= 2;
-            int x = -map.X * tileWidth + map.Y * tileWidth;
-            int y = map.X * tileHeight + map.Y * tileHeight - map.Z * blockHeight;
-
-            return new Point(x + offset.X, y + offset.Y);
         }
 
         public static Vector2 ToVector2(this Point point)

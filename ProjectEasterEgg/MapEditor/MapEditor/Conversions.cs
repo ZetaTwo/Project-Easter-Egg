@@ -26,9 +26,9 @@ namespace Mindstep.EasterEgg.MapEditor
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public static Point toPoint(this Vector2 p)
+        public static Point ToPoint(this Vector2 p)
         {
-            return new Point((int)(p.X + .5f), (int)(p.Y + .5f));
+            return new Point((int)p.X, (int)p.Y);
         }
 
         public static IEnumerable<Position> ToPositions(this IEnumerable<SaveBlock> blocks)

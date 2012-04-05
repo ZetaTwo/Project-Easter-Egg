@@ -65,8 +65,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\Animation.cs" />
-    <Compile Include="Animation\AnimationManager.cs" />
+    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\AnimationManager.cs" />
     <Compile Include="BlockDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,12 +75,12 @@
     </Compile>
     <Compile Include="Exporter.cs" />
     <Compile Include="Conversions.cs" />
-    <Compile Include="Animation\Frame.cs" />
+    <Compile Include="Animations\Frame.cs" />
     <Compile Include="MainView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SaveBlock.cs" />
-    <Compile Include="Animation\Texture2DWithPos.cs" />
+    <Compile Include="Animations\Texture2DWithPos.cs" />
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>

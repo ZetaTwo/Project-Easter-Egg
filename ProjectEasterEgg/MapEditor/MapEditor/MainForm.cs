@@ -228,7 +228,7 @@ using Microsoft.Xna.Framework.Content;
             Point textureOffset;
             if (lastImportedTextureOffset.X > 400)
             {
-                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).toPoint();
+                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).ToPoint();
             }
             else
             {
