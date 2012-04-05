@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.MapEditor.Animations
 {
     public class Texture2DWithPos
     {

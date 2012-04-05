@@ -8,6 +8,7 @@ using Mindstep.EasterEgg.Commons.SaveLoad;
 using System.IO.Packaging;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using Mindstep.EasterEgg.MapEditor.Animations;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -58,8 +59,9 @@ namespace Mindstep.EasterEgg.MapEditor
                     animationsElement.Add(animationElement);
                     animationElement.SetAttributeValue("name", animation.Name);
 
-                    foreach (Frame frame in animation.Frames)
+                    foreach (KeyValuePair<int, Frame> frameKeyValuePair in animation.Frames)
                     {
+                        Frame frame = frameKeyValuePair.Value;
                         XElement frameElement = new XElement("frame");
                         animationElement.Add(frameElement);
                         frameElement.SetAttributeValue("duration", frame.Duration);

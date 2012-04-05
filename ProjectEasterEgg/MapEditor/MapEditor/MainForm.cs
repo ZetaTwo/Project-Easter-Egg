@@ -25,6 +25,7 @@ namespace Mindstep.EasterEgg.MapEditor
 using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
     using System.IO;
+    using Mindstep.EasterEgg.MapEditor.Animations;
 
     
     /// <summary>
@@ -48,8 +49,7 @@ using Microsoft.Xna.Framework.Content;
         }
 
         public List<SaveBlock> SaveBlocks = new List<SaveBlock>();
-        private IEnumerable<Animation> animations;
-        public Frame CurrentFrame = new Frame();
+        public AnimationManager AnimationManager = new AnimationManager();
         public bool changedSinceLastSave;
 
         public readonly ServiceContainer Services;
@@ -75,6 +75,7 @@ using Microsoft.Xna.Framework.Content;
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
+            AnimationManager.setCurrentAnimation("still");
         }
 
         private void SetupContentManager()
@@ -194,7 +195,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void save()
         {
-            Exporter.SaveModel(SaveBlocks, animations, saveFileDialog.FileName);
+            Exporter.SaveModel(SaveBlocks, (List<Animation>)AnimationManager, saveFileDialog.FileName);
             lastSavedDoc = saveFileDialog.FileName;
             changedSinceLastSave = false;
             RefreshTitle();
@@ -236,7 +237,7 @@ using Microsoft.Xna.Framework.Content;
             tex.Coord = textureOffset;//ScreenToProjectionSpace(textureOffset);
             
             tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
-            CurrentFrame.Textures.Add(tex);
+            AnimationManager.CurrentFrame.Textures.Add(tex);
         }
         #endregion
 

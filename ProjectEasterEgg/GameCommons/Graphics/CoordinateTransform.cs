@@ -23,6 +23,16 @@ namespace Mindstep.EasterEgg.Commons
             return new Vector2(x,y);
         }
 
+        public static Point ToScreen(Position map, int tileHeight, int tileWidth, int blockHeight, Point offset)
+        {
+            tileWidth /= 2;
+            tileHeight /= 2;
+            int x = -map.X * tileWidth + map.Y * tileWidth;
+            int y = map.X * tileHeight + map.Y * tileHeight - map.Z * blockHeight;
+
+            return new Point(x + offset.X, y + offset.Y);
+        }
+
         public static Vector2 ToVector2(this Point point)
         {
             return new Vector2(point.X, point.Y);

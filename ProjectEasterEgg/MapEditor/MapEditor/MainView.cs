@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Mindstep.EasterEgg.Commons;
 using System;
 using System.Collections.Generic;
+using Mindstep.EasterEgg.MapEditor.Animations;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -48,7 +49,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private Texture2D grid;
         private Vector2 offset;
 
-        private MainForm MainForm;
+        private MainForm mainForm;
         private int tileHeight;
         private int tileWidth;
         private int blockHeight;
@@ -63,10 +64,10 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public void Initialize(MainForm mainForm)
         {
-            this.MainForm = mainForm;
-            spriteBatch = new SpriteBatch(MainForm.GraphicsDevice);
+            this.mainForm = mainForm;
+            spriteBatch = new SpriteBatch(mainForm.GraphicsDevice);
             spriteEffect = SpriteEffects.None;
-            spriteFont = MainForm.Content.Load<SpriteFont>("hudFont");
+            spriteFont = mainForm.Content.Load<SpriteFont>("hudFont");
 
             Load("mainBlock31", "mainGrid31");
             MouseDown += new MouseEventHandler(MainView_MouseDown);
@@ -84,8 +85,8 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         public void Load(string blockS, string gridS)
         {
-            block = MainForm.Content.Load<Texture2D>(blockS);
-            grid = MainForm.Content.Load<Texture2D>(gridS);
+            block = mainForm.Content.Load<Texture2D>(blockS);
+            grid = mainForm.Content.Load<Texture2D>(gridS);
             if (!block.Bounds.Equals(grid.Bounds))
             {
                 throw new Exception("mainBlock and mainGrid image size mismatch.");
@@ -109,7 +110,7 @@ namespace Mindstep.EasterEgg.MapEditor
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Zoom.Matrix * Matrix.CreateTranslation(offset.X, offset.Y, 0));
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.SaveBlocks.ToPositions());
+            BoundingBoxInt boundingBox = new BoundingBoxInt(mainForm.SaveBlocks.ToPositions());
 
             List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
@@ -127,10 +128,10 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
 
-            foreach (Position pos in MainForm.SaveBlocks.ToPositions())
+            foreach (Position pos in mainForm.SaveBlocks.ToPositions())
             {
                 Color color;
-                if (pos.Z == MainForm.CurrentHeight)
+                if (pos.Z == mainForm.CurrentHeight)
                 {
                     color = Color.Green;
                 }
@@ -141,13 +142,13 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(block, boundingBox, color, pos);
             }
 
-            for (int i = 0; i < MainForm.CurrentFrame.Textures.Count; i++)
+            for (int i = 0; i < mainForm.AnimationManager.CurrentFrame.Textures.Count; i++)
             {
 
-                Texture2DWithPos tex = MainForm.CurrentFrame.Textures[i];
-                float depth = 0.1f * (1 - (float)i / MainForm.CurrentFrame.Textures.Count);
+                Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
+                float depth = 0.1f * (1 - (float)i / mainForm.AnimationManager.CurrentFrame.Textures.Count);
                 spriteBatch.Draw(tex.Texture, tex.Coord.ToVector2(), null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth);
-                if (MainForm.DrawTextureIndices())
+                if (mainForm.DrawTextureIndices())
                 {
                     spriteBatch.DrawString(spriteFont, i.ToString(), tex.Coord.ToVector2(), Color.Green);
                 }
@@ -159,6 +160,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
             Point projCoords = CoordinateTransform.ObjectToProjectionSpace(pos).toPoint();
+            Vector2 screenCoords = CoordinateTransform.ToScreen(pos, tileHeight, tileWidth, blockHeight, offset.ToXnaPoint()).ToVector2();
             spriteBatch.Draw(image, projCoords.ToVector2(), null, color, 0, Vector2.Zero, 1, spriteEffect, depth/Zoom);
         }
 
@@ -170,9 +172,9 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             else if (e.Button == MouseButtons.Left)
             {
-                for (int i = MainForm.CurrentFrame.Textures.Count - 1; i >= 0; i--)
+                for (int i = mainForm.AnimationManager.CurrentFrame.Textures.Count - 1; i >= 0; i--)
                 {
-                    Texture2DWithPos tex = MainForm.CurrentFrame.Textures[i];
+                    Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
                     if (tex.Rectangle.Contains((e.Location.toVector2()-offset).toPoint()))
                     {
                         dragging = tex;
@@ -218,12 +220,12 @@ namespace Mindstep.EasterEgg.MapEditor
             if (e.Delta > 0)
             {
                 Zoom.In();
-                MainForm.RefreshTitle();
+                mainForm.RefreshTitle();
             }
             else if (e.Delta < 0)
             {
                 Zoom.Out();
-                MainForm.RefreshTitle();
+                mainForm.RefreshTitle();
             }
         }
     }

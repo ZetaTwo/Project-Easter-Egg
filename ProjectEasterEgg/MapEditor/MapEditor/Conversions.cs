@@ -37,6 +37,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 yield return block.Position;
             }
+            Dictionary<string, int> a;
         }
     }
 }
