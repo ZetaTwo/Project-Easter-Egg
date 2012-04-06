@@ -70,7 +70,7 @@ namespace Mindstep.EasterEgg.MapEditor
                         {
                             XElement textureElement = new XElement("texture");
                             frameElement.Add(textureElement);
-                            textureElement.SetAttributeValue("name", tex.Name);
+                            textureElement.SetAttributeValue("name", tex.RelativePath);
                             textureElement.SetAttributeValue("coord", tex.Coord.GetSaveString());
                             allTextures.Add(tex);
                         }
@@ -105,7 +105,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 Package.Open(path, FileMode.Create))
             {
                 // Add the Document part to the Package
-                //PackagePart packagePartDocument = package.CreatePart(new Uri("lol"), "image/png");
                 PackagePart packagePartDocument = package.CreatePart(new Uri("/model.xml", UriKind.Relative), System.Net.Mime.MediaTypeNames.Text.Xml);
 
                 packagePartDocument.GetStream().Write(doc.ToString());
@@ -114,7 +113,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 package.CreateRelationship(packagePartDocument.Uri, TargetMode.Internal, ResourceRelationshipType);
 
                 foreach (Texture2DWithPos tex in allTextures) {
-                    PackagePart blockImage = package.CreatePart(new Uri("/textures/" + tex.Name.Split('/').Last(), UriKind.Relative), "image/png");
+                    PackagePart blockImage = package.CreatePart(new Uri("/textures/" + tex.RelativePath, UriKind.Relative), "image/png");
                     tex.Texture.SaveAsPng(blockImage.GetStream(), tex.Texture.Width, tex.Texture.Height);
                     package.CreateRelationship(blockImage.Uri, TargetMode.Internal, ResourceRelationshipType);
                 }

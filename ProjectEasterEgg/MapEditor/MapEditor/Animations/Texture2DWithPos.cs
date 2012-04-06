@@ -9,16 +9,26 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
 {
     public class Texture2DWithPos
     {
-        public Texture2D Texture;
         public Point Coord;
-        public string Name;
+        public Texture2D Texture;
 
-        public Rectangle Rectangle
+        private string originalPath;
+        public string OriginalPath { get { return originalPath; } }
+
+        public string RelativePath;
+
+        public Rectangle Bounds
         {
             get
             {
                 return new Rectangle(Coord.X, Coord.Y, Texture.Width, Texture.Height);
             }
+        }
+
+        public Texture2DWithPos(string originalPath)
+        {
+            this.originalPath = originalPath.Replace('\\', '/');
+            this.RelativePath = this.originalPath.Split('/').Last();
         }
     }
 }
