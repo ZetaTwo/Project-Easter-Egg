@@ -95,18 +95,34 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(grid, boundingBox, Color.White, tilePos);
             }
 
-            foreach (Position pos in mainForm.SaveBlocks.ToPositions())
+            foreach (SaveBlock saveBlock in mainForm.SaveBlocks)
             {
-                Color color;
-                if (pos.Z == mainForm.CurrentHeight)
+
+                Color color = Color.Green;
+                if (saveBlock.Position.Z == mainForm.CurrentHeight)
                 {
-                    color = Color.Green;
+                    switch (saveBlock.type)
+                    {
+                        case 0:
+                            color = Color.Green;
+                            break;
+                        case 1:
+                            color = Color.Blue;
+                            break;
+                        case 2:
+                            color = Color.Brown;
+                            break;
+                        case 3:
+                            color = Color.Olive;
+                            break;
+                    }
+
                 }
                 else
                 {
                     color = Color.Red;
                 }
-                drawBlock(block, boundingBox, color, pos);
+                drawBlock(block, boundingBox, color, saveBlock.Position);
             }
 
             for (int i = 0; i < mainForm.AnimationManager.CurrentFrame.Textures.Count; i++)

@@ -57,7 +57,10 @@ namespace Mindstep.EasterEgg.MapEditor
             for (int i = 0; i < 4; i++)
             {
                 if (BlockTypesDropDown.Text == blockTypes[i])
+                {
                     block.type = i;
+                    break;
+                }
             }
 
             DialogResult = DialogResult.OK;
