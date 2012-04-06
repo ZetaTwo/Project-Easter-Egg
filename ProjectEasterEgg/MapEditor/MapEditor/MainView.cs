@@ -28,17 +28,17 @@ namespace Mindstep.EasterEgg.MapEditor
         private Texture2D grid;
 
         private MainForm mainForm;
+        private bool dragging;
         private bool panning;
         private System.Drawing.Point lastMouseLocation;
         private SamplerState samplerState;
 
         private Camera camera;
         public float Zoom { get { return camera.Zoom; } }
-        private Texture2DWithPos dragging;
         private SpriteFont spriteFont;
         public bool drawTextureIndices = true;
-        private Point textureCoordAtMouseDown;
         private Point mouseCoordAtMouseDown;
+        private List<Texture2DWithDoublePos> selectedTextures = new List<Texture2DWithDoublePos>();
 
         public void Initialize(MainForm mainForm)
         {
@@ -58,6 +58,7 @@ namespace Mindstep.EasterEgg.MapEditor
             MouseDown += new MouseEventHandler(MainView_MouseDown);
             MouseUp += new MouseEventHandler(MainView_MouseUp);
             MouseMove += new MouseEventHandler(MainView_MouseMove);
+            KeyDown += new KeyEventHandler(MainView_KeyDown);
 
             samplerState = new SamplerState();
             samplerState.Filter = TextureFilter.PointMipLinear;
@@ -114,12 +115,22 @@ namespace Mindstep.EasterEgg.MapEditor
 
                 Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
                 float depth = 0.1f * (1 - (float)i / mainForm.AnimationManager.CurrentFrame.Textures.Count);
-                spriteBatch.Draw(tex.Texture, tex.Coord.ToVector2(), null, Color.White, 0, Vector2.Zero, 1, spriteEffect, depth / camera.Zoom);
+                Color color;
+                if (!selectedTextures.TrueForAll(t => t.t != tex))
+                {
+                    color = Color.Violet;
+                }
+                else
+                {
+                    color = Color.White;
+                }
+                spriteBatch.Draw(tex.Texture, tex.Coord.ToVector2(), null, color, 0, Vector2.Zero, 1, spriteEffect, depth / camera.Zoom);
                 if (mainForm.DrawTextureIndices())
                 {
                     spriteBatch.DrawString(spriteFont, i.ToString(), tex.Coord.ToVector2(), Color.Green);
                 }
             }
+
             spriteBatch.End();
         }
 
@@ -134,10 +145,9 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (dragging != null) //pressing the other mouse button resets the textures position
+                if (dragging) //pressing the other mouse button cancels the dragging
                 {
-                    dragging.Coord = textureCoordAtMouseDown;
-                    dragging = null;
+                    dragging = false;
                 }
                 else
                 {
@@ -152,17 +162,41 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
                 else
                 {
-                    for (int i = mainForm.AnimationManager.CurrentFrame.Textures.Count - 1; i >= 0; i--)
+                    Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(e.Location.toXnaPoint(), camera);
+                    mouseCoordAtMouseDown = e.Location.toXnaPoint();
+
+                    //TODO: add support for Ctrl to toggle selection of a texture.
+
+                    foreach (Texture2DWithDoublePos tex in selectedTextures)
                     {
-                        Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
-                        Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(e.Location.toXnaPoint(), camera);
-                        if (tex.Rectangle.Contains(mousePosInProjSpace))
+                        if (tex.t.Bounds.Contains(mousePosInProjSpace))
                         {
-                            dragging = tex;
-                            textureCoordAtMouseDown = dragging.Coord;
-                            mouseCoordAtMouseDown = e.Location.toXnaPoint();
-                            break;
+                            dragging = true;
                         }
+                    }
+
+                    if (!dragging) //no currenly selected texture hit
+                    {
+                        selectedTextures.Clear();
+                        for (int i = mainForm.AnimationManager.CurrentFrame.Textures.Count - 1; i >= 0; i--)
+                        {
+                            Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
+                            if (tex.Bounds.Contains(mousePosInProjSpace))
+                            {
+                                dragging = true;
+                                selectedTextures.Add(new Texture2DWithDoublePos(tex));
+                                break;
+                            }
+                        }
+                    }
+
+                    if (dragging)
+                    {
+                        selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.Coord);
+                    }
+                    else //if still no texture has been hit
+                    {
+                        selectedTextures.Clear();
                     }
                 }
             }
@@ -172,12 +206,12 @@ namespace Mindstep.EasterEgg.MapEditor
         private void MainView_MouseUp(object sender, MouseEventArgs e)
         {
             panning = false;
-            dragging = null;
+            dragging = false;
         }
 
         private void MainView_MouseMove(object sender, MouseEventArgs e)
         {
-            if (panning || dragging != null) {
+            if (panning || dragging) {
                 int movedX = e.Location.X - lastMouseLocation.X;
                 int movedY = e.Location.Y - lastMouseLocation.Y;
                 if (panning)
@@ -187,7 +221,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 else
                 {
                     Point changeInProjectionSpace = e.Location.toXnaPoint().Subtract(mouseCoordAtMouseDown).Divide(camera.Zoom);
-                    dragging.Coord = textureCoordAtMouseDown.Add(changeInProjectionSpace);
+                    selectedTextures.ForEach(tex => tex.t.Coord = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
                 }
                 lastMouseLocation = e.Location;
             }
@@ -205,6 +239,29 @@ namespace Mindstep.EasterEgg.MapEditor
                 camera.ZoomOut(e.Location.toXnaPoint(), Width, Height);
                 mainForm.RefreshTitle();
             }
+        }
+
+        public void MainView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                foreach (Texture2DWithDoublePos tex in selectedTextures)
+                {
+                    mainForm.CurrentFrame.Textures.Remove(tex.t);
+                }
+                selectedTextures.Clear();
+            }
+        }
+    }
+
+    class Texture2DWithDoublePos
+    {
+        public Texture2DWithPos t;
+        public Point CoordAtMouseDown;
+
+        public Texture2DWithDoublePos(Texture2DWithPos t)
+        {
+            this.t = t;
         }
     }
 }

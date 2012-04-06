@@ -50,6 +50,8 @@ using Microsoft.Xna.Framework.Content;
 
         public List<SaveBlock> SaveBlocks = new List<SaveBlock>();
         public AnimationManager AnimationManager = new AnimationManager();
+        public Frame CurrentFrame { get { return AnimationManager.CurrentFrame; } }
+        public Animation CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
         public bool changedSinceLastSave;
 
         public readonly ServiceContainer Services;
@@ -224,7 +226,18 @@ using Microsoft.Xna.Framework.Content;
         private Point lastImportedTextureOffset = new Point(100, 100);
         private void importImage(string fileName)
         {
-            Texture2DWithPos tex = new Texture2DWithPos();
+            Texture2DWithPos tex = new Texture2DWithPos(fileName);
+            foreach (Texture2DWithPos existingTex in CurrentFrame.Textures)
+            {
+                if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
+                {
+                    MessageBox.Show("Texture relative path name collision: '"+tex.RelativePath+
+                        "', while original path name was not the same: '"+tex.OriginalPath+
+                        "'!", "It should be possible to click on a texture and "+
+                        "specify it's name.\nMake such a box popup here!");
+                    return;
+                }
+            }
             Point textureOffset;
             if (lastImportedTextureOffset.X > 400)
             {
