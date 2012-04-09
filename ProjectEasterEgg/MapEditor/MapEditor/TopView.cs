@@ -94,16 +94,32 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            foreach (Position pos in MainForm.SaveBlocks.ToPositions())
+            foreach (SaveBlock saveBlock in MainForm.SaveBlocks)
             {
-                int height = pos.Z-MainForm.CurrentHeight;
+                Color color = Color.Red;
+                int height = saveBlock.Position.Z-MainForm.CurrentHeight;
                 if (height == 0)
                 {
-                    drawBox(block, pos, Color.Green, 0);
+                    switch (saveBlock.type)
+                    {
+                        case 0:
+                            color = Color.Green;
+                            break;
+                        case 1:
+                            color = Color.Blue;
+                            break;
+                        case 2:
+                            color = Color.Brown;
+                            break;
+                        case 3:
+                            color = Color.Olive;
+                            break;
+                    }
+                    drawBox(block, saveBlock.Position, color, .5f);
                 }
                 else
                 {
-                    drawBox(block, pos, Color.Red, .5f);
+                    drawBox(block, saveBlock.Position, color, .5f);
                 }
             }
             spriteBatch.End();
