@@ -71,7 +71,7 @@ namespace Mindstep.EasterEgg.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, Matrix.Identity);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, CurrentMap.Camera.ZoomAndOffsetMatrix);
             CurrentMap.Draw(spriteBatch);
             spriteBatch.End();
 

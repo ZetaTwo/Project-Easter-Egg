@@ -48,6 +48,24 @@ namespace Mindstep.EasterEgg.MapEditor
                  */
             }
 
+            {
+                XElement blocksElement = new XElement("blocks");
+                root.Add(blocksElement);
+
+                foreach (SaveBlock block in blocks)
+                {
+                    XElement blockElement = new XElement("block");
+                    blocksElement.Add(blockElement);
+
+                    blockElement.SetAttributeValue("offset", block.Position.GetSaveString());
+                    blockElement.SetAttributeValue("type", block.type);
+                    if (!string.IsNullOrEmpty(block.script))
+                    {
+                        blockElement.SetAttributeValue("script", "ScriptBlock" + block.script);
+                    }
+                }
+            }
+
             HashSet<Texture2DWithPos> allTextures = new HashSet<Texture2DWithPos>();
             {
 
@@ -78,24 +96,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
             
-            {
-
-                XElement blocksElement = new XElement("blocks");
-                root.Add(blocksElement);
-
-                int i=0;
-                foreach (SaveBlock block in blocks) {
-                    XElement blockElement = new XElement("block");
-                    blocksElement.Add(blockElement);
-                    
-                    blockElement.SetAttributeValue("offset", block.Position.GetSaveString());
-                    blockElement.SetAttributeValue("type", block.type);
-                    if (!string.IsNullOrEmpty(block.script)) {
-                        blockElement.SetAttributeValue("script", "ScriptBlock"+block.script);
-                    }
-                }
-            }
-
             // Create the Package
             // (If the package file already exists, FileMode.Create will
             //  automatically delete it first before creating a new one.

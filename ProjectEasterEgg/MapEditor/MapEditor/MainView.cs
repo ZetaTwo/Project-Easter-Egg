@@ -64,9 +64,6 @@ namespace Mindstep.EasterEgg.MapEditor
             samplerState.Filter = TextureFilter.PointMipLinear;
             samplerState.AddressU = TextureAddressMode.Clamp;
             samplerState.AddressV = TextureAddressMode.Clamp;
-
-            // Hook the idle event to constantly redraw our animation.
-            Application.Idle += delegate { Invalidate(); };
         }
 
 
@@ -201,6 +198,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
             lastMouseLocation = e.Location;
+            mainForm.Updated();
         }
 
         private void MainView_MouseUp(object sender, MouseEventArgs e)
@@ -224,6 +222,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     selectedTextures.ForEach(tex => tex.t.Coord = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
                 }
                 lastMouseLocation = e.Location;
+                mainForm.Updated();
             }
         }
 
@@ -239,6 +238,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 camera.ZoomOut(e.Location.toXnaPoint(), Width, Height);
                 mainForm.RefreshTitle();
             }
+            mainForm.Updated();
         }
 
         public void MainView_KeyDown(object sender, KeyEventArgs e)
@@ -250,6 +250,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     mainForm.CurrentFrame.Textures.Remove(tex.t);
                 }
                 selectedTextures.Clear();
+                mainForm.Updated();
             }
         }
     }

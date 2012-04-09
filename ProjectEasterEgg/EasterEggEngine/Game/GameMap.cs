@@ -6,9 +6,9 @@ using Mindstep.EasterEgg.Engine.Physics;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.Game;
 using Mindstep.EasterEgg.Commons;
-using EggEnginePipeline;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
+using Mindstep.EasterEgg.Commons.DTO;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
@@ -26,6 +26,8 @@ namespace Mindstep.EasterEgg.Engine.Game
             get { return bounds; }
         }
 
+        public Mindstep.EasterEgg.Commons.Graphics.Camera Camera;
+
         private List<IEntityDrawable> drawableObjects = new List<IEntityDrawable>();
 
         private GameBlock[][][] worldMatrix;
@@ -40,15 +42,17 @@ namespace Mindstep.EasterEgg.Engine.Game
         public GameMap(Position min, Position max)
         {
             bounds = new BoundingBoxInt(new Position[] {min, max});
-            worldMatrix = CreateWorldMatrix<GameBlock>(max - min + new Position(1, 1, 1));
+            worldMatrix = Creators.CreateWorldMatrix<GameBlock>(max - min + new Position(1, 1, 1));
+            Camera = new Mindstep.EasterEgg.Commons.Graphics.Camera(new Point(50, 50));
         }
 
         public GameMap(GameMapDTO data)
         {
-            bounds = new BoundingBoxInt(new Position[] {data.Min, data.Max});
-            worldMatrix = CreateWorldMatrix<GameBlock>(new Position(data.WorldMatrix.Length,
+            bounds = new BoundingBoxInt(new Position[] {Position.Zero, data.Max});
+            worldMatrix = Creators.CreateWorldMatrix<GameBlock>(new Position(data.WorldMatrix.Length,
                                                                     data.WorldMatrix[0].Length,
                                                                     data.WorldMatrix[0][0].Length));
+            Camera = new Mindstep.EasterEgg.Commons.Graphics.Camera(new Point(200, 200));
 
             for (int x = 0; x < worldMatrix.Length; x++)
             {
@@ -94,33 +98,17 @@ namespace Mindstep.EasterEgg.Engine.Game
             updateObjects.Remove(entity);
         }
 
-        public static T[][][] CreateWorldMatrix<T>(Position size)
-        {
-            T[][][] matrix = new T[size.X][][];
-
-            for (int x = 0; x < size.X; x++)
-            {
-                matrix[x] = new T[size.Y][];
-                for (int y = 0; y < size.Y; y++)
-                {
-                    matrix[x][y] = new T[size.Z];
-                }
-            }
-
-            return matrix;
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (GameBlock block in this)
             {
                 block.Draw(spriteBatch, Bounds);
             }
-
+            /*
             foreach (IEntityDrawable drawable in drawableObjects)
             {
                 drawable.Draw(spriteBatch);
-            }
+            }*/
         }
 
         public void AddUpdate(IEntityDrawable entity)

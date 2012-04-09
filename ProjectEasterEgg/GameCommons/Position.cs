@@ -8,6 +8,15 @@ namespace Mindstep.EasterEgg.Commons
 {
     public class Position
     {
+        /// <summary>
+        /// Returns a Position with all of its components set to zero.
+        /// </summary>
+        public static Position Zero = new Position(0, 0, 0);
+        /// <summary>
+        /// Returns a Position with ones in all of its components.
+        /// </summary>
+        public static Position One = new Position(1, 1, 1);
+
         private int x;
         public int X
         {
@@ -61,6 +70,11 @@ namespace Mindstep.EasterEgg.Commons
         public override string ToString()
         {
             return "[Position " + X + "," + Y + "," + Z + "]";
+        }
+
+        public Vector3 ToVector3()
+        {
+            return new Vector3(X, Y, Z);
         }
 
         public override bool Equals(object obj)

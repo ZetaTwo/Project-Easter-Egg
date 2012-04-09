@@ -4,21 +4,23 @@ using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework.Graphics;
-using EggEnginePipeline;
 using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Engine.Graphics;
+using Mindstep.EasterEgg.Commons.DTO;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
     public class GameBlock : Block
     {
-        EggEngine engine;
+        private Dictionary<string, AnimationDTO> animationsData;
+
+        protected EggEngine engine;
         public EggEngine Engine
         {
             get { return engine; }
         }
 
-        string textureName;
-        Texture2D texture;
+        public Dictionary<string, Animation> Animations;
 
         string scriptName = null;
         public bool Interactable
@@ -26,30 +28,41 @@ namespace Mindstep.EasterEgg.Engine.Game
             get { return scriptName != null; }
         }
 
-        public GameBlock(BlockType type, Position position, string texture, string script)
-            : base(position)
-        {
-            scriptName = "ScriptBlock" + script;
-            textureName = texture;
-            this.type = type;
-        }
+
+
 
         public GameBlock(GameBlockDTO blockData)
-            : this(blockData.Type, blockData.Position, blockData.Texture, blockData.scriptName)
+            : this(blockData.Type, blockData.Position, blockData.scriptName)
         {
-
+            animationsData = blockData.Animations;
         }
 
         public GameBlock(BlockType blockType, Position position)
-            : this(blockType, position, null, null)
+            : this(blockType, position, null)
+        { }
+
+        public GameBlock(BlockType type, Position position, string scriptName)
+            : base(position)
         {
+            if (scriptName != null)
+            {
+                this.scriptName = "ScriptBlock" + scriptName;
+            }
+            this.type = type;
         }
+
+
+
 
         public void Initialize(EggEngine engine)
         {
             this.engine = engine;
 
-            texture = Engine.Content.Load<Texture2D>(textureName);
+            Animations = new Dictionary<string, Animation>();
+            foreach (AnimationDTO animationData in animationsData.Values)
+            {
+                Animations[animationData.Name] = new Animation(animationData, engine.GraphicsDevice);
+            }
         }
 
         private BlockType type;
@@ -68,7 +81,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             float depth = bounds.getRelativeDepthOf(Position);
             Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(Position);
-            spriteBatch.Draw(texture, screenCoords, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
+            spriteBatch.Draw(Animations["still"].Frames[0], screenCoords, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
 
             /*spriteBatch.Draw(texture, CoordinateTransform.ObjectToProjectionSpace(bounds.Min + Position),
                 null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, bounds.getRelativeDepthOf(Position));*/

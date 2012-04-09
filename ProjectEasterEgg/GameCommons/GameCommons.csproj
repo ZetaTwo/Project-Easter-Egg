@@ -60,6 +60,12 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Creators.cs" />
+    <Compile Include="DTO\AnimationDTO.cs" />
+    <Compile Include="DTO\FrameDTO.cs" />
+    <Compile Include="DTO\GameBlockDTO.cs" />
+    <Compile Include="DTO\GameMapDTO.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graphics\BoundingBox.cs" />

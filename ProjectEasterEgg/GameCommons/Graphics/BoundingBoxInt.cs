@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -10,11 +11,8 @@ namespace Mindstep.EasterEgg.Commons
         Position min;
         public Position Min { get { return min; } }
         Position max;
+        private float fullDepth;
         public Position Max { get { return max; } }
-
-        public BoundingBoxInt()
-        {
-        }
 
         public BoundingBoxInt(IEnumerable<Position> positions)
         {
@@ -53,6 +51,14 @@ namespace Mindstep.EasterEgg.Commons
                 max.Y = Math.Max(pos.Y, max.Y);
                 max.Z = Math.Max(pos.Z, max.Z);
             }
+
+            updateFullDepth();
+        }
+
+        private void updateFullDepth()
+        {
+            Vector3 v = Max.ToVector3()-Min.ToVector3();
+            fullDepth = v.Project(new Vector3(0.62f, 0.608f, 0.5f)).Length();
         }
 
         /// <summary>
@@ -63,7 +69,6 @@ namespace Mindstep.EasterEgg.Commons
         /// <returns>A value between 0.1 and 0.9, where higher is farther away</returns>
         public float getRelativeDepthOf(Position pos)
         {
-            float fullLength = (Max - Min).Length();
             /* Moving forward one step in X when viewed from directly above
              * moves you sqrt(2)/2 closer to the "bottom corner line".
              * However, when viewed from an angle (60 degrees tilted)
@@ -84,7 +89,7 @@ namespace Mindstep.EasterEgg.Commons
             float depth = (pos.X - Min.X) * 0.62f; //prioritize X over Y
             depth += (pos.Y - Min.Y) * 0.608f;
             depth += (pos.Z - Min.Z) * 0.5f;
-            return 0.9f - depth/fullLength*0.8f;
+            return 0.9f - depth/fullDepth*0.8f;
         }
     }
 }

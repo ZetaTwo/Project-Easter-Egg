@@ -18,23 +18,16 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
             return coord.X + " " + coord.Y;
         }
 
-        public static Position LoadPosition(string s)
+        public static Position LoadPosition(this string s)
         {
-            string[] ss = s.Split(' ');
-            int x, y, z;
-            bool success = int.TryParse(ss[0], out x);
-            success &= int.TryParse(ss[1], out y);
-            success &= int.TryParse(ss[2], out z);
-            return new Position(x, y, z);
+            string[] p = s.Split(' ');
+            return new Position(int.Parse(p[0]), int.Parse(p[1]), int.Parse(p[2]));
         }
 
-        public static Point LoadPoint(string s)
+        public static Point LoadPoint(this string s)
         {
-            string[] ss = s.Split(' ');
-            int x, y;
-            bool success = int.TryParse(ss[0], out x);
-            success &= int.TryParse(ss[1], out y);
-            return new Point(x, y);
+            string[] p = s.Split(' ');
+            return new Point(int.Parse(p[0]), int.Parse(p[1]));
         }
     }
 }

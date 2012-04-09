@@ -9,15 +9,10 @@ namespace Mindstep.EasterEgg.Commons
 {
     public static class CoordinateTransform
     {
-        public const int TILE_WIDTH = 125;
-        public const int TILE_HEIGHT = 63;
-
-        public const int BLOCK_HEIGHT = 77;
-
         public static Vector2 ObjectToProjectionSpace(Position map)
         {
-            int x = (-map.X + map.Y) * (int)(TILE_WIDTH / 2);
-            int y = (map.X + map.Y) * (int)(TILE_HEIGHT / 2) - map.Z * BLOCK_HEIGHT;
+            int x = (-map.X + map.Y) * (int)(Constants.TILE_WIDTH / 2);
+            int y = (map.X + map.Y) * (int)(Constants.TILE_HEIGHT / 2) - map.Z * Constants.BLOCK_HEIGHT;
 
             return new Vector2(x,y);
         }
@@ -54,6 +49,17 @@ namespace Mindstep.EasterEgg.Commons
             return new Vector2(point.X, point.Y);
         }
 
+        public static Point ToXnaPoint(this System.Drawing.Point point)
+        {
+            return new Point(point.X, point.Y);
+        }
+
+
+        public static System.Drawing.Point ToSDPoint(this Point point)
+        {
+            return new System.Drawing.Point(point.X, point.Y);
+        }
+
         public static System.Drawing.Point ToPoint(this Vector2 point)
         {
             return new System.Drawing.Point((int)point.X, (int)point.Y);
@@ -66,8 +72,8 @@ namespace Mindstep.EasterEgg.Commons
 
         public static Vector3 FromScreen(Vector2 screen, int layer = 0)
         {
-            return new Vector3((TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) + TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
-                               (TILE_WIDTH * (screen.Y - layer * BLOCK_HEIGHT) - TILE_HEIGHT * screen.X) / (TILE_WIDTH * TILE_HEIGHT),
+            return new Vector3((Constants.TILE_WIDTH * (screen.Y - layer * Constants.BLOCK_HEIGHT) + Constants.TILE_HEIGHT * screen.X) / (Constants.TILE_WIDTH * Constants.TILE_HEIGHT),
+                               (Constants.TILE_WIDTH * (screen.Y - layer * Constants.BLOCK_HEIGHT) - Constants.TILE_HEIGHT * screen.X) / (Constants.TILE_WIDTH * Constants.TILE_HEIGHT),
                                layer);
         }
 

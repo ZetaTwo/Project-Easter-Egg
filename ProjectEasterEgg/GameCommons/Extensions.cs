@@ -13,6 +13,17 @@ namespace Mindstep.EasterEgg.Commons
             return Math.Max(Math.Min(i, max), min);
         }
 
+        public static float Dot(this Vector3 v, Vector3 u)
+        {
+            return v.X * u.X + v.Y * u.Y + v.Z * u.Z;
+        }
+
+        public static Vector3 Project(this Vector3 v, Vector3 on)
+        {
+            return v.Dot(on) / on.LengthSquared() * on;
+        }
+
+        // remove this method.. sometime
         public static Vector4 matrixMul(Vector4 v, Matrix m)
         {
             return new Vector4(

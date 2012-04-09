@@ -25,6 +25,8 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
             }
         }
 
+        public Texture2DWithPos() { }
+
         public Texture2DWithPos(string originalPath)
         {
             this.originalPath = originalPath.Replace('\\', '/');

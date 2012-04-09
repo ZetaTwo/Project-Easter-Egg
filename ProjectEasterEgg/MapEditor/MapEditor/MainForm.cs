@@ -258,5 +258,11 @@ using Microsoft.Xna.Framework.Content;
         {
             return drawTextureIndices.Checked;
         }
+
+        internal void Updated()
+        {
+            mainView.Invalidate();
+            topView.Invalidate();
+        }
     }
 }

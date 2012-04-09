@@ -14,7 +14,7 @@ namespace Mindstep.EasterEgg.MapEditor
     /// Example control inherits from GraphicsDeviceControl, which allows it to
     /// render using a GraphicsDevice. This control shows how to draw animating
     /// 3D graphics inside a WinForms application. It hooks the Application.Idle
-    /// event, using this to invalidate the control, which will cause the animation
+    /// event, using this to MainForm.Updated() the control, which will cause the animation
     /// to constantly redraw.
     /// </summary>
     class TopView : GraphicsDeviceControl
@@ -42,7 +42,6 @@ namespace Mindstep.EasterEgg.MapEditor
             gridSize = grid.Width;
 
             // Hook the idle event to constantly redraw our animation.
-            Application.Idle += delegate { Invalidate(); };
             MouseClick += new MouseEventHandler(TopView_MouseClick);
             MouseMove += new MouseEventHandler(TopView_MouseMove);
             MouseLeave += new EventHandler(TopView_MouseLeave);
@@ -62,12 +61,14 @@ namespace Mindstep.EasterEgg.MapEditor
                     new BlockDetailsForm(block);
                 }
             }
+            MainForm.Updated();
         }
 
         private void TopView_MouseMove(object sender, MouseEventArgs e)
         {
             Point p = getClosestBlockCoord(e.Location.toXnaPoint());
             MainForm.setTopViewCoordLabel("X:" + p.X + "   Y:" + p.Y);
+            MainForm.Updated();
         }
 
         private void TopView_MouseLeave(object sender, EventArgs e)
@@ -156,6 +157,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 MainForm.SaveBlocks.Remove(saveBlock);
             }
+            MainForm.Updated();
         }
 
         private Position PointToPosition(Point p)
@@ -188,6 +190,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 MainForm.CurrentHeight--;
             }
+            MainForm.Updated();
         }
     }
 }
