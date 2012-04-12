@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons.Physics;
+using Mindstep.EasterEgg.Commons.DTO;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -52,6 +54,22 @@ namespace Mindstep.EasterEgg.Commons
         public static Point Divide(this Point p, float f)
         {
             return new Point((int)(p.X / f), (int)(p.Y / f));
+        }
+
+        public static IEnumerable<Position> ToPositions(this IEnumerable<Block> blocks)
+        {
+            foreach (Block block in blocks)
+            {
+                yield return block.Position;
+            }
+        }
+
+        public static IEnumerable<Position> ToPositions(this IEnumerable<GameBlockDTO> blocks)
+        {
+            foreach (GameBlockDTO block in blocks)
+            {
+                yield return block.Position;
+            }
         }
     }
 }

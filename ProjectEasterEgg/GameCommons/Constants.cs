@@ -13,5 +13,7 @@ namespace Mindstep.EasterEgg.Commons
         public const int TILE_WIDTH = 125;
         public const int TILE_HEIGHT = 63;
         public const int BLOCK_HEIGHT = 77;
+
+        public const string SCRIPT_BLOCK_PREFIX = "ScriptBlock";
     }
 }

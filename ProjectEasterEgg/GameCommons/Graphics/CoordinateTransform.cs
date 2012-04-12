@@ -76,12 +76,5 @@ namespace Mindstep.EasterEgg.Commons
                                (Constants.TILE_WIDTH * (screen.Y - layer * Constants.BLOCK_HEIGHT) - Constants.TILE_HEIGHT * screen.X) / (Constants.TILE_WIDTH * Constants.TILE_HEIGHT),
                                layer);
         }
-
-        public static IEnumerable<Position> ToPositions(this IEnumerable<Block> blocks) {
-            foreach (Block block in blocks)
-            {
-                yield return block.Position;
-            }
-        }
     }
 }

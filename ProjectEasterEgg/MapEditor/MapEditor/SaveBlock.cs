@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework.Graphics;
+using Mindstep.EasterEgg.Commons.Physics;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    public class SaveBlock
+    public class SaveBlock : Block
     {
-        public Position Position;
-        public Texture2D Texture;
-        public int id;
         public string script;
-        public int type;
+        public BlockType type;
 
         public SaveBlock(Position pos)
-        {
-            this.Position = pos;
-        }
+            : base(pos)
+        { }
     }
 }

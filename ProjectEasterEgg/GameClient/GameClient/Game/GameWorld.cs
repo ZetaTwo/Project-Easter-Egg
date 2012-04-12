@@ -19,7 +19,7 @@ namespace Mindstep.EasterEgg.Game.Game
 
             //Add game content here
 
-            GameMapDTO mapDTO = Engine.Content.Load<GameMapDTO>("Models/fifthmodel");
+            GameMapDTO mapDTO = Engine.Content.Load<GameMapDTO>("Models/seventhmodel");
             CurrentMap = new GameMap(mapDTO);
             
             pointer = new MousePointer();

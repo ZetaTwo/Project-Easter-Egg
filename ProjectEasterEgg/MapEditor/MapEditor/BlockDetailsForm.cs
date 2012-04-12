@@ -12,35 +12,21 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class BlockDetailsForm : Form
     {
-
-        private string scriptName;
-        private int blockType;
         private SaveBlock block;
-        string[] blockTypes = Enum.GetNames(typeof(BlockType));
 
-        public BlockDetailsForm(SaveBlock block)
+        public BlockDetailsForm(SaveBlock block, Point popupLocation)
         {
             this.block = block;
+            StartPosition = FormStartPosition.Manual;
+            Location = popupLocation;
+
             InitializeComponent();
-            scriptName = block.script;
-            blockType = block.type;
-            
 
-            Console.WriteLine(blockType);
-            CurrentScriptName.Text = scriptName;
-            CurrentBlockType.Text = blockTypes[block.type];
+            BlockTypesDropDown.Items.AddRange(Enum.GetNames(typeof(BlockType)));
 
-            ScriptNameBox.Text = scriptName;
-            BlockTypesDropDown.Text = blockTypes[block.type];
-
-
-            BlockTypesDropDown.Items.AddRange(blockTypes);
+            CurrentScriptName.Text = ScriptNameBox.Text = block.script;
+            CurrentBlockType.Text = BlockTypesDropDown.Text = System.Enum.GetName(typeof(BlockType), block.type);
             Show();
-        }
-
-
-        private void BlockTypes_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -51,25 +37,12 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            block.script = scriptName;
+            block.script = ScriptNameBox.Text;
 
-            //No way of getting the number of the one item in the dropdown so i did this
-            for (int i = 0; i < 4; i++)
-            {
-                if (BlockTypesDropDown.Text == blockTypes[i])
-                {
-                    block.type = i;
-                    break;
-                }
-            }
+            block.type = (BlockType)Enum.Parse(typeof(BlockType), BlockTypesDropDown.Text);
 
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private void ScriptNameBox_TextChanged(object sender, EventArgs e)
-        {
-            scriptName = ScriptNameBox.Text;
         }
     }
 }

@@ -7,12 +7,10 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
 {
     public class AnimationManager
     {
-        private List<Animation> animations = new List<Animation>();
+        public List<Animation> Animations = new List<Animation>();
 
         private Animation currentAnimation;
         public Animation CurrentAnimation { get { return currentAnimation; } }
-
-        public Frame CurrentFrame { get { return CurrentAnimation.CurrentFrame; } }
 
         public void setCurrentAnimation(string animationName)
         {
@@ -20,26 +18,15 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
             if (animation == null)
             {
                 animation = new Animation(animationName);
+                Animations.Add(animation);
             }
-            animations.Add(animation);
+            Animations.First(a => a.Name == animationName);
             currentAnimation = animation;
         }
 
         private Animation getAnimation(string animationName)
         {
-            foreach (Animation animation in (List<Animation>)this)
-            {
-                if (animation.Name == animationName)
-                {
-                    return animation;
-                }
-            }
-            return null;
-        }
-
-        public static implicit operator List<Animation>(AnimationManager manager)
-        {
-            return manager.animations;
+            return Animations.FirstOrDefault(animation => animation.Name == animationName);
         }
     }
 }

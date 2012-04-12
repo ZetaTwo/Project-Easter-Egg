@@ -101,16 +101,16 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     switch (saveBlock.type)
                     {
-                        case 0:
+                        case BlockType.SOLID:
                             color = Color.Green;
                             break;
-                        case 1:
+                        case BlockType.STAIRS_DOWN:
                             color = Color.Blue;
                             break;
-                        case 2:
+                        case BlockType.STAIRS_UP:
                             color = Color.Brown;
                             break;
-                        case 3:
+                        case BlockType.WALKABLE:
                             color = Color.Olive;
                             break;
                     }
@@ -123,11 +123,11 @@ namespace Mindstep.EasterEgg.MapEditor
                 drawBlock(block, boundingBox, color, saveBlock.Position);
             }
 
-            for (int i = 0; i < mainForm.AnimationManager.CurrentFrame.Textures.Count; i++)
+            for (int i = 0; i < mainForm.CurrentFrame.Textures.Count; i++)
             {
 
-                Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
-                float depth = 0.1f * (1 - (float)i / mainForm.AnimationManager.CurrentFrame.Textures.Count);
+                Texture2DWithPos tex = mainForm.CurrentFrame.Textures[i];
+                float depth = 0.1f * (1 - (float)i / mainForm.CurrentFrame.Textures.Count);
                 Color color;
                 if (!selectedTextures.TrueForAll(t => t.t != tex))
                 {
@@ -158,7 +158,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (dragging) //pressing the other mouse button cancels the dragging
+                if (dragging) //pressing the other mouse button only cancels the dragging
                 {
                     dragging = false;
                 }
@@ -169,7 +169,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             else if (e.Button == MouseButtons.Left)
             {
-                if (panning) //pressing the other mouse button cancels the panning and the dragging doesn't start
+                if (panning) //pressing the other mouse button only cancels the panning
                 {
                     panning = false;
                 }
@@ -191,9 +191,9 @@ namespace Mindstep.EasterEgg.MapEditor
                     if (!dragging) //no currenly selected texture hit
                     {
                         selectedTextures.Clear();
-                        for (int i = mainForm.AnimationManager.CurrentFrame.Textures.Count - 1; i >= 0; i--)
+                        for (int i = mainForm.CurrentFrame.Textures.Count - 1; i >= 0; i--)
                         {
-                            Texture2DWithPos tex = mainForm.AnimationManager.CurrentFrame.Textures[i];
+                            Texture2DWithPos tex = mainForm.CurrentFrame.Textures[i];
                             if (tex.Bounds.Contains(mousePosInProjSpace))
                             {
                                 dragging = true;

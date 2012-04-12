@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Engine.Graphics;
 using Mindstep.EasterEgg.Commons.DTO;
+using Mindstep.EasterEgg.Commons.Physics;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {

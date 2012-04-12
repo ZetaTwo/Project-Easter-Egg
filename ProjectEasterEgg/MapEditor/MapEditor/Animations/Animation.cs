@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.MapEditor.Animations
 {
     public class Animation
     {
-        public const int DEFAULT_ANIMATION_DURATION = 100;
+        private const int DEFAULT_FRAME_DURATION = 100;
 
-        public SortedDictionary<int, Frame> Frames = new SortedDictionary<int, Frame>();
-        private string name;
-        public string Name { get { return name; } }
+        public List<Frame> Frames = new List<Frame>();
+        public string Name;
+        public Facing Facing;
 
-
-        private int currentFrameIndex = -1;
+        private int currentFrameIndex = 0;
         public int CurrentFrameIndex
         {
             get { return currentFrameIndex; }
@@ -25,14 +25,14 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
                     throw new ArgumentOutOfRangeException("Frame index cannot be negative");
                 }
 
-                if (!Frames.ContainsKey(value))
+                while (value > Frames.Count)
                 {
-                    Frame newFrame = new Frame(currentFrameIndex == -1 ? DEFAULT_ANIMATION_DURATION : CurrentFrame.Duration);
-                    Frames.Add(value, newFrame);
+                    addNewFrame(CurrentFrame.Duration);
                 }
                 currentFrameIndex = value;
             }
         }
+
         public Frame CurrentFrame
         {
             get { return Frames[currentFrameIndex]; }
@@ -40,13 +40,13 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
 
         public Animation(string name)
         {
-            setName(name);
-            CurrentFrameIndex = 0;
+            this.Name = name;
+            addNewFrame(DEFAULT_FRAME_DURATION);
         }
 
-        public void setName(string name)
+        private void addNewFrame(int duration)
         {
-            this.name = name;
+            Frames.Add(new Frame(duration));
         }
     }
 }

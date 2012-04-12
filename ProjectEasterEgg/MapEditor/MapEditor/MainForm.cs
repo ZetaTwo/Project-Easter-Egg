@@ -50,7 +50,7 @@ using Microsoft.Xna.Framework.Content;
 
         public List<SaveBlock> SaveBlocks = new List<SaveBlock>();
         public AnimationManager AnimationManager = new AnimationManager();
-        public Frame CurrentFrame { get { return AnimationManager.CurrentFrame; } }
+        public Frame CurrentFrame { get { return AnimationManager.CurrentAnimation.CurrentFrame; } }
         public Animation CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
         public bool changedSinceLastSave;
 
@@ -197,7 +197,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void save()
         {
-            Exporter.SaveModel(SaveBlocks, (List<Animation>)AnimationManager, saveFileDialog.FileName);
+            EggModelExporter.SaveModel(SaveBlocks, AnimationManager.Animations, saveFileDialog.FileName);
             lastSavedDoc = saveFileDialog.FileName;
             changedSinceLastSave = false;
             RefreshTitle();
@@ -227,7 +227,8 @@ using Microsoft.Xna.Framework.Content;
         private void importImage(string fileName)
         {
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
-            foreach (Texture2DWithPos existingTex in CurrentFrame.Textures)
+
+            foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
             {
                 if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
                 {
@@ -250,7 +251,8 @@ using Microsoft.Xna.Framework.Content;
             tex.Coord = textureOffset;//ScreenToProjectionSpace(textureOffset);
             
             tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
-            AnimationManager.CurrentFrame.Textures.Add(tex);
+            CurrentFrame.Textures.Add(tex);
+            Updated();
         }
         #endregion
 

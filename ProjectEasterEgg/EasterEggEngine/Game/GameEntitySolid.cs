@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Game;
+using Mindstep.EasterEgg.Commons.Physics;
 
 namespace Mindstep.EasterEgg.Engine
 {

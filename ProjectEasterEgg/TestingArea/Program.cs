@@ -9,28 +9,19 @@ namespace TestingArea
     {
         static void Main(string[] args)
         {
-            IEnumerator<int> test1 = TestYield();
-            while (test1.MoveNext())
-            {
-                Console.WriteLine("{0} ", test1.Current);
-            }
-            
-        }
+            List<string> strings = new List<string>();
 
-        static IEnumerator<int> TestYield()
-        {
-            foreach (int i in TestYield2()) { yield return i; }
+            strings.Add("string0");
+            strings.Add("string1");
+            strings.Add("string2");
 
-            yield return 3;
+            strings[1] = "lol1";
+            System.Console.WriteLine("---");
+            strings.ForEach(s => System.Console.WriteLine(s));
 
-            yield return 4;
-        }
-
-        static IEnumerable<int> TestYield2()
-        {
-            yield return 1;
-
-            yield return 2;
+            strings[2] = "hej";
+            System.Console.WriteLine("---");
+            strings.ForEach(s => System.Console.WriteLine(s));
         }
     }
 }

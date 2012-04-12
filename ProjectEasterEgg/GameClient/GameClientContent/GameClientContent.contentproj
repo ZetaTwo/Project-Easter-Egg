@@ -36,15 +36,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\fourthmodel.egg">
-      <Name>fourthmodel</Name>
+    <Compile Include="Models\seventhmodel.egg">
+      <Name>seventhmodel</Name>
       <Importer>EggModelImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\fifthmodel.egg">
-      <Name>fifthmodel</Name>
+    <Compile Include="Models\sixthmodel.egg">
+      <Name>sixthmodel</Name>
       <Importer>EggModelImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>

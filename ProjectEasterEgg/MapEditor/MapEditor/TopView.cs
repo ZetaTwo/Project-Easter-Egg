@@ -58,7 +58,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 SaveBlock block = getBlockAt(PointToPosition(e.Location.toXnaPoint()));
                 if (block != null)
                 {
-                    new BlockDetailsForm(block);
+                    new BlockDetailsForm(block, PointToScreen(e.Location));
                 }
             }
             MainForm.Updated();
@@ -102,16 +102,16 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     switch (saveBlock.type)
                     {
-                        case 0:
+                        case BlockType.SOLID:
                             color = Color.Green;
                             break;
-                        case 1:
+                        case BlockType.STAIRS_DOWN:
                             color = Color.Blue;
                             break;
-                        case 2:
+                        case BlockType.STAIRS_UP:
                             color = Color.Brown;
                             break;
-                        case 3:
+                        case BlockType.WALKABLE:
                             color = Color.Olive;
                             break;
                     }

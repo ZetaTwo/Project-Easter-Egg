@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Engine;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mindstep.EasterEgg.Commons
+namespace Mindstep.EasterEgg.Commons.Physics
 {
     public class Block
     {
