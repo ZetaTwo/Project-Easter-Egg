@@ -71,5 +71,13 @@ namespace Mindstep.EasterEgg.Commons
                 yield return block.Position;
             }
         }
+
+        public static IEnumerable<System.Drawing.Point> ToSDPoints(this IEnumerable<Point> points)
+        {
+            foreach (Point point in points)
+            {
+                yield return point.ToSDPoint();
+            }
+        }
     }
 }

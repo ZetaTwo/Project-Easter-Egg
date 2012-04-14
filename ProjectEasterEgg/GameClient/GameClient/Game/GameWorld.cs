@@ -28,7 +28,6 @@ namespace Mindstep.EasterEgg.Game.Game
             AddDraw(pointer);
 
             //CurrentMap.WorldMatrix.ToList().ForEach(block => block.ToList().ForEach(b => b.ToList().ForEach(bl => AddDraw(bl))));
-
         }
     }
 }

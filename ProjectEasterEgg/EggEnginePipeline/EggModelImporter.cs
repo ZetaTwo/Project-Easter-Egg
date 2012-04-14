@@ -8,11 +8,16 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.IO.Packaging;
 using System.Xml;
 using Mindstep.EasterEgg.Commons;
-using Mindstep.EasterEgg.Engine.Game;
+using System.Windows.Media.Imaging;
+using System.IO;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Mindstep.EasterEgg.Commons.DTO;
+using Mindstep.EasterEgg.Commons.SaveLoad;
+using SD = System.Drawing;
 
-// TODO: replace this with the type you want to import.
-using TImport = EggEnginePipeline.GameMapDTO;
-
+using System.Drawing.Imaging;
+using System.Xml.Linq;
 
 namespace EggEnginePipeline
 {
@@ -26,82 +31,95 @@ namespace EggEnginePipeline
     /// extension, display name, and default processor for this importer.
     /// </summary>
     [ContentImporter(".egg", DisplayName = "Egg Model Importer", DefaultProcessor = "PassThroughProcessor")]
-    public class EggModelImporter : ContentImporter<TImport>
+    public class EggModelImporter : ContentImporter<GameMapDTO>
     {
-        public override TImport Import(string filename, ContentImporterContext context)
+        public override GameMapDTO Import(string filename, ContentImporterContext context)
         {
-            //System.Diagnostics.Debugger.Launch();
-            TImport gameMap = new TImport();
-
-            Package modelFile = Package.Open(filename);
-
-            PackagePart modelIndex = modelFile.GetPart(new Uri("/model.xml", UriKind.Relative));
-            XmlTextReader xmlReader = new XmlTextReader(modelIndex.GetStream());
-
-            xmlReader.MoveToContent();
-            while (xmlReader.Read())
+            //Debugger.Launch();
+            GameMapDTO gameMap = new GameMapDTO();
+            using (Package modelFile = Package.Open(filename))
             {
-                if (xmlReader.NodeType == XmlNodeType.Element)
+                BitmapManager bitmapManager = new BitmapManager(modelFile, "/textures/");
+
+                PackagePart modelXML = modelFile.GetPart(new Uri("/model.xml", UriKind.Relative));
+                XDocument doc = XDocument.Load(modelXML.GetStream());
+                XElement root = doc.Element("model");
+
+                List<GameBlockDTO> blocks = new List<GameBlockDTO>();
+                BoundingBoxInt bounds;
+
+                // blocks
                 {
-                    switch (xmlReader.Name)
+                    foreach (XElement blockElement in root.Element("blocks").Elements("block"))
                     {
-                        case "bounds":
-                            xmlReader.ReadToDescendant("min"); //Read min
-                            gameMap.Min = PositionFromString(xmlReader.ReadElementContentAsString());
+                        Position pos = blockElement.Attribute("offset").Value.LoadPosition();
 
-                            xmlReader.ReadToNextSibling("max"); //Read max
-                            gameMap.Max = PositionFromString(xmlReader.ReadElementContentAsString());
+                        GameBlockDTO block = new GameBlockDTO();
+                        blocks.Add(block);
+                        block.Position = pos;
+                        block.Type = blockElement.Attribute("type").Value.LoadBlockType();
+                        XAttribute scriptAttribute = blockElement.Attribute("script");
+                        if (scriptAttribute != null)
+                        {
+                            block.scriptName = Constants.SCRIPT_BLOCK_PREFIX + scriptAttribute.Value;
+                        }
+                    }
+                    bounds = new BoundingBoxInt(blocks.ToPositions());
+                    gameMap.Max = bounds.Max - bounds.Min;
+                    gameMap.WorldMatrix = Creators.CreateWorldMatrix<GameBlockDTO>(gameMap.Max + Position.One);
+                    foreach (GameBlockDTO block in blocks)
+                    {
+                        block.Position -= bounds.Min;
+                        Position pos = block.Position;
+                        //TODO: the physics matrix shouldn't be defined here
+                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = block;
+                    }
+                }
+                
+                // imports
+                foreach (XElement modelElement in root.Element("imports").Elements("model"))
+                {
+                    //TODO: Add suport for sub models
+                }
+                
+                // animations
+                foreach (XElement animationElement in root.Element("animations").Elements("animation"))
+                {
+                    string animationName = animationElement.Attribute("name").Value;
+                    Facing facing = animationElement.Attribute("facing").Value.LoadFacing();
 
-                            gameMap.WorldMatrix = GameMap.CreateWorldMatrix<GameBlockDTO>(gameMap.Max - gameMap.Min + new Position(1, 1, 1));
+                    foreach (GameBlockDTO block in blocks)
+                    {
+                        block.Animations[animationName] = new AnimationDTO(animationName);
+                    }
 
-                            break;
-                        case "imports":
-                            //TODO: Add suport for sub models
-                            XmlReader importsReader = xmlReader.ReadSubtree();
-                            break;
-                        case "animations":
-                            //TODO: Add support for textures
-                            XmlReader animationsReader = xmlReader.ReadSubtree();
-                            break;
-                        case "blocks":
-                            XmlReader blocksReader = xmlReader.ReadSubtree();
-                            while (blocksReader.Read())
+                    foreach (XElement frameElement in animationElement.Elements("frame"))
+                    {
+                        int duration = frameElement.Attribute("duration").Value.LoadInt();
+
+                        blocks.ForEach(block => block.Animations[animationName].Frames.Add(new FrameDTO(duration)));
+                        
+                        foreach (XElement imageElement in frameElement.Elements("image"))
+                        {
+                            string name = imageElement.Attribute("name").Value;
+                            Point imageCoord = imageElement.Attribute("coord").Value.LoadPoint();
+                            IEnumerable<GameBlockDTO> blocksProjectedOnto =
+                                imageElement.Elements("projectedOnto").Select(e => blocks[e.Value.LoadInt()]);
+
+                            SD.Bitmap image = bitmapManager[name];
+
+                            foreach (GameBlockDTO block in blocksProjectedOnto)
                             {
-                                switch (blocksReader.Name)
-                                {
-                                    case "block":
-                                        //xmlReader.MoveToAttribute("offset");
-                                        Position pos = - gameMap.Min + PositionFromString(blocksReader.GetAttribute("offset"));
-
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = new GameBlockDTO();
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Position = pos;
-                                        //gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = blocksReader.GetAttribute("script");
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].scriptName = "Example";
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Type = BlockType.SOLID;
-                                        gameMap.WorldMatrix[pos.X][pos.Y][pos.Z].Texture = "block31";
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                FrameDTO frame = block.Animations[animationName].Frames.Last();
+                                Point projCoords = CoordinateTransform.ObjectToProjectionSpace(block.Position + bounds.Min).ToXnaPoint();
+                                frame.getGraphics().eat(image, projCoords.Subtract(imageCoord));
+                                frame.updateDataToBeSaved();
                             }
-                            break;
-                        default:
-                            break;
+                        }
                     }
                 }
             }
-
-            xmlReader.Close();
-            modelFile.Close();
-
             return gameMap;
-        }
-
-        private Position PositionFromString(string positionString)
-        {
-            string[] pos = positionString.Split(' ');
-            return new Position(int.Parse(pos[0]), int.Parse(pos[1]), int.Parse(pos[2]));
-
         }
     }
 }

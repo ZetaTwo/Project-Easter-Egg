@@ -18,7 +18,7 @@ namespace Mindstep.EasterEgg.Engine.Graphics
         public readonly Texture2D Texture;
 
         public Frame(FrameDTO frameData, GraphicsDevice graphicsDevice)
-            : this(frameData.Duration, BitmapDataToTexture2D(frameData.bitmapData, graphicsDevice))
+            : this(frameData.Duration, BitmapDataToTexture2D(frameData.BitmapBytes, graphicsDevice))
         { }
 
         public Frame(int duration, Texture2D texture)
