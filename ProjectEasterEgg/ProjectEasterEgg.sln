@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasterEggEngine", "EasterEggEngine\EasterEggEngine.csproj", "{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEngine", "EggEngine\EggEngine\EggEngine.csproj", "{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditorContentLibrary", "MapEditor\MapEditorContentLibrary\MapEditorContentLibrary.csproj", "{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}"
 EndProject
@@ -28,7 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTests", "GameTests\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEnginePipeline", "EggEnginePipeline\EggEnginePipeline.csproj", "{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "EggEngineContent", "EggEngineContent\EggEngineContent.contentproj", "{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}"
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "EggEngineContent", "EggEngine\EggEngineContent\EggEngineContent.contentproj", "{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
