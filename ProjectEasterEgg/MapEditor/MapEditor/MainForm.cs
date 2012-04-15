@@ -71,8 +71,11 @@ using Microsoft.Xna.Framework.Content;
             Services = new ServiceContainer();
             Content = new ContentManager(Services, "MapEditorContent");
             SetupContentManager();
+            SpriteBatchExtensions.Initialize(GraphicsDevice);
 
             InitializeComponent();
+            BlockDrawState = BlockDrawState.Solid;
+            EditingMode = EditingModes.Block;
             topView.Initialize(this);
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
@@ -224,10 +227,14 @@ using Microsoft.Xna.Framework.Content;
         }
 
         private Point lastImportedTextureOffset = new Point(100, 100);
+        private BlockDrawState blockDrawState;
+        private  EditingModes editingMode;
+
         private void importImage(string fileName)
         {
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
 
+            EditingMode = EditingModes.Texture;
             foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
             {
                 if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
@@ -242,13 +249,13 @@ using Microsoft.Xna.Framework.Content;
             Point textureOffset;
             if (lastImportedTextureOffset.X > 400)
             {
-                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).ToPoint();
+                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).ToXnaPoint();
             }
             else
             {
                 textureOffset = new Point(100, 100);
             }
-            tex.Coord = textureOffset;//ScreenToProjectionSpace(textureOffset);
+            tex.Coord = textureOffset;
             
             tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
             CurrentFrame.Textures.Add(tex);
@@ -256,15 +263,84 @@ using Microsoft.Xna.Framework.Content;
         }
         #endregion
 
-        internal bool DrawTextureIndices()
-        {
-            return drawTextureIndices.Checked;
-        }
+        internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
 
         internal void Updated()
         {
             mainView.Invalidate();
             topView.Invalidate();
+        }
+
+        private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
+        {
+            System.Console.WriteLine(TextureOpacity);
+            Updated();
+        }
+
+        public float TextureOpacity { get { return (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum; } }
+
+        private void trackBarTextureOpacity_MouseUp(object sender, MouseEventArgs e)
+        {
+            mainView.Focus();
+        }
+
+        private void toolStripBlockDrawStateChanged(object sender, EventArgs e)
+        {
+            blockDrawStateChanged();
+        }
+
+        private void blockDrawStateChanged()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void toolStripDrawBlockSolid_Click(object sender, EventArgs e)
+        {
+            BlockDrawState = BlockDrawState.Solid;
+        }
+
+        private void toolStripDrawBlockWireframe_Click(object sender, EventArgs e)
+        {
+            BlockDrawState = BlockDrawState.Wireframe;
+        }
+
+        private void toolStripDrawBlockNone_Click(object sender, EventArgs e)
+        {
+            BlockDrawState = BlockDrawState.None;
+        }
+
+        internal BlockDrawState BlockDrawState
+        {
+            get { return blockDrawState; }
+            private set
+            {
+                toolStripDrawBlockSolid.Checked = value == BlockDrawState.Solid;
+                toolStripDrawBlockWireframe.Checked = value == BlockDrawState.Wireframe;
+                toolStripDrawBlockNone.Checked = value == BlockDrawState.None;
+                blockDrawState = value;
+            }
+        }
+
+        internal EditingModes EditingMode
+        {
+            get { return editingMode; }
+            set
+            {
+                toolStripEditBlocks.Checked = value == EditingModes.Block;
+                toolStripEditTextures.Checked = value == EditingModes.Texture ||
+                    value == EditingModes.TextureProjection;
+                editingMode = value;
+            }
+        }
+
+        private void toolStripEditBlocks_Click(object sender, EventArgs e)
+        {
+            EditingMode = EditingModes.Block;
+        }
+
+        private void toolStripEditTextures_Click(object sender, EventArgs e)
+        {
+            EditingMode = EditingModes.Texture;
         }
     }
 }

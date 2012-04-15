@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Conversions.cs" />
     <Compile Include="Creators.cs" />
     <Compile Include="DTO\AnimationDTO.cs" />
     <Compile Include="DTO\FrameDTO.cs" />

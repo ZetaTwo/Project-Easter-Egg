@@ -139,12 +139,12 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
         #endregion
 
-        public void ClickWorld(Vector2 screen, BlockAction action)
+        public void ClickWorld(Point screen, EasterEgg.Commons.Graphics.Camera camera, BlockAction action)
         {
             //The entry position
             //screen.Y *= 1;
             screen.X *= -1;
-            Vector3 position = CoordinateTransform.FromScreen(screen, CurrentMap.Bounds.Max.Z - CurrentMap.Bounds.Min.Z);
+            Vector3 position = CoordinateTransform.ScreenToObjectSpace(screen, camera, CurrentMap.Bounds.Max.Z - CurrentMap.Bounds.Min.Z);
             if (position.X < CurrentMap.Bounds.Min.X || position.X > CurrentMap.Bounds.Max.X ||
                position.Y < CurrentMap.Bounds.Min.Y || position.Y > CurrentMap.Bounds.Max.Y ||
                position.Z < CurrentMap.Bounds.Min.Z || position.Z > CurrentMap.Bounds.Max.Z)

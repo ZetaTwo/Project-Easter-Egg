@@ -75,14 +75,15 @@
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EggModelExporter.cs" />
-    <Compile Include="Conversions.cs" />
     <Compile Include="Animations\Frame.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SaveBlock.cs" />
     <Compile Include="Animations\Texture2DWithPos.cs" />
+    <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>

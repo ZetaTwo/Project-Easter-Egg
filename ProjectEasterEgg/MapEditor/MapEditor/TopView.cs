@@ -51,14 +51,14 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                toggleBlock(e.Location.toXnaPoint());
+                toggleBlock(e.Location.ToXnaPoint());
             }
             else if (e.Button == MouseButtons.Right)
             {
-                SaveBlock block = getBlockAt(PointToPosition(e.Location.toXnaPoint()));
+                SaveBlock block = getBlockAt(PointToPosition(e.Location.ToXnaPoint()));
                 if (block != null)
                 {
-                    new BlockDetailsForm(block, PointToScreen(e.Location));
+                    new BlockDetailsForm(new SaveBlock[]{block}, PointToScreen(e.Location));
                 }
             }
             MainForm.Updated();
@@ -66,7 +66,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void TopView_MouseMove(object sender, MouseEventArgs e)
         {
-            Point p = getClosestBlockCoord(e.Location.toXnaPoint());
+            Point p = getClosestBlockCoord(e.Location.ToXnaPoint());
             MainForm.setTopViewCoordLabel("X:" + p.X + "   Y:" + p.Y);
             MainForm.Updated();
         }

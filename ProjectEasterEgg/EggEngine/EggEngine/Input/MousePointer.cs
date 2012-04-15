@@ -11,8 +11,8 @@ namespace Mindstep.EasterEgg.Engine.Input
 {
     public class MousePointer : GameEntityDrawable
     {
-        Vector2 position = Vector2.Zero;
-        public Vector2 Position
+        Point position = Point.Zero;
+        public Point Position
         {
             get { return position; }
         }
@@ -22,25 +22,25 @@ namespace Mindstep.EasterEgg.Engine.Input
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, Color.White);
-            Vector3 position = CoordinateTransform.FromScreen(Position, 0);
-            spriteBatch.DrawString(font, position.ToString(), Position + Vector2.UnitX * 35, Color.White);
+            spriteBatch.Draw(texture, Position.ToVector2(), Color.White);
+            Vector3 position = CoordinateTransform.ScreenToObjectSpace(Position, Engine.World.CurrentMap.Camera, 0);
+            spriteBatch.DrawString(font, position.ToString(), Position.Add(new Point(35, 0)).ToVector2(), Color.White);
         }
 
         public override void Update(GameTime gameTime)
         {
-            position += Engine.Input.MouseDelta;
-            position.X = MathHelper.Clamp(position.X, 0, Engine.GraphicsDevice.Viewport.Width - texture.Width);
-            position.Y = MathHelper.Clamp(position.Y, 0, Engine.GraphicsDevice.Viewport.Height - texture.Height);
+            position = position.Add(Engine.Input.MouseDelta.ToXnaPoint());
+            position.X = Extensions.Clamp(position.X, 0, Engine.GraphicsDevice.Viewport.Width - texture.Width);
+            position.Y = Extensions.Clamp(position.Y, 0, Engine.GraphicsDevice.Viewport.Height - texture.Height);
 
             if (Engine.Input.ClickLeft)
             {
-                Engine.Physics.ClickWorld(Position, BlockAction.INTERACT);
+                Engine.Physics.ClickWorld(Position, Engine.World.CurrentMap.Camera, BlockAction.INTERACT);
             }
 
             if (Engine.Input.ClickRight)
             {
-                Engine.Physics.ClickWorld(Position, BlockAction.INSPECT);
+                Engine.Physics.ClickWorld(Position, Engine.World.CurrentMap.Camera, BlockAction.INSPECT);
             }
         }
 

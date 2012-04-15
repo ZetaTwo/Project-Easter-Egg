@@ -12,22 +12,44 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class BlockDetailsForm : Form
     {
-        private SaveBlock block;
+        private IEnumerable<SaveBlock> blocks;
+        private const string MULTIPLE_ENTRY_TEXT = "(multiple values)";
 
-        public BlockDetailsForm(SaveBlock block, Point popupLocation)
+        public BlockDetailsForm(IEnumerable<SaveBlock> blocks, Point popupLocation)
         {
-            this.block = block;
+            this.blocks = blocks;
             StartPosition = FormStartPosition.Manual;
             Location = popupLocation;
 
             InitializeComponent();
-
             BlockTypesDropDown.Items.AddRange(Enum.GetNames(typeof(BlockType)));
 
-            CurrentScriptName.Text = ScriptNameBox.Text = block.script;
-            CurrentBlockType.Text = BlockTypesDropDown.Text = System.Enum.GetName(typeof(BlockType), block.type);
+            string blockTypeText, scriptNameText;
+            if (blocks.All(block => block.type == blocks.First().type))
+            {
+                blockTypeText = System.Enum.GetName(typeof(BlockType), blocks.First().type);
+            }
+            else
+            {
+                blockTypeText = MULTIPLE_ENTRY_TEXT;
+            }
+
+            if (blocks.All(block => block.script == blocks.First().script) ||
+                blocks.All(block => string.IsNullOrWhiteSpace(block.script)))
+            {
+                scriptNameText = blocks.First().script;
+            }
+            else
+            {
+                scriptNameText = MULTIPLE_ENTRY_TEXT;
+            }
+
+            CurrentBlockType.Text = BlockTypesDropDown.Text = blockTypeText;
+            CurrentScriptName.Text = ScriptNameBox.Text = scriptNameText;
             Show();
         }
+
+
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
@@ -35,11 +57,20 @@ namespace Mindstep.EasterEgg.MapEditor
             Close();
         }
 
+
+
         private void okButton_Click(object sender, EventArgs e)
         {
-            block.script = ScriptNameBox.Text;
+            if (BlockTypesDropDown.Text != MULTIPLE_ENTRY_TEXT)
+            {
+                BlockType blockType = (BlockType)Enum.Parse(typeof(BlockType), BlockTypesDropDown.Text);
+                blocks.ToList().ForEach(block => block.type = blockType);
+            }
 
-            block.type = (BlockType)Enum.Parse(typeof(BlockType), BlockTypesDropDown.Text);
+            if (ScriptNameBox.Text != MULTIPLE_ENTRY_TEXT)
+            {
+                blocks.ToList().ForEach(block => block.script = ScriptNameBox.Text);
+            }
 
             DialogResult = DialogResult.OK;
             Close();
