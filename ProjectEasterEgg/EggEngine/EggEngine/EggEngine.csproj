@@ -106,7 +106,7 @@
       <Name>EggEngineContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
-    <ProjectReference Include="..\GameCommons\GameCommons.csproj">
+    <ProjectReference Include="..\..\GameCommons\GameCommons.csproj">
       <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
       <Name>GameCommons</Name>
     </ProjectReference>

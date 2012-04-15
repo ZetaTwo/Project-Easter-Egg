@@ -85,7 +85,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\EasterEggEngine\EasterEggEngine.csproj">
+    <ProjectReference Include="..\..\EggEngine\EggEngine\EggEngine.csproj">
       <Project>{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}</Project>
       <Name>EasterEggEngine</Name>
     </ProjectReference>

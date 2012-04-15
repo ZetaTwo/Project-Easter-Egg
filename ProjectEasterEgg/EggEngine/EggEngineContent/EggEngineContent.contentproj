@@ -46,7 +46,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EggEnginePipeline\EggEnginePipeline.csproj">
+    <ProjectReference Include="..\..\EggEnginePipeline\EggEnginePipeline.csproj">
       <Project>{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}</Project>
       <Name>EggEnginePipeline</Name>
     </ProjectReference>
