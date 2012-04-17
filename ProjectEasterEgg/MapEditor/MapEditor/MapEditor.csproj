@@ -48,6 +48,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mindstep.EasterEgg.MapEditor.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -84,6 +87,7 @@
     <Compile Include="SaveBlock.cs" />
     <Compile Include="Animations\Texture2DWithPos.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
+    <Compile Include="TextureManager.cs" />
     <Compile Include="TopView.cs">
       <SubType>Component</SubType>
     </Compile>

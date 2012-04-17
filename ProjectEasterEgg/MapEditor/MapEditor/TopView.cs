@@ -97,7 +97,7 @@ namespace Mindstep.EasterEgg.MapEditor
             foreach (SaveBlock saveBlock in MainForm.SaveBlocks)
             {
                 Color color = Color.Red;
-                int height = saveBlock.Position.Z-MainForm.CurrentHeight;
+                int height = saveBlock.Position.Z-MainForm.CurrentLayer;
                 if (height == 0)
                 {
                     switch (saveBlock.type)
@@ -179,7 +179,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private Position PointToPosition(Point p)
         {
             Point positionCoords = getClosestBlockCoord(p);
-            return new Position(positionCoords.X, positionCoords.Y, MainForm.CurrentHeight);
+            return new Position(positionCoords.X, positionCoords.Y, MainForm.CurrentLayer);
         }
 
         internal SaveBlock getBlockAt(Position pos)
@@ -200,13 +200,12 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Delta > 0)
             {
-                MainForm.CurrentHeight++;
+                MainForm.CurrentLayer++;
             }
             else if (e.Delta < 0)
             {
-                MainForm.CurrentHeight--;
+                MainForm.CurrentLayer--;
             }
-            MainForm.Updated();
         }
     }
 }

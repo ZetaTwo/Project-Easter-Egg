@@ -111,7 +111,7 @@ namespace EggEnginePipeline
                             foreach (GameBlockDTO block in blocksProjectedOnto)
                             {
                                 FrameDTO frame = block.Animations[animationName].Frames.Last();
-                                Point projCoords = CoordinateTransform.ObjectToProjectionSpace(block.Position + bounds.Min).ToXnaPoint();
+                                Point projCoords = CoordinateTransform.ObjectToProjSpace(block.Position + bounds.Min).ToXnaPoint();
                                 frame.getGraphics().eat(image, projCoords.Subtract(imageCoord));
                                 frame.updateDataToBeSaved();
                             }

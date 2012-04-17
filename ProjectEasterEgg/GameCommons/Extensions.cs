@@ -38,7 +38,12 @@ namespace Mindstep.EasterEgg.Commons
 
         public static Point Add(this Point p, Point q)
         {
-            return new Point(p.X + q.X, p.Y + q.Y);
+            return p.Add(q.X, q.Y);
+        }
+
+        public static Point Add(this Point p, int x, int y)
+        {
+            return new Point(p.X + x, p.Y + y);
         }
 
         public static Point Subtract(this Point p, Point q)
@@ -77,6 +82,23 @@ namespace Mindstep.EasterEgg.Commons
             foreach (Point point in points)
             {
                 yield return point.ToSDPoint();
+            }
+        }
+
+        /// <summary>
+        /// Casts a float to an int, rounding it down even if it has a negative value.
+        /// </summary>
+        /// <param name="f">float to cast</param>
+        /// <returns></returns>
+        public static int RoundDown(this float f)
+        {
+            if (f < 0)
+            {
+                return (int)f - 1;
+            }
+            else
+            {
+                return (int)f;
             }
         }
     }

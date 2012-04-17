@@ -23,7 +23,7 @@ namespace Mindstep.EasterEgg.Engine.Game
             get
             {
                 return Matrix.CreateTranslation(new Vector3(
-                  CoordinateTransform.ObjectToProjectionSpace(-_player.Position) +
+                  CoordinateTransform.ObjectToProjSpace(-_player.Position) +
                   new Vector2(Engine.GraphicsDevice.Viewport.Width / 2,
                               Engine.GraphicsDevice.Viewport.Height / 2) -
                   Vector2.One * 64, 0));

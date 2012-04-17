@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    enum EditingModes
+    enum EditingMode
     {
         Block,
         Texture,
@@ -17,5 +17,14 @@ namespace Mindstep.EasterEgg.MapEditor
         Solid,
         Wireframe,
         None,
+    }
+
+    enum ClickOperation
+    {
+        Add,
+        Subtract,
+        Toggle,
+        Replace,
+        Copy,
     }
 }

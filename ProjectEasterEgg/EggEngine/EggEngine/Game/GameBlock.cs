@@ -82,7 +82,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             float depth = bounds.getRelativeDepthOf(Position);
             //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(Position) * 1.3f).ToPoint().ToVector2();
-            Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(Position);
+            Vector2 screenCoords = CoordinateTransform.ObjectToProjSpace(Position);
             spriteBatch.Draw(Animations["still"].Frames[0], screenCoords, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
 
             /*spriteBatch.Draw(texture, CoordinateTransform.ObjectToProjectionSpace(bounds.Min + Position),

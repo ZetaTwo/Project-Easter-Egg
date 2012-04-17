@@ -72,7 +72,7 @@ namespace Mindstep.EasterEgg.MapEditor
                         frameElement.SetAttributeValue("duration", frame.Duration);
                         animationElement.Add(frameElement);
 
-                        foreach (Texture2DWithPos tex in frame.Textures)
+                        foreach (Texture2DWithPos tex in frame.Textures.BackToFront())
                         {
                             XElement textureElement = new XElement("image");
                             frameElement.Add(textureElement);

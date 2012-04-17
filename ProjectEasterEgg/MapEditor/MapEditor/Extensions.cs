@@ -17,7 +17,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 animation =>
                     animation.Frames.SelectMany(
                     frame =>
-                        frame.Textures));
+                        frame.Textures.BackToFront()));
         }
 
         public static Color GetPixelColor(this Texture2D texture, Point at)
@@ -31,6 +31,14 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             byte[] bytes = UnicodeEncoding.UTF8.GetBytes(stringToWrite);
             stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public static IEnumerable<Texture2DWithPos> GetUnderlyingTextures2DWithDoublePos(this IEnumerable<Texture2DWithDoublePos> texs)
+        {
+            foreach (Texture2DWithDoublePos tex in texs)
+            {
+                yield return tex.t;
+            }
         }
     }
 }

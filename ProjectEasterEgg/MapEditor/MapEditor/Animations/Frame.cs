@@ -8,7 +8,7 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
     public class Frame
     {
         public int Duration;
-        public List<Texture2DWithPos> Textures = new List<Texture2DWithPos>();
+        public TextureManager Textures = new TextureManager();
 
         public Frame() { }
 

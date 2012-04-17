@@ -38,13 +38,14 @@ using Microsoft.Xna.Framework.Content;
         private static string TITLE = "Easter Egg Editor - ";
         private string lastSavedDoc;
         private int currentHeight = 0;
-        public int CurrentHeight
+        public int CurrentLayer
         {
             get { return currentHeight; }
             set
             {
                 currentHeight = value;
                 layer.Text = currentHeight.ToString();
+                Updated();
             }
         }
 
@@ -66,6 +67,9 @@ using Microsoft.Xna.Framework.Content;
             get { return graphicsDeviceService.GraphicsDevice; }
         }
 
+        private Color backgroundColor = Color.Black;
+        public Color BackgroundColor { get { return backgroundColor; } }
+
         public MainForm()
         {
             Services = new ServiceContainer();
@@ -74,13 +78,15 @@ using Microsoft.Xna.Framework.Content;
             SpriteBatchExtensions.Initialize(GraphicsDevice);
 
             InitializeComponent();
-            BlockDrawState = BlockDrawState.Solid;
-            EditingMode = EditingModes.Block;
+            CurrentBlockDrawState = BlockDrawState.Solid;
+            EditingMode = EditingMode.Block;
             topView.Initialize(this);
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
             AnimationManager.setCurrentAnimation("still");
+
+            toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
         }
 
         private void SetupContentManager()
@@ -99,12 +105,12 @@ using Microsoft.Xna.Framework.Content;
 
         private void upButton_Click(object sender, System.EventArgs e)
         {
-            CurrentHeight++;
+            CurrentLayer++;
         }
 
         private void downButton_Click(object sender, System.EventArgs e)
         {
-            CurrentHeight--;
+            CurrentLayer--;
         }
 
         #region zoom (mousewheel)
@@ -226,15 +232,15 @@ using Microsoft.Xna.Framework.Content;
             }
         }
 
-        private Point lastImportedTextureOffset = new Point(100, 100);
+        private Point lastImportedTextureOffset = Point.Zero;
         private BlockDrawState blockDrawState;
-        private  EditingModes editingMode;
+        private  EditingMode editingMode;
 
         private void importImage(string fileName)
         {
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
 
-            EditingMode = EditingModes.Texture;
+            EditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
             {
                 if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
@@ -246,19 +252,13 @@ using Microsoft.Xna.Framework.Content;
                     return;
                 }
             }
-            Point textureOffset;
-            if (lastImportedTextureOffset.X > 400)
+            lastImportedTextureOffset = lastImportedTextureOffset.Add(20, 20);
+            tex.Coord = lastImportedTextureOffset;
+            using (Stream texStream = new FileStream(fileName, FileMode.Open))
             {
-                textureOffset = (lastImportedTextureOffset.ToVector2() + new Vector2(50, 50)).ToXnaPoint();
+                tex.Texture = Texture2D.FromStream(GraphicsDevice, texStream);
             }
-            else
-            {
-                textureOffset = new Point(100, 100);
-            }
-            tex.Coord = textureOffset;
-            
-            tex.Texture = Texture2D.FromStream(GraphicsDevice, new FileStream(fileName, FileMode.Open));
-            CurrentFrame.Textures.Add(tex);
+            CurrentFrame.Textures.AddToFront(tex);
             Updated();
         }
         #endregion
@@ -273,7 +273,6 @@ using Microsoft.Xna.Framework.Content;
 
         private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
         {
-            System.Console.WriteLine(TextureOpacity);
             Updated();
         }
 
@@ -296,20 +295,20 @@ using Microsoft.Xna.Framework.Content;
 
         private void toolStripDrawBlockSolid_Click(object sender, EventArgs e)
         {
-            BlockDrawState = BlockDrawState.Solid;
+            CurrentBlockDrawState = BlockDrawState.Solid;
         }
 
         private void toolStripDrawBlockWireframe_Click(object sender, EventArgs e)
         {
-            BlockDrawState = BlockDrawState.Wireframe;
+            CurrentBlockDrawState = BlockDrawState.Wireframe;
         }
 
         private void toolStripDrawBlockNone_Click(object sender, EventArgs e)
         {
-            BlockDrawState = BlockDrawState.None;
+            CurrentBlockDrawState = BlockDrawState.None;
         }
 
-        internal BlockDrawState BlockDrawState
+        internal BlockDrawState CurrentBlockDrawState
         {
             get { return blockDrawState; }
             private set
@@ -321,26 +320,48 @@ using Microsoft.Xna.Framework.Content;
             }
         }
 
-        internal EditingModes EditingMode
+        internal EditingMode EditingMode
         {
             get { return editingMode; }
             set
             {
-                toolStripEditBlocks.Checked = value == EditingModes.Block;
-                toolStripEditTextures.Checked = value == EditingModes.Texture ||
-                    value == EditingModes.TextureProjection;
+                toolStripEditBlocks.Checked = value == EditingMode.Block;
+                toolStripEditTextures.Checked = value == EditingMode.Texture ||
+                    value == EditingMode.TextureProjection;
                 editingMode = value;
             }
         }
 
         private void toolStripEditBlocks_Click(object sender, EventArgs e)
         {
-            EditingMode = EditingModes.Block;
+            EditingMode = EditingMode.Block;
         }
 
         private void toolStripEditTextures_Click(object sender, EventArgs e)
         {
-            EditingMode = EditingModes.Texture;
+            EditingMode = EditingMode.Texture;
+        }
+
+        private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
+        {
+            backgroundColorDialog.ShowDialog();
+            backgroundColor = backgroundColorDialog.Color.ToXnaColor();
+            Updated();
+        }
+
+        private void menuStrip_MenuActivate(object sender, EventArgs e)
+        {
+            menuStrip.Visible = true;
+        }
+
+        private void menuStrip_MenuDeactivate(object sender, EventArgs e)
+        {
+            menuStrip.Visible = false;
+        }
+
+        private void drawTextureIndices_Click(object sender, EventArgs e)
+        {
+            Updated();
         }
     }
 }
