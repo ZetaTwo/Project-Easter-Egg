@@ -6,7 +6,7 @@ using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework.Graphics;
 using Mindstep.EasterEgg.Commons.Physics;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
     public class SaveBlock : Block
     {

@@ -6,15 +6,15 @@ using System.Drawing;
 using System.IO.Packaging;
 using System.IO;
 
-namespace EggEnginePipeline
+namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    class BitmapManager
+    public class PackagedBitmapsManager : IDisposable
     {
         private Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>();
         private Package modelFile;
         private string imageNamePrefix;
 
-        public BitmapManager(Package modelFile, string imageNamePrefix)
+        public PackagedBitmapsManager(Package modelFile, string imageNamePrefix)
         {
             this.modelFile = modelFile;
             this.imageNamePrefix = imageNamePrefix;
@@ -31,6 +31,11 @@ namespace EggEnginePipeline
                 }
                 return bitmaps[imageName];
             }
+        }
+
+        public void Dispose()
+        {
+            modelFile.Close();
         }
     }
 }

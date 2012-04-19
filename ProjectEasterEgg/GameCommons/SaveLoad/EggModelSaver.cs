@@ -8,32 +8,33 @@ using Mindstep.EasterEgg.Commons.SaveLoad;
 using System.IO.Packaging;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using Mindstep.EasterEgg.MapEditor.Animations;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    static class EggModelExporter
+    public static class EggModelSaver
     {
         private static string ResourceRelationshipType =
             "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
-        internal static void SaveModel(IEnumerable<SaveBlock> saveBlocks, List<Animation> animations, string path)
+        public static void Save<T>(SaveModel<T> model, string path) where T : ImageWithPos
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
             doc.Add(root);
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(saveBlocks.ToPositions());
-            List<SaveBlock> orderedBlocks = saveBlocks.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)).ToList();
+            BoundingBoxInt boundingBox = new BoundingBoxInt(model.blocks.ToPositions());
+            List<SaveBlock> orderedBlocks = model.blocks.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)).ToList();
 
             { // imports
                 XElement imports = new XElement("imports");
                 root.Add(imports);
-                /* foreach model, add
-                 * <imports>
-                 *   <model offset="0 0 5">katt<model>
-                 * </imports>
-                 */
+                foreach (SaveSubModel<T> subModel in model.subModels)
+                {
+                    XElement subModelElement = new XElement("model");
+                    imports.Add(subModelElement);
+                    subModelElement.SetAttributeValue("offset", subModel.offset.GetSaveString());
+                    subModelElement.Value = subModel.name;
+                }
             }
 
             { // blocks
@@ -54,30 +55,30 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            HashSet<Texture2DWithPos> allTextures = new HashSet<Texture2DWithPos>();
+            HashSet<T> allTextures = new HashSet<T>();
             { // animations
 
                 XElement animationsElement = new XElement("animations");
                 root.Add(animationsElement);
-                foreach (Animation animation in animations)
+                foreach (SaveAnimation<T> animation in model.animations)
                 {
                     XElement animationElement = new XElement("animation");
                     animationsElement.Add(animationElement);
                     animationElement.SetAttributeValue("name", animation.Name);
                     animationElement.SetAttributeValue("facing", animation.Facing.GetSaveString());
 
-                    foreach (Frame frame in animation.Frames)
+                    foreach (SaveFrame<T> frame in animation.Frames)
                     {
                         XElement frameElement = new XElement("frame");
                         frameElement.SetAttributeValue("duration", frame.Duration);
                         animationElement.Add(frameElement);
 
-                        foreach (Texture2DWithPos tex in frame.Textures.BackToFront())
+                        foreach (T tex in frame.Images.BackToFront())
                         {
                             XElement textureElement = new XElement("image");
                             frameElement.Add(textureElement);
-                            textureElement.SetAttributeValue("name", tex.RelativePath);
-                            textureElement.SetAttributeValue("coord", tex.Coord.GetSaveString());
+                            textureElement.SetAttributeValue("name", tex.name);
+                            textureElement.SetAttributeValue("coord", tex.pos.GetSaveString());
                             allTextures.Add(tex);
                             //TODO: foreach (SaveBlock block in tex.projectedOnto)
                             foreach (SaveBlock block in orderedBlocks)
@@ -94,7 +95,7 @@ namespace Mindstep.EasterEgg.MapEditor
             // Create the Package
             // (If the package file already exists, FileMode.Create will
             //  automatically delete it first before creating a new one.
-            //  The 'using' statement insures that 'package' is
+            //  The 'using' statement ensures that 'package' is
             //  closed and disposed when it goes out of scope.)
             using (Package package =
                 Package.Open(path, FileMode.Create))
@@ -107,14 +108,13 @@ namespace Mindstep.EasterEgg.MapEditor
                 // Add a Package Relationship to the Document Part
                 package.CreateRelationship(packagePartDocument.Uri, TargetMode.Internal, ResourceRelationshipType);
 
-                foreach (Texture2DWithPos tex in allTextures) {
-                    PackagePart blockImage = package.CreatePart(new Uri("/textures/" + tex.RelativePath, UriKind.Relative), "image/png");
-                    tex.Texture.SaveAsPng(blockImage.GetStream(), tex.Texture.Width, tex.Texture.Height);
+                foreach (ImageWithPos tex in allTextures) {
+                    PackagePart blockImage = package.CreatePart(new Uri("/textures/" + tex.name, UriKind.Relative), "image/png");
+                    tex.SaveTo(blockImage.GetStream());
                     package.CreateRelationship(blockImage.Uri, TargetMode.Internal, ResourceRelationshipType);
                 }
             }
             System.Console.WriteLine("Saved to: " + path);
         }
-
     }
 }

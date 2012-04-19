@@ -1,38 +1,16 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MainForm.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System.Windows.Forms;
 using System.Linq;
-#endregion
+using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons;
+using System.Collections.Generic;
+using System;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using Mindstep.EasterEgg.Commons.SaveLoad;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    // System.Drawing and the XNA Framework both define Color types.
-    // To avoid conflicts, we define shortcut names for them both.
-    using GdiColor = System.Drawing.Color;
-    using XnaColor = Microsoft.Xna.Framework.Color;
-    using Microsoft.Xna.Framework;
-    using Mindstep.EasterEgg.Commons;
-    using System.Collections.Generic;
-    using System;
-using Microsoft.Xna.Framework.Content;
-    using Microsoft.Xna.Framework.Graphics;
-    using System.IO;
-    using Mindstep.EasterEgg.MapEditor.Animations;
-
-    
-    /// <summary>
-    /// Custom form provides the main user interface for the program.
-    /// In this sample we used the designer to add a splitter pane to the form,
-    /// which contains a SpriteFontControl and a SpinningTriangleControl.
-    /// </summary>
     public partial class MainForm : Form
     {
         private static string TITLE = "Easter Egg Editor - ";
@@ -43,15 +21,19 @@ using Microsoft.Xna.Framework.Content;
             get { return currentHeight; }
             set
             {
-                currentHeight = value;
-                Updated();
+                if (CurrentEditingMode == EditingMode.Block)
+                {
+                    currentHeight = value;
+                    Updated();
+                }
             }
         }
 
-        public List<SaveBlock> SaveBlocks = new List<SaveBlock>();
-        public AnimationManager AnimationManager = new AnimationManager();
-        public Frame CurrentFrame { get { return AnimationManager.CurrentAnimation.CurrentFrame; } }
-        public Animation CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
+        private SaveModel<Texture2DWithPos> model;
+        public SaveModel<Texture2DWithPos> CurrentModel { get { return model; } }
+        public AnimationManager<Texture2DWithPos> AnimationManager = new AnimationManager<Texture2DWithPos>();
+        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return AnimationManager.CurrentAnimation.CurrentFrame; } }
+        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
         public bool changedSinceLastSave;
         public Texture2D whiteOneByOneTexture;
         public Texture2D transparentOneByOneTexture;
@@ -77,6 +59,7 @@ using Microsoft.Xna.Framework.Content;
             Content = new ContentManager(Services, "MapEditorContent");
             SetupContentManager();
             SpriteBatchExtensions.Initialize(this);
+            model = new SaveModel<Texture2DWithPos>("untitledModel");
 
 
             initializeTextures();
@@ -168,7 +151,8 @@ using Microsoft.Xna.Framework.Content;
 
         private void saveClicked()
         {
-            if (SaveBlocks.Count == 0)
+            if (CurrentModel.blocks.Count == 0 &&
+                CurrentModel.subModels.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -180,7 +164,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void saveAsClicked()
         {
-            if (SaveBlocks.Count == 0)
+            if (CurrentModel.blocks.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -197,7 +181,7 @@ using Microsoft.Xna.Framework.Content;
 
         private void save()
         {
-            EggModelExporter.SaveModel(SaveBlocks, AnimationManager.Animations, saveFileDialog.FileName);
+            EggModelSaver.Save(CurrentModel, saveFileDialog.FileName);
             lastSavedDoc = saveFileDialog.FileName;
             changedSinceLastSave = false;
             RefreshTitle();
@@ -233,9 +217,9 @@ using Microsoft.Xna.Framework.Content;
             CurrentEditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
             {
-                if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
+                if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
                 {
-                    MessageBox.Show("Texture relative path name collision: '"+tex.RelativePath+
+                    MessageBox.Show("Texture relative path name collision: '"+tex.name+
                         "', while original path name was not the same: '"+tex.OriginalPath+
                         "'!", "It should be possible to click on a texture and "+
                         "specify it's name.\nMake such a box popup here!");
@@ -243,12 +227,12 @@ using Microsoft.Xna.Framework.Content;
                 }
             }
             lastImportedTextureOffset = lastImportedTextureOffset.Add(20, 20);
-            tex.Coord = lastImportedTextureOffset;
+            tex.pos = lastImportedTextureOffset;
             using (Stream texStream = new FileStream(fileName, FileMode.Open))
             {
                 tex.Texture = Texture2D.FromStream(GraphicsDevice, texStream);
             }
-            CurrentFrame.Textures.AddToFront(tex);
+            CurrentFrame.Images.AddToFront(tex);
             Updated();
         }
         #endregion

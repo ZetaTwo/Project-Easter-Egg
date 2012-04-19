@@ -8,8 +8,8 @@ using Mindstep.EasterEgg.Commons;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Mindstep.EasterEgg.MapEditor.Animations;
 using Mindstep.EasterEgg.Commons.Graphics;
+using Mindstep.EasterEgg.Commons.SaveLoad;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -53,6 +53,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private bool mouseHasMovedSinceMouseDown = true;
 
         private static Dictionary<BlockType, Color> blockTypeColor;
+        private static Dictionary<BlockDrawState, Texture2D> blockDrawStateTexture;
         private bool erasingBlocks;
         private bool drawingBlocks;
         private Texture2DWithDoublePos textureBeingProjectedDown;
@@ -103,6 +104,10 @@ namespace Mindstep.EasterEgg.MapEditor
             blockTypeColor.Add(BlockType.STAIRS_DOWN, Color.Blue);
             blockTypeColor.Add(BlockType.STAIRS_UP, Color.Brown);
             blockTypeColor.Add(BlockType.WALKABLE, Color.Olive);
+            blockDrawStateTexture = new Dictionary<BlockDrawState, Texture2D>();
+            blockDrawStateTexture.Add(BlockDrawState.None, mainForm.transparentOneByOneTexture);
+            blockDrawStateTexture.Add(BlockDrawState.Solid, textureBlock);
+            blockDrawStateTexture.Add(BlockDrawState.Wireframe, textureWireframe);
         }
 
         private EditingMode ActualEditingMode
@@ -142,7 +147,7 @@ namespace Mindstep.EasterEgg.MapEditor
             GraphicsDevice.Clear(mainForm.BackgroundColor);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, samplerState, null, null, null, camera.ZoomAndOffsetMatrix);
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(mainForm.SaveBlocks.ToPositions());
+            BoundingBoxInt boundingBox = new BoundingBoxInt(mainForm.CurrentModel.blocks.ToPositions());
 
             List<Position> tiles = new List<Position>();
             for (int x = -5; x < 10; x += 1)
@@ -165,73 +170,66 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
+            switch (ActualEditingMode)
             {
-                Texture2D aboveCurrentLayerTexture = null;
-                Texture2D atCurrentLayerTexture = textureBlock;
-                Texture2D belowCurrentLayerTexture = textureBlock;
-
-                switch (ActualBlockDrawState)
-                {
-                    case BlockDrawState.Solid:
-                        aboveCurrentLayerTexture = textureBlock;
-                        break;
-                    case BlockDrawState.Wireframe:
-                        aboveCurrentLayerTexture = textureWireframe;
-                        break;
-                    case BlockDrawState.None:
-                        aboveCurrentLayerTexture = mainForm.transparentOneByOneTexture;
-                        break;
-                }
-                if (ActualEditingMode == EditingMode.Block)
-                {
-                    atCurrentLayerTexture = textureDrawing;
-                }
-
-                foreach (SaveBlock saveBlock in mainForm.SaveBlocks)
-                {
-                    if (ActualEditingMode == EditingMode.TextureProjection &&
-                        textureBeingProjectedDown.t.projectedOnto.Contains(saveBlock))
-                    {
-                        drawBlock(textureWireframeBack, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, .01f);
-                        //TODO: cut out relevant piece of the texture and draw it inside the block
-                        drawBlock(textureWireframe, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, -.01f);
-                    }
-                    else
+                case EditingMode.Block:
+                    foreach (SaveBlock saveBlock in mainForm.CurrentModel.blocks)
                     {
                         switch (Math.Sign(saveBlock.Position.Z - mainForm.CurrentLayer))
                         {
                             case 1: //above
-                                drawBlock(aboveCurrentLayerTexture, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                                drawBlock(blockDrawStateTexture[ActualBlockDrawState], boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
                                 break;
                             case 0: //at
-                                drawBlock(atCurrentLayerTexture, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                                drawBlock(textureDrawing, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
                                 break;
                             case -1: //below
-                                drawBlock(belowCurrentLayerTexture, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                                drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
                                 break;
                         }
                     }
-                }
+                    break;
+                case EditingMode.Texture:
+                    foreach (SaveBlock saveBlock in mainForm.CurrentModel.blocks)
+                    {
+                        drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                    }
+                    break;
+                case EditingMode.TextureProjection:
+                    foreach (SaveBlock saveBlock in mainForm.CurrentModel.blocks)
+                    {
+                        if (textureBeingProjectedDown.t.projectedOnto.Contains(saveBlock))
+                        {
+                            drawBlock(textureWireframeBack, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, .01f);
+                            //TODO: cut out relevant piece of the texture and draw it inside the block
+                            drawBlock(textureWireframe, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, -.01f);
+                        }
+                        else
+                        {
+                            drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                        }
+                    }
+                    break;
             }
 
             if (textureBeingProjectedDown != null)
             {
-                spriteBatch.Draw(textureBeingProjectedDown.t.Texture, textureBeingProjectedDown.t.Coord.ToVector2(), null,
+                spriteBatch.Draw(textureBeingProjectedDown.t.Texture, textureBeingProjectedDown.t.pos.ToVector2(), null,
                     new Color(1, 1, 1, mainForm.TextureOpacity), 0,
                     Vector2.Zero, 1, SpriteEffects.None, 0);
             }
             else
             {
                 float i = 0;
-                foreach (Texture2DWithPos tex in mainForm.CurrentFrame.Textures.BackToFront())
+                foreach (Texture2DWithPos tex in mainForm.CurrentFrame.Images.BackToFront())
                 {
-                    float depth = (1 - i / mainForm.CurrentFrame.Textures.Count) * .1f;
-                    spriteBatch.Draw(tex.Texture, tex.Coord.ToVector2(), null,
+                    float depth = (1 - i / mainForm.CurrentFrame.Images.Count) * .1f;
+                    spriteBatch.Draw(tex.Texture, tex.pos.ToVector2(), null,
                         new Color(1, 1, 1, mainForm.TextureOpacity), 0,
                         Vector2.Zero, 1, SpriteEffects.None, depth / camera.Zoom);
                     if (mainForm.DrawTextureIndices)
                     {
-                        spriteBatch.DrawString(spriteFont, i.ToString(), tex.Coord.ToVector2(),
+                        spriteBatch.DrawString(spriteFont, i.ToString(), tex.pos.ToVector2(),
                             Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
                     }
                     i++;
@@ -319,11 +317,11 @@ namespace Mindstep.EasterEgg.MapEditor
                         case EditingMode.Texture:
                             mouseCoordAtMouseDown = e.Location.ToXnaPoint();
                             updateSelectedTextures(e.Location, getClickOperation());
-                            selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.Coord);
+                            selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.pos);
                             draggingTextures = selectedTextures.Count != 0;
                             break;
                         case EditingMode.TextureProjection:
-                            SaveBlock hitBlock = getHitBlock(mainForm.SaveBlocks,
+                            SaveBlock hitBlock = getHitBlock(mainForm.CurrentModel.blocks,
                                 CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), camera).ToSDPoint());
                             if (!textureBeingProjectedDown.t.projectedOnto.Remove(hitBlock))
                             {
@@ -342,6 +340,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 mainForm.CurrentLayer++;
             }
+            
             lastMouseLocation = e.Location;
             mainForm.Updated();
         }
@@ -366,7 +365,7 @@ namespace Mindstep.EasterEgg.MapEditor
             else if (draggingTextures)
             {
                 Point changeInProjectionSpace = e.Location.ToXnaPoint().Subtract(mouseCoordAtMouseDown).Divide(camera.Zoom);
-                selectedTextures.ForEach(tex => tex.t.Coord = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
+                selectedTextures.ForEach(tex => tex.t.pos = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
             }
             else if (ActualEditingMode == EditingMode.Block && drawingBlocks)
             {
@@ -437,7 +436,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.KeyCode == Keys.Delete)
             {
-                mainForm.CurrentFrame.Textures.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+                mainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
                 mainForm.Updated();
             }
@@ -454,25 +453,25 @@ namespace Mindstep.EasterEgg.MapEditor
         #region Context menus
         private void TextureContextMenuBringToFront(object sender, EventArgs e)
         {
-            mainForm.CurrentFrame.Textures.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            mainForm.CurrentFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             mainForm.Updated();
         }
 
         private void TextureContextMenuBringForward(object sender, EventArgs e)
         {
-            mainForm.CurrentFrame.Textures.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            mainForm.CurrentFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             mainForm.Updated();
         }
 
         private void TextureContextMenuSendBackward(object sender, EventArgs e)
         {
-            mainForm.CurrentFrame.Textures.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            mainForm.CurrentFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             mainForm.Updated();
         }
 
         private void TextureContextMenuSendToBack(object sender, EventArgs e)
         {
-            mainForm.CurrentFrame.Textures.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            mainForm.CurrentFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             mainForm.Updated();
         }
 
@@ -483,7 +482,7 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         private void TextureContextMenuDelete(object sender, EventArgs e)
         {
-            mainForm.CurrentFrame.Textures.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            mainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             selectedTextures.Clear();
             mainForm.Updated();
         }
@@ -499,9 +498,9 @@ namespace Mindstep.EasterEgg.MapEditor
         private void createBlockAt(System.Drawing.Point mouseLocation)
         {
             Position pos = posUnderPoint(mouseLocation);
-            if (!mainForm.SaveBlocks.Any(block => block.Position == pos))
+            if (!mainForm.CurrentModel.blocks.Any(block => block.Position == pos))
             {
-                mainForm.SaveBlocks.Add(new SaveBlock(pos));
+                mainForm.CurrentModel.blocks.Add(new SaveBlock(pos));
             }
             mainForm.Updated();
         }
@@ -509,14 +508,14 @@ namespace Mindstep.EasterEgg.MapEditor
         private void deleteBlockAt(System.Drawing.Point mouseLocation)
         {
             Position pos = posUnderPoint(mouseLocation);
-            mainForm.SaveBlocks.RemoveAll(block => block.Position == pos);
+            mainForm.CurrentModel.blocks.RemoveAll(block => block.Position == pos);
             mainForm.Updated();
         }
 
         private bool blockAt(System.Drawing.Point mouseLocation)
         {
             Position pos = posUnderPoint(mouseLocation);
-            return mainForm.SaveBlocks.Any(block => block.Position == pos);
+            return mainForm.CurrentModel.blocks.Any(block => block.Position == pos);
         }
 
         private Position posUnderPoint(System.Drawing.Point mouseLocation)
@@ -531,7 +530,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
             mainForm.Updated();
             return getHitBlock(
-                mainForm.SaveBlocks.Where(block => block.Position.Z == mainForm.CurrentLayer),
+                mainForm.CurrentModel.blocks.Where(block => block.Position.Z == mainForm.CurrentLayer),
                 mousePosInProjSpace.ToSDPoint());
         }
 
@@ -564,7 +563,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mousePos.ToXnaPoint(), camera);
 
             SaveBlock hitAlreadyExistingBlock = getHitBlock(
-                mainForm.SaveBlocks.Where(block => block.Position.Z >= mainForm.CurrentLayer),
+                mainForm.CurrentModel.blocks.Where(block => block.Position.Z >= mainForm.CurrentLayer),
                 mousePosInProjSpace.ToSDPoint());
 
             SaveBlock newBlock = new SaveBlock(pos);
@@ -574,7 +573,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 case ClickOperation.Add:
                     if (hitAlreadyExistingBlock == null)
                     {
-                        mainForm.SaveBlocks.Add(newBlock);
+                        mainForm.CurrentModel.blocks.Add(newBlock);
                         selectedBlocks.Add(newBlock);
                     }
                     break;
@@ -582,7 +581,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     selectedBlocks.Clear();
                     if (hitAlreadyExistingBlock == null)
                     {
-                        mainForm.SaveBlocks.Add(newBlock);
+                        mainForm.CurrentModel.blocks.Add(newBlock);
                         selectedBlocks.Add(newBlock);
                     }
                     else
@@ -604,10 +603,10 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mouseLocation.ToXnaPoint(), camera);
 
-            foreach (Texture2DWithPos hitTexture in mainForm.CurrentFrame.Textures.FrontToBack())
+            foreach (Texture2DWithPos hitTexture in mainForm.CurrentFrame.Images.FrontToBack())
             {
                 if (hitTexture.Bounds.Contains(mousePosInProjSpace) &&
-                    hitTexture.Texture.GetPixelColor(mousePosInProjSpace.Subtract(hitTexture.Coord)).A != 0)
+                    hitTexture.Texture.GetPixelColor(mousePosInProjSpace.Subtract(hitTexture.pos)).A != 0)
                 {
                     Texture2DWithDoublePos hitAlreadySelectedTexture = null;
                     foreach (Texture2DWithDoublePos selectedTexture in selectedTextures)

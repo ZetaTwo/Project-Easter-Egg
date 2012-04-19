@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Commons;
 
-namespace Mindstep.EasterEgg.MapEditor.Animations
+namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    public class Animation
+    public class SaveAnimation<T> where T : ImageWithPos
     {
         private const int DEFAULT_FRAME_DURATION = 100;
 
-        public List<Frame> Frames = new List<Frame>();
+        public List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
         public string Name;
         public Facing Facing;
 
@@ -27,26 +27,21 @@ namespace Mindstep.EasterEgg.MapEditor.Animations
 
                 while (value > Frames.Count)
                 {
-                    addNewFrame(CurrentFrame.Duration);
+                    Frames.Add(new SaveFrame<T>(CurrentFrame.Duration));
                 }
                 currentFrameIndex = value;
             }
         }
 
-        public Frame CurrentFrame
+        public SaveFrame<T> CurrentFrame
         {
             get { return Frames[currentFrameIndex]; }
         }
 
-        public Animation(string name)
+        public SaveAnimation(string name)
         {
             this.Name = name;
-            addNewFrame(DEFAULT_FRAME_DURATION);
-        }
-
-        private void addNewFrame(int duration)
-        {
-            Frames.Add(new Frame(duration));
+            Frames.Add(new SaveFrame<T>(DEFAULT_FRAME_DURATION));
         }
     }
 }
