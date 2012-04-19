@@ -88,9 +88,6 @@
     <Compile Include="Animations\Texture2DWithPos.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="TextureManager.cs" />
-    <Compile Include="TopView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GraphicsDeviceControl.cs">
       <SubType>Component</SubType>
     </Compile>

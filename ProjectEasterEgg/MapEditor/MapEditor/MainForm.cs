@@ -44,7 +44,6 @@ using Microsoft.Xna.Framework.Content;
             set
             {
                 currentHeight = value;
-                layer.Text = currentHeight.ToString();
                 Updated();
             }
         }
@@ -54,6 +53,8 @@ using Microsoft.Xna.Framework.Content;
         public Frame CurrentFrame { get { return AnimationManager.CurrentAnimation.CurrentFrame; } }
         public Animation CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
         public bool changedSinceLastSave;
+        public Texture2D whiteOneByOneTexture;
+        public Texture2D transparentOneByOneTexture;
 
         public readonly ServiceContainer Services;
         public readonly ContentManager Content;
@@ -75,18 +76,27 @@ using Microsoft.Xna.Framework.Content;
             Services = new ServiceContainer();
             Content = new ContentManager(Services, "MapEditorContent");
             SetupContentManager();
-            SpriteBatchExtensions.Initialize(GraphicsDevice);
+            SpriteBatchExtensions.Initialize(this);
 
+
+            initializeTextures();
             InitializeComponent();
             CurrentBlockDrawState = BlockDrawState.Solid;
-            EditingMode = EditingMode.Block;
-            topView.Initialize(this);
+            CurrentEditingMode = EditingMode.Block;
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
             AnimationManager.setCurrentAnimation("still");
 
             toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
+        }
+
+        private void initializeTextures()
+        {
+            transparentOneByOneTexture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            transparentOneByOneTexture.SetData<Color>(new Color[] { Color.Transparent });
+            whiteOneByOneTexture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            whiteOneByOneTexture.SetData<Color>(new Color[]{Color.White});
         }
 
         private void SetupContentManager()
@@ -116,13 +126,10 @@ using Microsoft.Xna.Framework.Content;
         #region zoom (mousewheel)
         private void mouseWheel(object sender, MouseEventArgs e)
         {
-            if (GetChildAtPoint(e.Location) == topViewPanel)
+            if (GetChildAtPoint(e.Location) == mainView)
             {
-                topView.MainView_MouseWheel(sender, e);
-            }
-            else if (GetChildAtPoint(e.Location) == mainView)
-            {
-                mainView.MainView_MouseWheel(sender, e);
+                System.Drawing.Point newLocation = e.Location.ToXnaPoint().Subtract(mainView.Location.ToXnaPoint()).ToSDPoint();
+                mainView.MainView_MouseWheel(sender, new MouseEventArgs(e.Button, e.Clicks, newLocation.X, newLocation.Y, e.Delta));
             }
         }
         #endregion
@@ -139,22 +146,6 @@ using Microsoft.Xna.Framework.Content;
                 doc += "*";
             }
             Text = TITLE + doc.Split(' ').Last() + " [" + Math.Round(mainView.Zoom*100, 0) + "%]";
-        }
-
-
-        private void topView_MouseLeave(object sender, System.EventArgs e)
-        {
-            coords.Text = "";
-        }
-
-        private void showTopView_CheckChanged(object sender, System.EventArgs e)
-        {
-            topViewPanel.Visible = showTopView.Checked;
-        }
-
-        internal void setTopViewCoordLabel(string s)
-        {
-            coords.Text = s;
         }
 
         #region save
@@ -234,13 +225,12 @@ using Microsoft.Xna.Framework.Content;
 
         private Point lastImportedTextureOffset = Point.Zero;
         private BlockDrawState blockDrawState;
-        private  EditingMode editingMode;
 
         private void importImage(string fileName)
         {
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
 
-            EditingMode = EditingMode.Texture;
+            CurrentEditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
             {
                 if (existingTex.RelativePath == tex.RelativePath && existingTex.OriginalPath != tex.OriginalPath)
@@ -268,7 +258,6 @@ using Microsoft.Xna.Framework.Content;
         internal void Updated()
         {
             mainView.Invalidate();
-            topView.Invalidate();
         }
 
         private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
@@ -317,10 +306,12 @@ using Microsoft.Xna.Framework.Content;
                 toolStripDrawBlockWireframe.Checked = value == BlockDrawState.Wireframe;
                 toolStripDrawBlockNone.Checked = value == BlockDrawState.None;
                 blockDrawState = value;
+                Updated();
             }
         }
 
-        internal EditingMode EditingMode
+        private EditingMode editingMode;
+        internal EditingMode CurrentEditingMode
         {
             get { return editingMode; }
             set
@@ -329,17 +320,18 @@ using Microsoft.Xna.Framework.Content;
                 toolStripEditTextures.Checked = value == EditingMode.Texture ||
                     value == EditingMode.TextureProjection;
                 editingMode = value;
+                Updated();
             }
         }
 
         private void toolStripEditBlocks_Click(object sender, EventArgs e)
         {
-            EditingMode = EditingMode.Block;
+            CurrentEditingMode = EditingMode.Block;
         }
 
         private void toolStripEditTextures_Click(object sender, EventArgs e)
         {
-            EditingMode = EditingMode.Texture;
+            CurrentEditingMode = EditingMode.Texture;
         }
 
         private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)

@@ -105,22 +105,19 @@ namespace Mindstep.EasterEgg.Commons.Graphics
         /// left corner of the drawing</param>
         /// <param name="screenWidth"></param>
         /// <param name="screenHeight"></param>
-        public void ZoomIn(Point around, int screenWidth, int screenHeight)
+        public void ZoomIn(Point around)
         {
             if (zoomIndex < zoomLevels.Length - 1)
             {
-                float oldZoom = zoomLevels[zoomIndex];
-                float newZoom = zoomLevels[zoomIndex+1];
+                float oldZoom = Zoom;
+                zoomIndex++;
+                float newZoom = Zoom;
                 float zoomChange = newZoom / oldZoom;
-                int newWidth = (int)(screenWidth * zoomChange);
-                int newHeight = (int)(screenHeight * zoomChange);
 
                 Point a = around.Subtract(offset);
-                Point b = a.Multiply(newWidth).Divide(screenWidth);
-                Point x = a.Subtract(b);
+                Point b = a.Multiply(zoomChange);
 
-                zoomIndex++;
-                Offset = Offset.Add(x);
+                Offset = Offset.Add(a).Subtract(b);
             }
         }
 
@@ -130,22 +127,19 @@ namespace Mindstep.EasterEgg.Commons.Graphics
         /// <param name="point">A Point in screen space, AKA:
         /// the distance in screen pixels from the upper
         /// right corner of the drawing</param>
-        public void ZoomOut(Point around, int screenWidth, int screenHeight)
+        public void ZoomOut(Point around)
         {
             if (zoomIndex > 0)
             {
-                float oldZoom = zoomLevels[zoomIndex];
-                float newZoom = zoomLevels[zoomIndex - 1];
+                float oldZoom = Zoom;
+                zoomIndex--;
+                float newZoom = Zoom;
                 float zoomChange = newZoom / oldZoom;
-                int newWidth = (int)(screenWidth * zoomChange);
-                int newHeight = (int)(screenHeight * zoomChange);
 
                 Point a = around.Subtract(offset);
-                Point b = a.Multiply(newWidth).Divide(screenWidth);
-                Point x = a.Subtract(b);
+                Point b = a.Multiply(zoomChange);
 
-                zoomIndex--;
-                Offset = Offset.Add(x);
+                Offset = Offset.Add(a).Subtract(b);
             }
         }
 

@@ -94,7 +94,7 @@ namespace Mindstep.EasterEgg.Commons
         {
             if (f < 0)
             {
-                return (int)f - 1;
+                return (int)Math.Round(f-.5f, MidpointRounding.AwayFromZero);
             }
             else
             {

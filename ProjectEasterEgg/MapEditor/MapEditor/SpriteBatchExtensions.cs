@@ -9,19 +9,18 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public static class SpriteBatchExtensions
     {
-        private static Texture2D blankTexture;
+        private static MainForm mainForm;
 
-        public static void Initialize(GraphicsDevice graphicsDevice)
+        public static void Initialize(MainForm mainForm)
         {
-            blankTexture = new Texture2D(graphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            blankTexture.SetData<Color>(new Color[]{Color.White});
+            SpriteBatchExtensions.mainForm = mainForm;
         }
 
         public static void DrawLineSegment(this SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Color color, int lineWidth)
         {
             float angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
             float length = Vector2.Distance(point1, point2);
-            spriteBatch.Draw(blankTexture, point1, null, color,
+            spriteBatch.Draw(mainForm.whiteOneByOneTexture, point1, null, color,
                 angle, Vector2.Zero, new Vector2(length, lineWidth),
                 SpriteEffects.None, 0f);
         }

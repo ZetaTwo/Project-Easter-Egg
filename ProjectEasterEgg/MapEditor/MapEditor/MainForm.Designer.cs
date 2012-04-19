@@ -30,7 +30,6 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.showTopView = new System.Windows.Forms.ToolStripButton();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSelectBackgroundColor = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -47,29 +46,24 @@ namespace Mindstep.EasterEgg.MapEditor
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.topViewPanel = new System.Windows.Forms.Panel();
-            this.coords = new System.Windows.Forms.Label();
-            this.upButton = new System.Windows.Forms.Button();
-            this.layerLabel = new System.Windows.Forms.Label();
-            this.downButton = new System.Windows.Forms.Button();
-            this.layer = new System.Windows.Forms.TextBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.trackBarTextureOpacity = new System.Windows.Forms.TrackBar();
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
-            this.topView = new Mindstep.EasterEgg.MapEditor.TopView();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            this.topViewPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
             // 
+            this.toolStrip.AllowMerge = false;
+            this.toolStrip.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStrip.GripMargin = new System.Windows.Forms.Padding(0);
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showTopView,
             this.drawTextureIndices,
             this.toolStripButtonSelectBackgroundColor,
             this.toolStripSeparator1,
@@ -81,26 +75,15 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockNone,
             this.toolStripSeparator3,
             this.toolStripTextureOpacityLabel});
+            this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip.Size = new System.Drawing.Size(1092, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1092, 27);
+            this.toolStrip.Stretch = true;
             this.toolStrip.TabIndex = 15;
-            this.toolStrip.Text = "toolStrip1";
-            // 
-            // showTopView
-            // 
-            this.showTopView.Checked = true;
-            this.showTopView.CheckOnClick = true;
-            this.showTopView.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showTopView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.showTopView.Image = ((System.Drawing.Image)(resources.GetObject("showTopView.Image")));
-            this.showTopView.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.showTopView.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.showTopView.Name = "showTopView";
-            this.showTopView.Size = new System.Drawing.Size(23, 22);
-            this.showTopView.Text = "Show Top View";
-            this.showTopView.CheckedChanged += new System.EventHandler(this.showTopView_CheckChanged);
+            this.toolStrip.Text = "toolStrip";
             // 
             // drawTextureIndices
             // 
@@ -110,26 +93,30 @@ namespace Mindstep.EasterEgg.MapEditor
             this.drawTextureIndices.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.drawTextureIndices.Image = ((System.Drawing.Image)(resources.GetObject("drawTextureIndices.Image")));
             this.drawTextureIndices.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.drawTextureIndices.Margin = new System.Windows.Forms.Padding(5, 1, 1, 2);
             this.drawTextureIndices.Name = "drawTextureIndices";
-            this.drawTextureIndices.Size = new System.Drawing.Size(23, 22);
+            this.drawTextureIndices.Size = new System.Drawing.Size(24, 24);
             this.drawTextureIndices.Text = "Draw Texture Indices";
             this.drawTextureIndices.Click += new System.EventHandler(this.drawTextureIndices_Click);
             // 
             // toolStripButtonSelectBackgroundColor
             // 
+            this.toolStripButtonSelectBackgroundColor.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.toolStripButtonSelectBackgroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonSelectBackgroundColor.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSelectBackgroundColor.Image")));
             this.toolStripButtonSelectBackgroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSelectBackgroundColor.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.toolStripButtonSelectBackgroundColor.Name = "toolStripButtonSelectBackgroundColor";
-            this.toolStripButtonSelectBackgroundColor.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSelectBackgroundColor.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonSelectBackgroundColor.Text = "toolStripButton1";
             this.toolStripButtonSelectBackgroundColor.ToolTipText = "Select Background Color";
             this.toolStripButtonSelectBackgroundColor.Click += new System.EventHandler(this.toolStripButtonSelectBackgroundColor_Click);
             // 
             // toolStripSeparator1
             // 
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
             // 
             // toolStripEditBlocks
             // 
@@ -137,8 +124,9 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripEditBlocks.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripEditBlocks.Image = ((System.Drawing.Image)(resources.GetObject("toolStripEditBlocks.Image")));
             this.toolStripEditBlocks.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripEditBlocks.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.toolStripEditBlocks.Name = "toolStripEditBlocks";
-            this.toolStripEditBlocks.Size = new System.Drawing.Size(23, 22);
+            this.toolStripEditBlocks.Size = new System.Drawing.Size(24, 24);
             this.toolStripEditBlocks.Text = "toolStripButton1";
             this.toolStripEditBlocks.ToolTipText = "Enter block editing mode";
             this.toolStripEditBlocks.Click += new System.EventHandler(this.toolStripEditBlocks_Click);
@@ -149,24 +137,27 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripEditTextures.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripEditTextures.Image = ((System.Drawing.Image)(resources.GetObject("toolStripEditTextures.Image")));
             this.toolStripEditTextures.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripEditTextures.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.toolStripEditTextures.Name = "toolStripEditTextures";
-            this.toolStripEditTextures.Size = new System.Drawing.Size(23, 22);
+            this.toolStripEditTextures.Size = new System.Drawing.Size(24, 24);
             this.toolStripEditTextures.Text = "toolStripButton2";
             this.toolStripEditTextures.ToolTipText = "Enter texture editing mode";
             this.toolStripEditTextures.Click += new System.EventHandler(this.toolStripEditTextures_Click);
             // 
             // toolStripSeparator2
             // 
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
             // 
             // toolStripDrawBlockSolid
             // 
             this.toolStripDrawBlockSolid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDrawBlockSolid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDrawBlockSolid.Image")));
             this.toolStripDrawBlockSolid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDrawBlockSolid.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.toolStripDrawBlockSolid.Name = "toolStripDrawBlockSolid";
-            this.toolStripDrawBlockSolid.Size = new System.Drawing.Size(23, 22);
+            this.toolStripDrawBlockSolid.Size = new System.Drawing.Size(24, 24);
             this.toolStripDrawBlockSolid.Text = "toolStripButton1";
             this.toolStripDrawBlockSolid.ToolTipText = "Draw blocks as solid";
             this.toolStripDrawBlockSolid.Click += new System.EventHandler(this.toolStripDrawBlockSolid_Click);
@@ -176,8 +167,9 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDrawBlockWireframe.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDrawBlockWireframe.Image")));
             this.toolStripDrawBlockWireframe.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDrawBlockWireframe.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.toolStripDrawBlockWireframe.Name = "toolStripDrawBlockWireframe";
-            this.toolStripDrawBlockWireframe.Size = new System.Drawing.Size(23, 22);
+            this.toolStripDrawBlockWireframe.Size = new System.Drawing.Size(24, 24);
             this.toolStripDrawBlockWireframe.Text = "toolStripButton2";
             this.toolStripDrawBlockWireframe.ToolTipText = "Draw blocks as wireframes";
             this.toolStripDrawBlockWireframe.Click += new System.EventHandler(this.toolStripDrawBlockWireframe_Click);
@@ -187,21 +179,24 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockNone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDrawBlockNone.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDrawBlockNone.Image")));
             this.toolStripDrawBlockNone.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDrawBlockNone.Margin = new System.Windows.Forms.Padding(0, 1, 0, 1);
             this.toolStripDrawBlockNone.Name = "toolStripDrawBlockNone";
-            this.toolStripDrawBlockNone.Size = new System.Drawing.Size(23, 22);
+            this.toolStripDrawBlockNone.Size = new System.Drawing.Size(24, 24);
             this.toolStripDrawBlockNone.Text = "toolStripButton1";
             this.toolStripDrawBlockNone.ToolTipText = "Don\'t draw blocks";
             this.toolStripDrawBlockNone.Click += new System.EventHandler(this.toolStripDrawBlockNone_Click);
             // 
             // toolStripSeparator3
             // 
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 23);
             // 
             // toolStripTextureOpacityLabel
             // 
+            this.toolStripTextureOpacityLabel.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
             this.toolStripTextureOpacityLabel.Name = "toolStripTextureOpacityLabel";
-            this.toolStripTextureOpacityLabel.Size = new System.Drawing.Size(85, 22);
+            this.toolStripTextureOpacityLabel.Size = new System.Drawing.Size(85, 13);
             this.toolStripTextureOpacityLabel.Text = "Texture Opacity";
             // 
             // menuStrip
@@ -252,66 +247,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.importToolStripMenuItem.Text = "Import";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
-            // topViewPanel
-            // 
-            this.topViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.topViewPanel.Controls.Add(this.topView);
-            this.topViewPanel.Controls.Add(this.coords);
-            this.topViewPanel.Controls.Add(this.upButton);
-            this.topViewPanel.Controls.Add(this.layerLabel);
-            this.topViewPanel.Controls.Add(this.downButton);
-            this.topViewPanel.Controls.Add(this.layer);
-            this.topViewPanel.Location = new System.Drawing.Point(860, 49);
-            this.topViewPanel.Name = "topViewPanel";
-            this.topViewPanel.Size = new System.Drawing.Size(232, 208);
-            this.topViewPanel.TabIndex = 18;
-            // 
-            // coords
-            // 
-            this.coords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.coords.Location = new System.Drawing.Point(131, 190);
-            this.coords.Name = "coords";
-            this.coords.Size = new System.Drawing.Size(98, 13);
-            this.coords.TabIndex = 12;
-            // 
-            // upButton
-            // 
-            this.upButton.Image = ((System.Drawing.Image)(resources.GetObject("upButton.Image")));
-            this.upButton.Location = new System.Drawing.Point(3, 16);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(24, 24);
-            this.upButton.TabIndex = 8;
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.upButton_Click);
-            // 
-            // layerLabel
-            // 
-            this.layerLabel.AutoSize = true;
-            this.layerLabel.Location = new System.Drawing.Point(0, 0);
-            this.layerLabel.Name = "layerLabel";
-            this.layerLabel.Size = new System.Drawing.Size(33, 13);
-            this.layerLabel.TabIndex = 11;
-            this.layerLabel.Text = "Layer";
-            // 
-            // downButton
-            // 
-            this.downButton.Image = ((System.Drawing.Image)(resources.GetObject("downButton.Image")));
-            this.downButton.Location = new System.Drawing.Point(3, 72);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(24, 24);
-            this.downButton.TabIndex = 9;
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.downButton_Click);
-            // 
-            // layer
-            // 
-            this.layer.Location = new System.Drawing.Point(3, 46);
-            this.layer.Name = "layer";
-            this.layer.ReadOnly = true;
-            this.layer.Size = new System.Drawing.Size(24, 20);
-            this.layer.TabIndex = 10;
-            this.layer.Text = "0";
-            // 
             // saveFileDialog
             // 
             this.saveFileDialog.Filter = "Egg model files (*.egg)|*.egg";
@@ -327,13 +262,13 @@ namespace Mindstep.EasterEgg.MapEditor
             // trackBarTextureOpacity
             // 
             this.trackBarTextureOpacity.AutoSize = false;
-            this.trackBarTextureOpacity.BackColor = System.Drawing.SystemColors.Control;
+            this.trackBarTextureOpacity.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.trackBarTextureOpacity.Cursor = System.Windows.Forms.Cursors.Default;
             this.trackBarTextureOpacity.LargeChange = 100;
-            this.trackBarTextureOpacity.Location = new System.Drawing.Point(488, 0);
+            this.trackBarTextureOpacity.Location = new System.Drawing.Point(468, 0);
             this.trackBarTextureOpacity.Maximum = 1000;
             this.trackBarTextureOpacity.Name = "trackBarTextureOpacity";
-            this.trackBarTextureOpacity.Size = new System.Drawing.Size(168, 25);
+            this.trackBarTextureOpacity.Size = new System.Drawing.Size(168, 24);
             this.trackBarTextureOpacity.SmallChange = 100;
             this.trackBarTextureOpacity.TabIndex = 19;
             this.trackBarTextureOpacity.TabStop = false;
@@ -347,21 +282,14 @@ namespace Mindstep.EasterEgg.MapEditor
             this.backgroundColorDialog.AnyColor = true;
             this.backgroundColorDialog.FullOpen = true;
             // 
-            // topView
-            // 
-            this.topView.Location = new System.Drawing.Point(33, 3);
-            this.topView.Name = "topView";
-            this.topView.Size = new System.Drawing.Size(196, 184);
-            this.topView.TabIndex = 7;
-            this.topView.Text = "top view";
-            // 
             // mainView
             // 
             this.mainView.Cursor = System.Windows.Forms.Cursors.Default;
             this.mainView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainView.Location = new System.Drawing.Point(0, 25);
+            this.mainView.Location = new System.Drawing.Point(0, 27);
+            this.mainView.Margin = new System.Windows.Forms.Padding(0);
             this.mainView.Name = "mainView";
-            this.mainView.Size = new System.Drawing.Size(1092, 741);
+            this.mainView.Size = new System.Drawing.Size(1092, 739);
             this.mainView.TabIndex = 17;
             this.mainView.Text = "mainView";
             // 
@@ -372,7 +300,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1092, 766);
             this.Controls.Add(this.trackBarTextureOpacity);
-            this.Controls.Add(this.topViewPanel);
             this.Controls.Add(this.mainView);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
@@ -385,8 +312,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStrip.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.topViewPanel.ResumeLayout(false);
-            this.topViewPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -396,15 +321,7 @@ namespace Mindstep.EasterEgg.MapEditor
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton showTopView;
         private MainView mainView;
-        private System.Windows.Forms.Panel topViewPanel;
-        private TopView topView;
-        private System.Windows.Forms.Label coords;
-        private System.Windows.Forms.Button upButton;
-        private System.Windows.Forms.Label layerLabel;
-        private System.Windows.Forms.Button downButton;
-        private System.Windows.Forms.TextBox layer;
         private System.Windows.Forms.ToolStripButton drawTextureIndices;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFile;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
