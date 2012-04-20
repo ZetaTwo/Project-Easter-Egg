@@ -103,7 +103,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EggEngineContent\EggEngineContent.contentproj">
       <Project>{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}</Project>
-      <Name>EggEngineContent</Name>
+      <Name>EggEngineContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
     <ProjectReference Include="..\..\GameCommons\GameCommons.csproj">

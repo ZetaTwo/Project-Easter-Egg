@@ -18,17 +18,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEngine", "EggEngine\EggEngine\EggEngine.csproj", "{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditorContentLibrary", "MapEditor\MapEditorContentLibrary\MapEditorContentLibrary.csproj", "{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelEditorContentLibrary", "MapEditor\MapEditorContentLibrary\ModelEditorContentLibrary.csproj", "{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditorContent", "MapEditor\MapEditorContent\MapEditorContent.contentproj", "{618DED89-9BA8-44D7-83A0-163041666FAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelEditorContent", "MapEditor\MapEditorContent\ModelEditorContent.contentproj", "{618DED89-9BA8-44D7-83A0-163041666FAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor\MapEditor.csproj", "{A8A938D0-3179-454F-B390-AA29F2606732}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelEditor", "MapEditor\MapEditor\ModelEditor.csproj", "{A8A938D0-3179-454F-B390-AA29F2606732}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTests", "GameTests\GameTests.csproj", "{911EDF75-3D47-481A-A572-BABBAD6D1A5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEnginePipeline", "EggEnginePipeline\EggEnginePipeline.csproj", "{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "EggEngineContent", "EggEngine\EggEngineContent\EggEngineContent.contentproj", "{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EggEngineContent", "EggEngine\EggEngineContent\EggEngineContent.contentproj", "{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -50,7 +50,6 @@ Global
 		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Debug|x86.Build.0 = Debug|x86
 		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Release|Any CPU.ActiveCfg = Release|x86
 		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Release|Mixed Platforms.Build.0 = Release|x86
 		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Release|x86.ActiveCfg = Release|x86
 		{6290023A-130E-4F5F-A2AA-A05CD1803354}.Release|x86.Build.0 = Release|x86
 		{1F23F759-3367-4A41-B99E-57051B16DBBC}.Debug|Any CPU.ActiveCfg = Debug|x86
@@ -76,7 +75,6 @@ Global
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Debug|x86.Build.0 = Debug|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Release|Any CPU.ActiveCfg = Release|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Release|Mixed Platforms.Build.0 = Release|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Release|x86.ActiveCfg = Release|x86
 		{6415EFFB-679C-4DF4-954C-DFEB69DA5C21}.Release|x86.Build.0 = Release|x86
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Debug|Any CPU.ActiveCfg = Debug|x86
@@ -86,7 +84,6 @@ Global
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Debug|x86.Build.0 = Debug|x86
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Release|Any CPU.ActiveCfg = Release|x86
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Release|Mixed Platforms.Build.0 = Release|x86
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Release|x86.ActiveCfg = Release|x86
 		{5608A83E-1BFE-4FA8-AC3A-C14BCC463B57}.Release|x86.Build.0 = Release|x86
 		{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}.Debug|Any CPU.ActiveCfg = Debug|x86
@@ -134,7 +131,6 @@ Global
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|Any CPU.ActiveCfg = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|Any CPU.Build.0 = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|Mixed Platforms.Build.0 = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|x86.ActiveCfg = Release|x86
 		{9E203F27-6129-45B1-8180-BCBA5E1FD6B3}.Release|x86.Build.0 = Release|x86
 		{3CCD1A24-3588-4DEB-9B01-F326DAA19DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

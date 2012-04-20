@@ -75,6 +75,12 @@ namespace Mindstep.EasterEgg.MapEditor
             toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
         }
 
+        public MainForm(string fileName)
+            : this()
+        {
+            open(fileName);
+        }
+
         private void initializeTextures()
         {
             transparentOneByOneTexture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
