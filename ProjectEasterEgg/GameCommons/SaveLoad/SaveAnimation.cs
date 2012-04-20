@@ -35,13 +35,19 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public SaveFrame<T> CurrentFrame
         {
-            get { return Frames[currentFrameIndex]; }
+            get
+            {
+                if (Frames.Count == 0)
+                {
+                    Frames.Add(new SaveFrame<T>(DEFAULT_FRAME_DURATION));
+                }
+                return Frames[currentFrameIndex];
+            }
         }
 
         public SaveAnimation(string name)
         {
             this.Name = name;
-            Frames.Add(new SaveFrame<T>(DEFAULT_FRAME_DURATION));
         }
     }
 }

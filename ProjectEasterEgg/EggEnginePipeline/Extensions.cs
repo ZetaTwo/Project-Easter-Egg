@@ -14,7 +14,7 @@ namespace EggEnginePipeline
     {
         /// <summary>
         /// The "eater" image steals all the pixels from the "eaten" image
-        /// within a offseted by offset
+        /// within a block outlined by BlockRegion.WholeBlock offseted by offset
         /// </summary>
         /// <param name="eater"></param>
         /// <param name="eaten"></param>
@@ -26,6 +26,22 @@ namespace EggEnginePipeline
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.FillRegion(Brushes.Transparent, BlockRegions.WholeBlock.Offset(offset));
+            }
+        }
+
+        public static IEnumerable<int> IndexOf<T>(this List<T> list, IEnumerable<T> items)
+        {
+            foreach (T item in items)
+            {
+                yield return list.IndexOf(item);
+            }
+        }
+
+        public static IEnumerable<T> GetRange<T>(this List<T> list, IEnumerable<int> indexes)
+        {
+            foreach (int index in indexes)
+            {
+                yield return list[index];
             }
         }
     }

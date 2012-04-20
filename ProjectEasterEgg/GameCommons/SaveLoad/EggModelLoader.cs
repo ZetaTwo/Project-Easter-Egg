@@ -9,8 +9,18 @@ using System.Drawing;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    class EggModelLoader
+    public class EggModelLoader
     {
+        public static SaveModel<BitmapWithPos> Load(string wholePath)
+        {
+            wholePath = wholePath.Replace('\\', '/');
+            int lastSlashIndex = wholePath.LastIndexOf('/');
+            string directoryPath = wholePath.Substring(0, lastSlashIndex);
+            string modelName = wholePath.Substring(lastSlashIndex+1);
+            modelName = modelName.Substring(0, modelName.Length - 4);
+            return Load(directoryPath, modelName);
+        }
+
         /// <summary>
         /// Imports a model from the file
         /// <code>directoryPath+"/"+modelName+".egg"</code>
@@ -19,7 +29,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         /// <param name="directoryPath"></param>
         /// <param name="modelName"></param>
         /// <returns></returns>
-        public SaveModel<BitmapWithPos> Load(string directoryPath, string modelName)
+        public static SaveModel<BitmapWithPos> Load(string directoryPath, string modelName)
         {
             SaveModel<BitmapWithPos> model = new SaveModel<BitmapWithPos>(modelName);
             using (Package modelFile = Package.Open(directoryPath + "/" + modelName + ".egg"))

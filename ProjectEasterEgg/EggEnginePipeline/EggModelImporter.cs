@@ -35,87 +35,58 @@ namespace EggEnginePipeline
     {
         public override GameMapDTO Import(string filename, ContentImporterContext context)
         {
-            //Debugger.Launch();
             GameMapDTO gameMap = new GameMapDTO();
-            using (Package modelFile = Package.Open(filename))
+            SaveModel<BitmapWithPos> model = EggModelLoader.Load(filename);
+            
+            // imports
+            foreach (SaveSubModel<BitmapWithPos> subModels in model.subModels)
             {
-                using (PackagedBitmapsManager bitmapManager = new PackagedBitmapsManager(modelFile, "/textures/"))
+                //TODO: Add support for sub models
+            }
+
+            List<GameBlockDTO> gameBlocks = new List<GameBlockDTO>();
+            BoundingBoxInt bounds = new BoundingBoxInt(model.blocks.ToPositions());
+            //blocks
+            {
+                gameMap.Max = bounds.Max - bounds.Min;
+                gameMap.WorldMatrix = Creators.CreateWorldMatrix<GameBlockDTO>(gameMap.Max + Position.One);
+
+                foreach (SaveBlock block in model.blocks)
                 {
-                    PackagePart modelXML = modelFile.GetPart(new Uri("/model.xml", UriKind.Relative));
-                    XDocument doc = XDocument.Load(modelXML.GetStream());
-                    XElement root = doc.Element("model");
+                    GameBlockDTO gameBlock = new GameBlockDTO();
+                    gameBlocks.Add(gameBlock);
+                    gameBlock.Position = block.Position - bounds.Min;
+                    gameBlock.scriptName = block.script;
+                    gameBlock.Type = block.type;
+                    Position pos = gameBlock.Position;
+                    //TODO: the physics matrix shouldn't be defined here
+                    gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = gameBlock;
+                }
+            }
 
-                    List<GameBlockDTO> blocks = new List<GameBlockDTO>();
-                    BoundingBoxInt bounds;
+            //animations
+            foreach (SaveAnimation<BitmapWithPos> animation in model.animations)
+            {
+                foreach (GameBlockDTO block in gameBlocks)
+                {
+                    block.Animations[animation.Name] = new AnimationDTO(animation.Name, animation.Facing);
+                }
 
-                    // blocks
+                foreach (SaveFrame<BitmapWithPos> frame in animation.Frames)
+                {
+                    foreach (GameBlockDTO block in gameBlocks)
                     {
-                        foreach (XElement blockElement in root.Element("blocks").Elements("block"))
-                        {
-                            Position pos = blockElement.Attribute("offset").Value.LoadPosition();
-
-                            GameBlockDTO block = new GameBlockDTO();
-                            blocks.Add(block);
-                            block.Position = pos;
-                            block.Type = blockElement.Attribute("type").Value.LoadBlockType();
-                            XAttribute scriptAttribute = blockElement.Attribute("script");
-                            if (scriptAttribute != null)
-                            {
-                                block.scriptName = Constants.SCRIPT_BLOCK_PREFIX + scriptAttribute.Value;
-                            }
-                        }
-                        bounds = new BoundingBoxInt(blocks.ToPositions());
-                        gameMap.Max = bounds.Max - bounds.Min;
-                        gameMap.WorldMatrix = Creators.CreateWorldMatrix<GameBlockDTO>(gameMap.Max + Position.One);
-                        foreach (GameBlockDTO block in blocks)
-                        {
-                            block.Position -= bounds.Min;
-                            Position pos = block.Position;
-                            //TODO: the physics matrix shouldn't be defined here
-                            gameMap.WorldMatrix[pos.X][pos.Y][pos.Z] = block;
-                        }
+                        block.Animations[animation.Name].Frames.Add(new FrameDTO(frame.Duration));
                     }
 
-                    // imports
-                    foreach (XElement modelElement in root.Element("imports").Elements("model"))
+                    foreach (BitmapWithPos bitmap in frame.Images.FrontToBack())
                     {
-                        //TODO: Add suport for sub models
-                    }
-
-                    // animations
-                    foreach (XElement animationElement in root.Element("animations").Elements("animation"))
-                    {
-                        string animationName = animationElement.Attribute("name").Value;
-                        Facing facing = animationElement.Attribute("facing").Value.LoadFacing();
-
-                        foreach (GameBlockDTO block in blocks)
+                        foreach (GameBlockDTO block in gameBlocks.GetRange(model.blocks.IndexOf(bitmap.projectedOnto)))
                         {
-                            block.Animations[animationName] = new AnimationDTO(animationName);
-                        }
-
-                        foreach (XElement frameElement in animationElement.Elements("frame"))
-                        {
-                            int duration = frameElement.Attribute("duration").Value.LoadInt();
-
-                            blocks.ForEach(block => block.Animations[animationName].Frames.Add(new FrameDTO(duration)));
-
-                            foreach (XElement imageElement in frameElement.Elements("image"))
-                            {
-                                string name = imageElement.Attribute("name").Value;
-                                Point imageCoord = imageElement.Attribute("coord").Value.LoadPoint();
-                                IEnumerable<GameBlockDTO> blocksProjectedOnto =
-                                    imageElement.Elements("projectedOnto").Select(e => blocks[e.Value.LoadInt()]);
-
-                                SD.Bitmap image = bitmapManager[name];
-
-                                foreach (GameBlockDTO block in blocksProjectedOnto)
-                                {
-                                    FrameDTO frame = block.Animations[animationName].Frames.Last();
-                                    Point projCoords = CoordinateTransform.ObjectToProjSpace(block.Position + bounds.Min).ToXnaPoint();
-                                    frame.getGraphics().eat(image, projCoords.Subtract(imageCoord));
-                                    frame.updateDataToBeSaved();
-                                }
-                            }
+                            FrameDTO blockFrame = block.Animations[animation.Name].Frames.Last();
+                            Point projCoords = CoordinateTransform.ObjectToProjSpace(block.Position + bounds.Min).ToXnaPoint();
+                            blockFrame.getGraphics().eat(bitmap.bitmap, projCoords.Subtract(bitmap.pos));
+                            blockFrame.updateDataToBeSaved();
                         }
                     }
                 }

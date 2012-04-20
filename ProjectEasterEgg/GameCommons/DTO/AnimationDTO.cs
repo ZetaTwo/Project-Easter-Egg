@@ -9,12 +9,14 @@ namespace Mindstep.EasterEgg.Commons.DTO
     {
         public readonly List<FrameDTO> Frames = new List<FrameDTO>();
         public string Name;
+        private Facing Facing;
 
         public AnimationDTO() { }
 
-        public AnimationDTO(string name)
+        public AnimationDTO(string name, Facing facing)
         {
             this.Name = name;
+            this.Facing = facing;
         }
     }
 }
