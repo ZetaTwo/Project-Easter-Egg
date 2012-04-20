@@ -69,7 +69,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimationManager.cs" />
     <Compile Include="BlockDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>

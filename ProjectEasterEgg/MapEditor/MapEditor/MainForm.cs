@@ -13,7 +13,7 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class MainForm : Form
     {
-        private static string TITLE = "Easter Egg Editor - ";
+        private static string TITLE = "Easter Egg Editor";
         private string lastSavedDoc;
         private int currentHeight = 0;
         public int CurrentLayer
@@ -24,17 +24,17 @@ namespace Mindstep.EasterEgg.MapEditor
                 if (CurrentEditingMode == EditingMode.Block)
                 {
                     currentHeight = value;
-                    Updated();
+                    UpdatedGraphics();
                 }
             }
         }
 
         private SaveModel<Texture2DWithPos> model;
         public SaveModel<Texture2DWithPos> CurrentModel { get { return model; } }
-        public AnimationManager<Texture2DWithPos> AnimationManager = new AnimationManager<Texture2DWithPos>();
-        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return AnimationManager.CurrentAnimation.CurrentFrame; } }
-        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return AnimationManager.CurrentAnimation; } }
-        public bool changedSinceLastSave;
+        private SaveAnimation<Texture2DWithPos> currentAnimation;
+        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return currentAnimation; } }
+        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return currentAnimation.CurrentFrame; } }
+        private bool changedSinceLastSave;
         public Texture2D whiteOneByOneTexture;
         public Texture2D transparentOneByOneTexture;
 
@@ -59,7 +59,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Content = new ContentManager(Services, "MapEditorContent");
             SetupContentManager();
             SpriteBatchExtensions.Initialize(this);
-            model = new SaveModel<Texture2DWithPos>("untitledModel");
+            model = new SaveModel<Texture2DWithPos>("untitled");
 
 
             initializeTextures();
@@ -69,7 +69,8 @@ namespace Mindstep.EasterEgg.MapEditor
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
-            AnimationManager.setCurrentAnimation("still");
+            currentAnimation = new SaveAnimation<Texture2DWithPos>("still");
+            currentAnimation.Facing = Facing.POSITIVE_Y;
 
             toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
         }
@@ -119,22 +120,13 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public void RefreshTitle()
         {
-            string doc = lastSavedDoc;
-            if (doc == null)
-            {
-                doc = "Untitled";
-            }
-            if (changedSinceLastSave)
-            {
-                doc += "*";
-            }
-            Text = TITLE + doc.Split(' ').Last() + " [" + Math.Round(mainView.Zoom*100, 0) + "%]";
+            Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(mainView.Zoom * 100, 0) + "%]";
         }
 
-        #region save
+        #region save/open/import
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (lastSavedDoc == null)
+            if (string.IsNullOrWhiteSpace(lastSavedDoc))
             {
                 saveAsClicked();
             }
@@ -158,13 +150,14 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             else
             {
-                save();
+                save(lastSavedDoc);
             }
         }
 
         private void saveAsClicked()
         {
-            if (CurrentModel.blocks.Count == 0)
+            if (CurrentModel.blocks.Count == 0 &&
+                CurrentModel.subModels.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -176,19 +169,51 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            save();
+            save(saveFileDialog.FileName);
         }
 
-        private void save()
+        private void save(string fileName)
         {
-            EggModelSaver.Save(CurrentModel, saveFileDialog.FileName);
-            lastSavedDoc = saveFileDialog.FileName;
+            EggModelSaver.Save(CurrentModel, fileName);
+            lastSavedDoc = fileName;
             changedSinceLastSave = false;
             RefreshTitle();
         }
-        #endregion
 
-        #region import
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog.ShowDialog();
+        }
+        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (changedSinceLastSave &&
+                !(CurrentModel.blocks.Count == 0 &&
+                CurrentModel.subModels.Count == 0))
+            {
+                DialogResult dialogResult = MessageBox.Show("Save changes to " + model.name + "?",
+                    TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                switch (dialogResult)
+                {
+                    case DialogResult.Yes:
+                        saveAsClicked();
+                        break;
+                    case DialogResult.No:
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                }
+            }
+            open(openFileDialog.FileName);
+        }
+
+        private void open(string fileName)
+        {
+            model = EggModelLoader.Load(fileName).ToTexture2D(GraphicsDevice);
+            lastSavedDoc = fileName;
+            changedSinceLastSave = false;
+        }
+
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             importFileDialog.ShowDialog();
@@ -215,7 +240,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
 
             CurrentEditingMode = EditingMode.Texture;
-            foreach (Texture2DWithPos existingTex in AnimationManager.Animations.GetAllTextures())
+            foreach (Texture2DWithPos existingTex in model.animations.GetAllTextures())
             {
                 if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
                 {
@@ -233,20 +258,29 @@ namespace Mindstep.EasterEgg.MapEditor
                 tex.Texture = Texture2D.FromStream(GraphicsDevice, texStream);
             }
             CurrentFrame.Images.AddToFront(tex);
-            Updated();
+            UpdatedThings();
         }
         #endregion
 
         internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
 
-        internal void Updated()
+        internal void UpdatedThings()
+        {
+            if (!changedSinceLastSave)
+            {
+                changedSinceLastSave = true;
+                RefreshTitle();
+            }
+            mainView.Invalidate();
+        }
+        internal void UpdatedGraphics()
         {
             mainView.Invalidate();
         }
 
         private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
         {
-            Updated();
+            UpdatedGraphics();
         }
 
         public float TextureOpacity { get { return (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum; } }
@@ -290,7 +324,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 toolStripDrawBlockWireframe.Checked = value == BlockDrawState.Wireframe;
                 toolStripDrawBlockNone.Checked = value == BlockDrawState.None;
                 blockDrawState = value;
-                Updated();
+                UpdatedGraphics();
             }
         }
 
@@ -304,7 +338,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 toolStripEditTextures.Checked = value == EditingMode.Texture ||
                     value == EditingMode.TextureProjection;
                 editingMode = value;
-                Updated();
+                UpdatedGraphics();
             }
         }
 
@@ -322,7 +356,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             backgroundColorDialog.ShowDialog();
             backgroundColor = backgroundColorDialog.Color.ToXnaColor();
-            Updated();
+            UpdatedGraphics();
         }
 
         private void menuStrip_MenuActivate(object sender, EventArgs e)
@@ -337,7 +371,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void drawTextureIndices_Click(object sender, EventArgs e)
         {
-            Updated();
+            UpdatedGraphics();
         }
     }
 }

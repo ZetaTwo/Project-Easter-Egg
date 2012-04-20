@@ -188,6 +188,10 @@ namespace Mindstep.EasterEgg.MapEditor
                                 break;
                         }
                     }
+                    foreach (SaveBlock saveblock in selectedBlocks)
+                    {
+                        drawBlock(textureWireframeFilled, boundingBox, Color.White, saveblock.Position, -.02f);
+                    }
                     break;
                 case EditingMode.Texture:
                     foreach (SaveBlock saveBlock in mainForm.CurrentModel.blocks)
@@ -327,6 +331,7 @@ namespace Mindstep.EasterEgg.MapEditor
                             {
                                 textureBeingProjectedDown.t.projectedOnto.Add(hitBlock);
                             }
+                            mainForm.UpdatedThings();
                             break;
                     }
 
@@ -342,7 +347,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             
             lastMouseLocation = e.Location;
-            mainForm.Updated();
+            mainForm.UpdatedGraphics();
         }
 
         private void MainView_MouseMove(object sender, MouseEventArgs e)
@@ -377,7 +382,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
 
             lastMouseLocation = e.Location;
-            mainForm.Updated();
+            mainForm.UpdatedGraphics();
             //mainForm.SaveBlocks.Clear();
             //mainForm.SaveBlocks.Add(new SaveBlock(CoordinateTransform.ScreenToObjectSpace(e.Location.ToXnaPoint(), camera, mainForm.CurrentLayer).ToPosition()));
         }
@@ -385,6 +390,10 @@ namespace Mindstep.EasterEgg.MapEditor
         private void MainView_MouseUp(object sender, MouseEventArgs e)
         {
             panning = false;
+            if (draggingTextures)
+            {
+                mainForm.UpdatedThings();
+            }
             draggingTextures = false;
             if (!mouseHasMovedSinceMouseDown)
             {
@@ -399,11 +408,22 @@ namespace Mindstep.EasterEgg.MapEditor
                 switch (mainForm.CurrentEditingMode)
                 {
                     case EditingMode.Block:
-                        updateSelectedBlocks(e.Location, getClickOperation());
-                        if (selectedBlocks.Count != 0)
+                        Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), camera);
+                        SaveBlock hitBlock = getHitBlock(mainForm.CurrentModel.blocks, mousePosInProjSpace.ToSDPoint());
+
+                        if (hitBlock != null)
                         {
+                            selectedBlocks.Clear();
+                            selectedBlocks.Add(hitBlock);
+                            mainForm.UpdatedGraphics();
                             blockContextMenu.Show(this, e.Location);
+                            mainForm.UpdatedThings();
                         }
+                        //updateSelectedBlocks(e.Location, getClickOperation());
+                        //if (selectedBlocks.Count != 0)
+                        //{
+                        //    blockContextMenu.Show(this, e.Location);
+                        //}
                         break;
                     case EditingMode.Texture:
                         updateSelectedTextures(e.Location, getClickOperation());
@@ -429,16 +449,17 @@ namespace Mindstep.EasterEgg.MapEditor
                 camera.ZoomOut(e.Location.ToXnaPoint());
                 mainForm.RefreshTitle();
             }
-            mainForm.Updated();
+            mainForm.UpdatedGraphics();
         }
 
         public void MainView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete
+                && selectedTextures.Count != 0)
             {
                 mainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
-                mainForm.Updated();
+                mainForm.UpdatedThings();
             }
             if (e.KeyCode == Keys.Up)
             {
@@ -454,42 +475,43 @@ namespace Mindstep.EasterEgg.MapEditor
         private void TextureContextMenuBringToFront(object sender, EventArgs e)
         {
             mainForm.CurrentFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void TextureContextMenuBringForward(object sender, EventArgs e)
         {
             mainForm.CurrentFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void TextureContextMenuSendBackward(object sender, EventArgs e)
         {
             mainForm.CurrentFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void TextureContextMenuSendToBack(object sender, EventArgs e)
         {
             mainForm.CurrentFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void TextureContextMenuSelectBlocksToProjectOnto(object sender, EventArgs e)
         {
             textureBeingProjectedDown = selectedTextures.Single();
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
         private void TextureContextMenuDelete(object sender, EventArgs e)
         {
             mainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             selectedTextures.Clear();
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void BlockContextMenuEditDetails(object sender, EventArgs e)
         {
             new BlockDetailsForm(selectedBlocks, lastMouseLocation);
+            selectedBlocks.Clear();
         }
         #endregion
 
@@ -502,14 +524,14 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 mainForm.CurrentModel.blocks.Add(new SaveBlock(pos));
             }
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private void deleteBlockAt(System.Drawing.Point mouseLocation)
         {
             Position pos = posUnderPoint(mouseLocation);
             mainForm.CurrentModel.blocks.RemoveAll(block => block.Position == pos);
-            mainForm.Updated();
+            mainForm.UpdatedThings();
         }
 
         private bool blockAt(System.Drawing.Point mouseLocation)
@@ -528,7 +550,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mouseLocation.ToXnaPoint(), camera);
 
-            mainForm.Updated();
+            mainForm.UpdatedGraphics();
             return getHitBlock(
                 mainForm.CurrentModel.blocks.Where(block => block.Position.Z == mainForm.CurrentLayer),
                 mousePosInProjSpace.ToSDPoint());
@@ -551,46 +573,46 @@ namespace Mindstep.EasterEgg.MapEditor
             return null;
         }
 
-        /// <summary>
-        /// Updates the field TODO "selectedBlocks" to include the first block that
-        /// contains "point". If no block meet this requirement, "selectedTextures" is cleared.
-        /// </summary>
-        /// <param name="mousePos"></param>
-        /// <param name="clickOperation">The operation to be performed on the hit block.</param>
-        private void updateSelectedBlocks(System.Drawing.Point mousePos, ClickOperation clickOperation)
-        {
-            Position pos = CoordinateTransform.ScreenToObjectSpace(mousePos.ToXnaPoint(), camera, mainForm.CurrentLayer).ToPosition();
-            Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mousePos.ToXnaPoint(), camera);
+        ///// <summary>
+        ///// Updates the field TODO "selectedBlocks" to include the first block that
+        ///// contains "point". If no block meet this requirement, "selectedTextures" is cleared.
+        ///// </summary>
+        ///// <param name="mousePos"></param>
+        ///// <param name="clickOperation">The operation to be performed on the hit block.</param>
+        //private void updateSelectedBlocks(System.Drawing.Point mousePos, ClickOperation clickOperation)
+        //{
+        //    Position pos = CoordinateTransform.ScreenToObjectSpace(mousePos.ToXnaPoint(), camera, mainForm.CurrentLayer).ToPosition();
+        //    Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mousePos.ToXnaPoint(), camera);
 
-            SaveBlock hitAlreadyExistingBlock = getHitBlock(
-                mainForm.CurrentModel.blocks.Where(block => block.Position.Z >= mainForm.CurrentLayer),
-                mousePosInProjSpace.ToSDPoint());
+        //    SaveBlock hitAlreadyExistingBlock = getHitBlock(
+        //        mainForm.CurrentModel.blocks.Where(block => block.Position.Z >= mainForm.CurrentLayer),
+        //        mousePosInProjSpace.ToSDPoint());
 
-            SaveBlock newBlock = new SaveBlock(pos);
+        //    SaveBlock newBlock = new SaveBlock(pos);
 
-            switch (clickOperation)
-            {
-                case ClickOperation.Add:
-                    if (hitAlreadyExistingBlock == null)
-                    {
-                        mainForm.CurrentModel.blocks.Add(newBlock);
-                        selectedBlocks.Add(newBlock);
-                    }
-                    break;
-                case ClickOperation.Replace:
-                    selectedBlocks.Clear();
-                    if (hitAlreadyExistingBlock == null)
-                    {
-                        mainForm.CurrentModel.blocks.Add(newBlock);
-                        selectedBlocks.Add(newBlock);
-                    }
-                    else
-                    {
-                    }
-                    break;
-            }
-            mainForm.Updated();
-        }
+        //    switch (clickOperation)
+        //    {
+        //        case ClickOperation.Add:
+        //            if (hitAlreadyExistingBlock == null)
+        //            {
+        //                mainForm.CurrentModel.blocks.Add(newBlock);
+        //                selectedBlocks.Add(newBlock);
+        //            }
+        //            break;
+        //        case ClickOperation.Replace:
+        //            selectedBlocks.Clear();
+        //            if (hitAlreadyExistingBlock == null)
+        //            {
+        //                mainForm.CurrentModel.blocks.Add(newBlock);
+        //                selectedBlocks.Add(newBlock);
+        //            }
+        //            else
+        //            {
+        //            }
+        //            break;
+        //    }
+        //    mainForm.Updated();
+        //}
 
         /// <summary>
         /// Updates the field "selectedTextures" to include the first texture that
@@ -649,13 +671,13 @@ namespace Mindstep.EasterEgg.MapEditor
                             }
                             break;
                     }
-                    mainForm.Updated();
+                    mainForm.UpdatedThings();
                     return;
                 }
             }
 
             selectedTextures.Clear();
-            mainForm.Updated();
+            mainForm.UpdatedGraphics();
         }
 
         private static ClickOperation getClickOperation()

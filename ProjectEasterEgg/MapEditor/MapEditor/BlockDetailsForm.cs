@@ -13,12 +13,12 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class BlockDetailsForm : Form
     {
-        private IEnumerable<SaveBlock> blocks;
+        private List<SaveBlock> blocks = new List<SaveBlock>();
         private const string MULTIPLE_ENTRY_TEXT = "(multiple values)";
 
         public BlockDetailsForm(IEnumerable<SaveBlock> blocks, Point popupLocation)
         {
-            this.blocks = blocks;
+            this.blocks.AddRange(blocks);
             StartPosition = FormStartPosition.Manual;
             Location = popupLocation;
 
@@ -26,19 +26,19 @@ namespace Mindstep.EasterEgg.MapEditor
             BlockTypesDropDown.Items.AddRange(Enum.GetNames(typeof(BlockType)));
 
             string blockTypeText, scriptNameText;
-            if (blocks.All(block => block.type == blocks.First().type))
+            if (this.blocks.All(block => block.type == this.blocks.First().type))
             {
-                blockTypeText = System.Enum.GetName(typeof(BlockType), blocks.First().type);
+                blockTypeText = System.Enum.GetName(typeof(BlockType), this.blocks.First().type);
             }
             else
             {
                 blockTypeText = MULTIPLE_ENTRY_TEXT;
             }
 
-            if (blocks.All(block => block.script == blocks.First().script) ||
-                blocks.All(block => string.IsNullOrWhiteSpace(block.script)))
+            if (this.blocks.All(block => block.script == this.blocks.First().script) ||
+                this.blocks.All(block => string.IsNullOrWhiteSpace(block.script)))
             {
-                scriptNameText = blocks.First().script;
+                scriptNameText = this.blocks.First().script;
             }
             else
             {

@@ -45,12 +45,15 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.trackBarTextureOpacity = new System.Windows.Forms.TrackBar();
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).BeginInit();
@@ -217,6 +220,8 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.openToolStripMenuItem,
             this.importToolStripMenuItem});
             this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
             this.toolStripMenuItemFile.Size = new System.Drawing.Size(35, 20);
@@ -239,6 +244,19 @@ namespace Mindstep.EasterEgg.MapEditor
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.openToolStripMenuItem.Text = "Open Model";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
@@ -255,8 +273,9 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             // importFileDialog
             // 
-            this.importFileDialog.Filter = "PNG (*.png)|*.png";
+            this.importFileDialog.Filter = "PNG (*.png)|*.png|Egg model files (*.egg)|*.egg";
             this.importFileDialog.Multiselect = true;
+            this.importFileDialog.Title = "Import Textures and Sub Models";
             this.importFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.importFileDialog_FileOk);
             // 
             // trackBarTextureOpacity
@@ -280,6 +299,7 @@ namespace Mindstep.EasterEgg.MapEditor
             // backgroundColorDialog
             // 
             this.backgroundColorDialog.AnyColor = true;
+            this.backgroundColorDialog.Color = System.Drawing.Color.Red;
             this.backgroundColorDialog.FullOpen = true;
             // 
             // mainView
@@ -292,6 +312,12 @@ namespace Mindstep.EasterEgg.MapEditor
             this.mainView.Size = new System.Drawing.Size(1092, 739);
             this.mainView.TabIndex = 17;
             this.mainView.Text = "mainView";
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Egg model files (*.egg)|*.egg";
+            this.openFileDialog.Title = "Open Model";
+            this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
             // MainForm
             // 
@@ -342,6 +368,9 @@ namespace Mindstep.EasterEgg.MapEditor
         private System.Windows.Forms.ToolStripButton toolStripButtonSelectBackgroundColor;
         private System.Windows.Forms.ColorDialog backgroundColorDialog;
         private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
 
