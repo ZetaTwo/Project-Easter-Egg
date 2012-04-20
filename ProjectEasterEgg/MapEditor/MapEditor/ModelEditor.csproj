@@ -83,6 +83,7 @@
     <Compile Include="MainView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="GraphicsDeviceControl.cs">
       <SubType>Component</SubType>

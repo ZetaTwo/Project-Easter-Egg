@@ -14,26 +14,13 @@ namespace Mindstep.EasterEgg.MapEditor
     public partial class MainForm : Form
     {
         private static string TITLE = "Easter Egg Editor";
-        private string lastSavedDoc;
-        private int currentHeight = 0;
-        public int CurrentLayer
-        {
-            get { return currentHeight; }
-            set
-            {
-                if (CurrentEditingMode == EditingMode.Block)
-                {
-                    currentHeight = value;
-                    UpdatedGraphics();
-                }
-            }
-        }
 
         private SaveModel<Texture2DWithPos> model;
         public SaveModel<Texture2DWithPos> CurrentModel { get { return model; } }
         private SaveAnimation<Texture2DWithPos> currentAnimation;
         public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return currentAnimation; } }
         public SaveFrame<Texture2DWithPos> CurrentFrame { get { return currentAnimation.CurrentFrame; } }
+        private string lastSavedDoc;
         private bool changedSinceLastSave;
         public Texture2D whiteOneByOneTexture;
         public Texture2D transparentOneByOneTexture;
@@ -50,9 +37,6 @@ namespace Mindstep.EasterEgg.MapEditor
             get { return graphicsDeviceService.GraphicsDevice; }
         }
 
-        private Color backgroundColor = Color.Black;
-        public Color BackgroundColor { get { return backgroundColor; } }
-
         public MainForm()
         {
             Services = new ServiceContainer();
@@ -64,8 +48,6 @@ namespace Mindstep.EasterEgg.MapEditor
 
             initializeTextures();
             InitializeComponent();
-            CurrentBlockDrawState = BlockDrawState.Solid;
-            CurrentEditingMode = EditingMode.Block;
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
@@ -105,15 +87,15 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void upButton_Click(object sender, System.EventArgs e)
         {
-            CurrentLayer++;
+            mainView.CurrentLayer++;
         }
 
         private void downButton_Click(object sender, System.EventArgs e)
         {
-            CurrentLayer--;
+            mainView.CurrentLayer--;
         }
 
-        #region zoom (mousewheel)
+        #region delegate mousewheel input
         private void mouseWheel(object sender, MouseEventArgs e)
         {
             if (GetChildAtPoint(e.Location) == mainView)
@@ -239,13 +221,11 @@ namespace Mindstep.EasterEgg.MapEditor
         }
 
         private Point lastImportedTextureOffset = Point.Zero;
-        private BlockDrawState blockDrawState;
-
         private void importImage(string fileName)
         {
             Texture2DWithPos tex = new Texture2DWithPos(fileName);
 
-            CurrentEditingMode = EditingMode.Texture;
+            mainView.CurrentEditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in model.animations.GetAllTextures())
             {
                 if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
@@ -270,6 +250,23 @@ namespace Mindstep.EasterEgg.MapEditor
 
         internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
 
+        internal void UpdatedSettings()
+        {
+            toolStripDrawBlockSolid.Checked = mainView.CurrentBlockDrawState == BlockDrawState.Solid;
+            toolStripDrawBlockWireframe.Checked = mainView.CurrentBlockDrawState == BlockDrawState.Wireframe;
+            toolStripDrawBlockNone.Checked = mainView.CurrentBlockDrawState == BlockDrawState.None;
+
+            toolStripEditBlocks.Checked = mainView.CurrentEditingMode == EditingMode.Block;
+            toolStripEditTextures.Checked = mainView.CurrentEditingMode == EditingMode.Texture ||
+                mainView.CurrentEditingMode == EditingMode.TextureProjection;
+
+            //something related to background color could be changed here too
+
+            trackBarTextureOpacity.Value = (int)(mainView.TextureOpacity*trackBarTextureOpacity.Maximum);
+
+            UpdatedGraphics();
+        }
+
         internal void UpdatedThings()
         {
             if (!changedSinceLastSave)
@@ -286,10 +283,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
         {
-            UpdatedGraphics();
+            mainView.TextureOpacity = (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum;
         }
-
-        public float TextureOpacity { get { return (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum; } }
 
         private void trackBarTextureOpacity_MouseUp(object sender, MouseEventArgs e)
         {
@@ -308,60 +303,33 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void toolStripDrawBlockSolid_Click(object sender, EventArgs e)
         {
-            CurrentBlockDrawState = BlockDrawState.Solid;
+            mainView.CurrentBlockDrawState = BlockDrawState.Solid;
         }
 
         private void toolStripDrawBlockWireframe_Click(object sender, EventArgs e)
         {
-            CurrentBlockDrawState = BlockDrawState.Wireframe;
+            mainView.CurrentBlockDrawState = BlockDrawState.Wireframe;
         }
 
         private void toolStripDrawBlockNone_Click(object sender, EventArgs e)
         {
-            CurrentBlockDrawState = BlockDrawState.None;
-        }
-
-        internal BlockDrawState CurrentBlockDrawState
-        {
-            get { return blockDrawState; }
-            private set
-            {
-                toolStripDrawBlockSolid.Checked = value == BlockDrawState.Solid;
-                toolStripDrawBlockWireframe.Checked = value == BlockDrawState.Wireframe;
-                toolStripDrawBlockNone.Checked = value == BlockDrawState.None;
-                blockDrawState = value;
-                UpdatedGraphics();
-            }
-        }
-
-        private EditingMode editingMode;
-        internal EditingMode CurrentEditingMode
-        {
-            get { return editingMode; }
-            set
-            {
-                toolStripEditBlocks.Checked = value == EditingMode.Block;
-                toolStripEditTextures.Checked = value == EditingMode.Texture ||
-                    value == EditingMode.TextureProjection;
-                editingMode = value;
-                UpdatedGraphics();
-            }
+            mainView.CurrentBlockDrawState = BlockDrawState.None;
         }
 
         private void toolStripEditBlocks_Click(object sender, EventArgs e)
         {
-            CurrentEditingMode = EditingMode.Block;
+            mainView.CurrentEditingMode = EditingMode.Block;
         }
 
         private void toolStripEditTextures_Click(object sender, EventArgs e)
         {
-            CurrentEditingMode = EditingMode.Texture;
+            mainView.CurrentEditingMode = EditingMode.Texture;
         }
 
         private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
         {
             backgroundColorDialog.ShowDialog();
-            backgroundColor = backgroundColorDialog.Color.ToXnaColor();
+            mainView.CurrentBackgroundColor = backgroundColorDialog.Color.ToXnaColor();
             UpdatedGraphics();
         }
 
