@@ -92,7 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MapEditorContent\MapEditorContent.contentproj">
+    <ProjectReference Include="..\MapEditorContent\ModelEditorContent.contentproj">
       <Project>{618DED89-9BA8-44D7-83A0-163041666FAC}</Project>
       <Name>MapEditorContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

@@ -40,7 +40,7 @@ namespace Mindstep.EasterEgg.MapEditor
         public MainForm()
         {
             Services = new ServiceContainer();
-            Content = new ContentManager(Services, "MapEditorContent");
+            Content = new ContentManager(Services, "ModelEditorContent");
             SetupContentManager();
             SpriteBatchExtensions.Initialize(this);
             model = new SaveModel<Texture2DWithPos>("untitled");
