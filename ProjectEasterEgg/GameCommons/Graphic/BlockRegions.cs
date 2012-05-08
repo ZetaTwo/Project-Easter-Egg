@@ -7,7 +7,7 @@ using Mindstep.EasterEgg.Commons;
 using XNA = Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace Mindstep.EasterEgg.Commons.Graphics
+namespace Mindstep.EasterEgg.Commons.Graphic
 {
     public static class BlockRegions
     {

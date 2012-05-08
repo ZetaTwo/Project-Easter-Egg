@@ -9,7 +9,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
 {
     public interface IPhysicsManager
     {
-        void ClickWorld(Point screen, EasterEgg.Commons.Graphics.Camera camera, BlockAction action);
+        void ClickWorld(Point screen, EasterEgg.Commons.Graphic.Camera camera, BlockAction action);
         Path<GameBlock> FindPath(GameBlock start, GameBlock destination);
     }
 }

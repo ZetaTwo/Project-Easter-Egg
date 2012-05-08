@@ -13,15 +13,11 @@ namespace Mindstep.EasterEgg.Engine.Game
 {
     public class GameBlock : Block
     {
-        private Dictionary<string, AnimationDTO> animationsData;
-
         protected EggEngine engine;
         public EggEngine Engine
         {
             get { return engine; }
         }
-
-        public Dictionary<string, Animation> Animations;
 
         string scriptName = null;
         public bool Interactable
@@ -34,9 +30,7 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public GameBlock(GameBlockDTO blockData)
             : this(blockData.Type, blockData.Position, blockData.scriptName)
-        {
-            animationsData = blockData.Animations;
-        }
+        { }
 
         public GameBlock(BlockType blockType, Position position)
             : this(blockType, position, null)
@@ -58,12 +52,6 @@ namespace Mindstep.EasterEgg.Engine.Game
         public void Initialize(EggEngine engine)
         {
             this.engine = engine;
-
-            Animations = new Dictionary<string, Animation>();
-            foreach (AnimationDTO animationData in animationsData.Values)
-            {
-                Animations[animationData.Name] = new Animation(animationData, engine.GraphicsDevice);
-            }
         }
 
         private BlockType type;
@@ -77,17 +65,5 @@ namespace Mindstep.EasterEgg.Engine.Game
             ScriptBlock script = Engine.Script.Library.GetBlockScript(scriptName, this, action);
             Engine.Script.AddScript(script);
         }
-
-        public void Draw(SpriteBatch spriteBatch, BoundingBoxInt bounds)
-        {
-            float depth = bounds.getRelativeDepthOf(Position);
-            //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(Position) * 1.3f).ToPoint().ToVector2();
-            Vector2 screenCoords = CoordinateTransform.ObjectToProjSpace(Position);
-            spriteBatch.Draw(Animations["still"].Frames[0], screenCoords, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
-
-            /*spriteBatch.Draw(texture, CoordinateTransform.ObjectToProjectionSpace(bounds.Min + Position),
-                null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, bounds.getRelativeDepthOf(Position));*/
-        }
-       
     }
 }

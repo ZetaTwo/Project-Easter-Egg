@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.Commons.Physics
 {
-    public class Block
+    public abstract class Block : IPositionable
     {
         private Position position;
         public Position Position
@@ -16,6 +16,10 @@ namespace Mindstep.EasterEgg.Commons.Physics
             get
             {
                 return position;
+            }
+            set
+            {
+                position = value;
             }
         }
 

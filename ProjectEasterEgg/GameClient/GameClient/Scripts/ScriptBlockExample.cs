@@ -14,7 +14,7 @@ namespace Mindstep.EasterEgg.Scripts
         public override IEnumerator<float> Interact()
         {
             System.Console.WriteLine(this.Block.Position);
-            Engine.Engine.World.CurrentMap.WorldMatrix[Block.Position.X][Block.Position.Y][Block.Position.Z] = null;
+            Engine.Engine.World.CurrentMap.WorldMatrix[Block.Position] = null;
 
             yield break;
         }

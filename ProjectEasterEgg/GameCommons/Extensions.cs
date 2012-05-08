@@ -61,9 +61,9 @@ namespace Mindstep.EasterEgg.Commons
             return new Point((int)(p.X / f), (int)(p.Y / f));
         }
 
-        public static IEnumerable<Position> ToPositions(this IEnumerable<Block> blocks)
+        public static IEnumerable<Position> ToPositions(this IEnumerable<IPositionable> blocks)
         {
-            foreach (Block block in blocks)
+            foreach (IPositionable block in blocks)
             {
                 yield return block.Position;
             }

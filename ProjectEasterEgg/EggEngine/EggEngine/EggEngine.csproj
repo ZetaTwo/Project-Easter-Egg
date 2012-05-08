@@ -63,6 +63,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\GameModel.cs" />
     <Compile Include="Game\GameBlock.cs" />
     <Compile Include="Game\GameEntity.cs" />
     <Compile Include="Game\GameEntityDrawable.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Game\GameMap.cs" />
     <Compile Include="Game\IEntityUpdate.cs" />
     <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\WorldMatrix.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Frame.cs" />
     <Compile Include="Input\IInputManager.cs" />

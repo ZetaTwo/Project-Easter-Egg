@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
 
-namespace Mindstep.EasterEgg.Commons.Graphics
+namespace Mindstep.EasterEgg.Commons.Graphic
 {
     class SpriteHelper
     {

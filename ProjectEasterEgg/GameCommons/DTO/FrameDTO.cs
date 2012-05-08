@@ -7,49 +7,33 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Mindstep.EasterEgg.Commons.Graphics;
+using Mindstep.EasterEgg.Commons.Graphic;
 using System.Drawing.Drawing2D;
+using Xna = Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons.SaveLoad;
 
 namespace Mindstep.EasterEgg.Commons.DTO
 {
     public class FrameDTO
     {
-        public int Duration;
-        public byte[] BitmapBytes;
-        private Bitmap bitmap;
-        private System.Drawing.Graphics graphics;
-
-        public FrameDTO(int duration)
-            : this()
-        {
-            this.Duration = duration;
-        }
+        public int duration;
+        public readonly Dictionary<int, SaveBlockImage> textures = new Dictionary<int, SaveBlockImage>();
 
         public FrameDTO()
-        {
-            bitmap = new Bitmap(Constants.PROJ_WIDTH, Constants.PROJ_HEIGHT);
-            graphics = System.Drawing.Graphics.FromImage(bitmap);
-            graphics.Clear(Color.Transparent);
-            graphics.SetClip(BlockRegions.WholeBlock, CombineMode.Replace);
-            graphics.FillRegion(Brushes.White, BlockRegions.Top);
-            graphics.FillRegion(Brushes.LightGray, BlockRegions.Left);
-            graphics.FillRegion(Brushes.Gray, BlockRegions.Right);
-            graphics.FillRegion(Brushes.Black, BlockRegions.OuterBorder);
-            graphics.FillRegion(Brushes.Pink, BlockRegions.InnerBorder);
-        }
+            : this(0)
+        { }
 
-        public System.Drawing.Graphics getGraphics()
+        public FrameDTO(int duration)
         {
-            return graphics;
+            this.duration = duration;
         }
 
         public void updateDataToBeSaved()
         {
-            graphics.Flush(FlushIntention.Sync);
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            BitmapBytes = new byte[data.Height * data.Stride];
-            Marshal.Copy(data.Scan0, BitmapBytes, 0, BitmapBytes.Length);
-            bitmap.UnlockBits(data);
+            foreach (SaveBlockImage blockImage in textures.Values)
+            {
+                blockImage.updateDataToBeSaved();
+            }
         }
     }
 }

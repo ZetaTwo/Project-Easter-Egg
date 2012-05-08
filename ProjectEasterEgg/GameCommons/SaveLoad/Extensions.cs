@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using SD = System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
@@ -24,8 +26,14 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             SaveModel<Texture2DWithPos> newModel = new SaveModel<Texture2DWithPos>(model.name);
             newModel.blocks.AddRange(model.blocks);
-            newModel.subModels.AddRange(model.subModels.Select(subModel => subModel.ToTexture2D(graphicsDevice)));
-            newModel.animations.AddRange(model.animations.Select(animation => animation.ToTexture2D(graphicsDevice)));
+            foreach (SaveSubModel<BitmapWithPos> subModel in model.subModels)
+            {
+                newModel.subModels.Add(subModel.ToTexture2D(graphicsDevice));
+            }
+            foreach (SaveAnimation<BitmapWithPos> animation in model.animations)
+            {
+                newModel.animations.Add(animation.ToTexture2D(graphicsDevice));
+            }
             return newModel;
         }
 
@@ -33,26 +41,60 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             SaveAnimation<Texture2DWithPos> newAnimation = new SaveAnimation<Texture2DWithPos>(animation.Name);
             newAnimation.Facing = animation.Facing;
-            newAnimation.Frames.AddRange(animation.Frames.Select(frame => frame.ToTexture2D(graphicsDevice)));
+            foreach (SaveFrame<BitmapWithPos> frame in animation.Frames)
+            {
+                newAnimation.Frames.Add(frame.ToTexture2D(graphicsDevice));
+            }
             return newAnimation;
         }
 
         public static SaveFrame<Texture2DWithPos> ToTexture2D(this SaveFrame<BitmapWithPos> frame, GraphicsDevice graphicsDevice)
         {
             SaveFrame<Texture2DWithPos> newFrame = new SaveFrame<Texture2DWithPos>(frame.Duration);
-            newFrame.Images.AddToFront(frame.Images.BackToFront().Select(bitmap => bitmap.ToTexture2D(graphicsDevice)));
+            foreach (BitmapWithPos bitmap in frame.Images.BackToFront())
+            {
+                newFrame.Images.AddToFront(bitmap.ToTexture2D(graphicsDevice));
+            }
             return newFrame;
         }
 
-        public static Texture2DWithPos ToTexture2D(this BitmapWithPos bitmap, GraphicsDevice graphicsDevice)
+        public static Texture2DWithPos ToTexture2D(this BitmapWithPos bitmapWithPos, GraphicsDevice graphicsDevice)
         {
-            Texture2DWithPos texture = new Texture2DWithPos();
-            texture.pos = bitmap.pos;
-            texture.projectedOnto.AddRange(bitmap.projectedOnto);
-            MemoryStream stream = new MemoryStream();
-            bitmap.SaveTo(stream);
-            texture.Texture = Texture2D.FromStream(graphicsDevice, stream);
+            Texture2DWithPos texture = new Texture2DWithPos(bitmapWithPos.OriginalPath, bitmapWithPos.bitmap.CloneFix(), graphicsDevice);
+            texture.pos = bitmapWithPos.pos;
+            texture.projectedOnto.AddRange(bitmapWithPos.projectedOnto);
             return texture;
+        }
+
+        public static Texture2D ToTexture2D(this SD.Bitmap bitmap, GraphicsDevice graphicsDevice)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.SaveTo(stream);
+                return Texture2D.FromStream(graphicsDevice, stream);
+            }
+        }
+
+        public static void SaveTo(this SD.Bitmap bitmap, Stream stream)
+        {
+            bitmap.Save(stream, ImageFormat.Png);
+        }
+
+        /// <summary>
+        /// Clones the whole Bitmap, and it just works, 
+        /// whereas a bitmap that Bitmap.Clone() has been called on,
+        /// or a bitmap created with Bitmap.Clone(), cannot be used to create
+        /// a System.Drawing.Graphics.FromImage().
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static SD.Bitmap CloneFix(this SD.Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.SaveTo(stream);
+                return new SD.Bitmap(stream);
+            }
         }
     }
 }

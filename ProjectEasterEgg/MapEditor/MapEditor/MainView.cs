@@ -8,7 +8,7 @@ using Mindstep.EasterEgg.Commons;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Mindstep.EasterEgg.Commons.Graphics;
+using Mindstep.EasterEgg.Commons.Graphic;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 #endregion
 
@@ -60,6 +60,9 @@ namespace Mindstep.EasterEgg.MapEditor
         private MenuItem menuItemSelectBlocksToProjectOnto;
 
 
+
+
+
         public void Initialize(MainForm mainForm)
         {
             this.mainForm = mainForm;
@@ -101,9 +104,11 @@ namespace Mindstep.EasterEgg.MapEditor
 
             blockTypeColor = new Dictionary<BlockType, Color>();
             blockTypeColor.Add(BlockType.SOLID, Color.Green);
-            blockTypeColor.Add(BlockType.STAIRS_DOWN, Color.Blue);
-            blockTypeColor.Add(BlockType.STAIRS_UP, Color.Brown);
             blockTypeColor.Add(BlockType.WALKABLE, Color.Olive);
+            blockTypeColor.Add(BlockType.STAIRS_UP, Color.Brown);
+            blockTypeColor.Add(BlockType.STAIRS_DOWN, Color.Blue);
+            blockTypeColor.Add(BlockType.SPAWN_LOCATION, Color.White);
+
             blockDrawStateTexture = new Dictionary<BlockDrawState, Texture2D>();
             blockDrawStateTexture.Add(BlockDrawState.None, mainForm.transparentOneByOneTexture);
             blockDrawStateTexture.Add(BlockDrawState.Solid, textureBlock);
@@ -115,6 +120,10 @@ namespace Mindstep.EasterEgg.MapEditor
 
             CurrentEditingMode = EditingMode.Block;
         }
+
+
+
+
 
         private Dictionary<EditingMode, Settings> settings = new Dictionary<EditingMode, Settings>();
 
@@ -310,11 +319,7 @@ namespace Mindstep.EasterEgg.MapEditor
             spriteBatch.End();
         }
 
-        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos)
-        {
-            drawBlock(image, boundingBox, color, pos, 0);
-        }
-        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos, float depthOffset)
+        private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos, float depthOffset = 0)
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
             Vector2 projCoords = CoordinateTransform.ObjectToProjSpace(pos);
@@ -486,6 +491,7 @@ namespace Mindstep.EasterEgg.MapEditor
                         }
                         break;
                 }
+                selectedBlocks.Clear();
             }
         }
 
@@ -562,7 +568,6 @@ namespace Mindstep.EasterEgg.MapEditor
         private void BlockContextMenuEditDetails(object sender, EventArgs e)
         {
             new BlockDetailsForm(selectedBlocks, lastMouseLocation);
-            selectedBlocks.Clear();
         }
         #endregion
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Mindstep.EasterEgg.Commons.Graphics;
+using Mindstep.EasterEgg.Commons.Graphic;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -17,7 +17,12 @@ namespace Mindstep.EasterEgg.Commons
             int x = (int)((-map.X + map.Y) * TILE_WIDTH_OVER_2);
             int y = (int)((map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT);
 
-            return new Vector2(x,y);
+            return new Vector2(x, y);
+        }
+
+        public static Vector2 ObjectToBlockDrawCoordsInProjectionSpace(Vector3 map)
+        {
+            return ObjectToProjectionSpace(map) + Constants.blockDrawOffset;
         }
 
         public static Vector2 ObjectToProjSpace(Position map)

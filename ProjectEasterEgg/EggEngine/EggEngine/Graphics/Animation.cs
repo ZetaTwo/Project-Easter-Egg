@@ -9,29 +9,39 @@ namespace Mindstep.EasterEgg.Engine.Graphics
 {
     public class Animation
     {
-        public readonly Frame[] Frames;
+        private AnimationDTO animationData;
+
         public readonly string Name;
 
+        private Frame[] frames;
+        public Frame[] Frames { get { return frames; } }
+
+
+
+
+
         public Animation(AnimationDTO animationData, GraphicsDevice graphicsDevice)
-            : this(animationData.Name, toRealFrames(animationData.Frames, graphicsDevice))
-        { }
+            : this(animationData)
+        {
+            Initialize(graphicsDevice);
+        }
+
+        public Animation(AnimationDTO animationData)
+        {
+            this.Name = animationData.Name;
+            this.animationData = animationData;
+        }
 
         public Animation(string name, Frame[] frames)
         {
             this.Name = name;
-            this.Frames = frames;
+            this.frames = frames;
         }
 
-        private static Frame[] toRealFrames(IEnumerable<FrameDTO> framesData, GraphicsDevice graphicsDevice)
+        internal void Initialize(GraphicsDevice graphicsDevice)
         {
-            Frame[] realFrames = new Frame[framesData.Count()];
-
-            int i=0;
-            foreach (FrameDTO frame in framesData) {
-                realFrames[i++] = new Frame(frame, graphicsDevice);
-            }
-
-            return realFrames;
+            this.frames = animationData.Frames.Select(frameDTO => new Frame(frameDTO, graphicsDevice)).ToArray();
+            animationData = null;
         }
     }
 }

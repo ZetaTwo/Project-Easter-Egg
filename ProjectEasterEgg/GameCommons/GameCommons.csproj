@@ -64,11 +64,15 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Conversions.cs" />
-    <Compile Include="Creators.cs" />
     <Compile Include="DTO\AnimationDTO.cs" />
+    <Compile Include="DTO\GameModelDTO.cs" />
+    <Compile Include="DTO\SaveableBlockImage.cs" />
+    <Compile Include="Physics\SpawnLocation.cs" />
+    <Compile Include="Graphic\BlockImage.cs" />
     <Compile Include="DTO\FrameDTO.cs" />
     <Compile Include="DTO\GameBlockDTO.cs" />
     <Compile Include="DTO\GameMapDTO.cs" />
+    <Compile Include="Physics\IPositionable.cs" />
     <Compile Include="SaveLoad\SaveAnimation.cs" />
     <Compile Include="SaveLoad\SaveFrame.cs" />
     <Compile Include="SaveLoad\BitmapWithPos.cs" />
@@ -78,11 +82,11 @@
     <Compile Include="SaveLoad\EggModelLoader.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Graphics\BlockRegions.cs" />
-    <Compile Include="Graphics\BoundingBoxInt.cs" />
-    <Compile Include="Graphics\Camera.cs" />
-    <Compile Include="Graphics\IEntityDrawable.cs" />
-    <Compile Include="Graphics\SpriteHelper.cs" />
+    <Compile Include="Graphic\BlockRegions.cs" />
+    <Compile Include="Graphic\BoundingBoxInt.cs" />
+    <Compile Include="Graphic\Camera.cs" />
+    <Compile Include="Graphic\IEntityDrawable.cs" />
+    <Compile Include="Graphic\SpriteHelper.cs" />
     <Compile Include="Physics\Block.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,7 +95,7 @@
     <Compile Include="SaveLoad\ImageWithPos.cs" />
     <Compile Include="SaveLoad\SaveBlock.cs" />
     <Compile Include="SaveLoad\SaveLoadExtensions.cs" />
-    <Compile Include="Graphics\CoordinateTransform.cs" />
+    <Compile Include="Graphic\CoordinateTransform.cs" />
     <Compile Include="SaveLoad\SaveModel.cs" />
     <Compile Include="SaveLoad\SaveSubModel.cs" />
   </ItemGroup>

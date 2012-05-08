@@ -11,11 +11,11 @@ namespace Mindstep.EasterEgg.Commons
         /// <summary>
         /// Returns a Position with all of its components set to zero.
         /// </summary>
-        public static Position Zero = new Position(0, 0, 0);
+        public static readonly Position Zero = new Position(0, 0, 0);
         /// <summary>
         /// Returns a Position with ones in all of its components.
         /// </summary>
-        public static Position One = new Position(1, 1, 1);
+        public static readonly Position One = new Position(1, 1, 1);
 
         private int x;
         public int X

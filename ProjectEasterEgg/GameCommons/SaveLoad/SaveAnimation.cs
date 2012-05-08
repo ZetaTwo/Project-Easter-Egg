@@ -8,44 +8,41 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
     public class SaveAnimation<T> where T : ImageWithPos
     {
-        private const int DEFAULT_FRAME_DURATION = 100;
+        public const string DEFAULT_ANIMATION_NAME = "still";
 
-        public List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
         public string Name;
-        public Facing Facing;
+        public Facing Facing = Facing.POSITIVE_Y;
+        public List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
 
-        private int currentFrameIndex = 0;
-        public int CurrentFrameIndex
-        {
-            get { return currentFrameIndex; }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("Frame index cannot be negative");
-                }
-
-                while (value > Frames.Count)
-                {
-                    Frames.Add(new SaveFrame<T>(CurrentFrame.Duration));
-                }
-                currentFrameIndex = value;
-            }
-        }
-
+        private SaveFrame<T> currentFrame;
         public SaveFrame<T> CurrentFrame
         {
             get
             {
-                if (Frames.Count == 0)
+                if (this.Frames.Count == 0)
                 {
-                    Frames.Add(new SaveFrame<T>(DEFAULT_FRAME_DURATION));
+                    this.Frames.Add(new SaveFrame<T>());
                 }
-                return Frames[currentFrameIndex];
+                if (currentFrame == null)
+                {
+                    currentFrame = this.Frames[0];
+                }
+                return currentFrame;
+            }
+            set
+            {
+                if (!Frames.Contains(value))
+                {
+                    throw new ArgumentException("Can't set CurrentFrame to a frame that isn't in the frames list");
+                }
+                currentFrame = value;
             }
         }
 
-        public SaveAnimation(string name)
+
+
+
+        public SaveAnimation(string name = DEFAULT_ANIMATION_NAME)
         {
             this.Name = name;
         }

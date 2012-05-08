@@ -15,21 +15,21 @@ namespace Mindstep.EasterEgg.Engine.Graphics
     public class Frame
     {
         public readonly int Duration;
-        public readonly Texture2D Texture;
+        public readonly Texture2D[] textures;
 
         public Frame(FrameDTO frameData, GraphicsDevice graphicsDevice)
-            : this(frameData.Duration, BitmapDataToTexture2D(frameData.BitmapBytes, graphicsDevice))
-        { }
-
-        public Frame(int duration, Texture2D texture)
+            : this(frameData.duration)
         {
-            this.Duration = duration;
-            this.Texture = texture;
+            textures = new Texture2D[frameData.textures.Count];
+            foreach (KeyValuePair<int, SaveBlockImage> pair in frameData.textures)
+            {
+                textures[pair.Key] = BitmapDataToTexture2D(pair.Value.BitmapBytes, graphicsDevice);
+            }
         }
 
-        public static implicit operator Texture2D(Frame frame)
+        public Frame(int duration)
         {
-            return frame.Texture;
+            this.Duration = duration;
         }
 
         private static Texture2D BitmapDataToTexture2D(byte[] data, GraphicsDevice graphicsDevice) {
@@ -40,23 +40,6 @@ namespace Mindstep.EasterEgg.Engine.Graphics
 
             Texture2D tex = new Texture2D(graphicsDevice, Constants.PROJ_WIDTH, Constants.PROJ_HEIGHT);
             tex.SetData(data);
-            //using (MemoryStream stream = new MemoryStream())
-            //{
-                //int bufferSize = data.Height * data.Stride;
-
-                ////create data buffer 
-                //byte[] bytes = new byte[bufferSize];
-
-                //// copy bitmap data into buffer
-                //Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-
-                //// copy our buffer to the texture
-                //tex.SetData(bytes);
-
-                //data.Save(stream, ImageFormat.Png);
-                //stream.Seek(0, SeekOrigin.Begin);
-                //tex = Texture2D.FromStream(graphicsDevice, stream);
-            //}
             return tex;
         }
     }

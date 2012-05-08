@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Mindstep.EasterEgg.Commons.Graphics
+namespace Mindstep.EasterEgg.Commons.Graphic
 {
     public class Camera
     {

@@ -12,62 +12,38 @@ using Mindstep.EasterEgg.Commons.DTO;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class GameMap : IEntityDrawable, IEnumerable<GameBlock>
+    public class GameMap : GameModel, IEntityDrawable
     {
-        EggEngine engine;
+        protected EggEngine engine;
         public EggEngine Engine
         {
             get { return engine; }
         }
 
-        BoundingBoxInt bounds;
         public BoundingBoxInt Bounds
         {
-            get { return bounds; }
+            get { return relativeBounds; }
         }
 
-        public Mindstep.EasterEgg.Commons.Graphics.Camera Camera;
+        public Mindstep.EasterEgg.Commons.Graphic.Camera Camera;
 
         private List<IEntityDrawable> drawableObjects = new List<IEntityDrawable>();
 
-        private GameBlock[][][] worldMatrix;
-        public GameBlock[][][] WorldMatrix
+        private WorldMatrix worldMatrix;
+        public WorldMatrix WorldMatrix
         {
             get { return worldMatrix; }
-            set { worldMatrix = value; }
         }
 
         List<IEntityUpdate> updateObjects = new List<IEntityUpdate>();
 
-        public GameMap(Position min, Position max)
+        public GameMap(GameModelDTO data)
+            : base(data)
         {
-            bounds = new BoundingBoxInt(new Position[] {min, max});
-            worldMatrix = Creators.CreateWorldMatrix<GameBlock>(max - min + new Position(1, 1, 1));
-            Camera = new Mindstep.EasterEgg.Commons.Graphics.Camera(new Point(50, 50));
-        }
+            Camera = new Mindstep.EasterEgg.Commons.Graphic.Camera(new Point(200, 200));
 
-        public GameMap(GameMapDTO data)
-        {
-            bounds = new BoundingBoxInt(new Position[] {Position.Zero, data.Max});
-            worldMatrix = Creators.CreateWorldMatrix<GameBlock>(new Position(data.WorldMatrix.Length,
-                                                                    data.WorldMatrix[0].Length,
-                                                                    data.WorldMatrix[0][0].Length));
-            Camera = new Mindstep.EasterEgg.Commons.Graphics.Camera(new Point(200, 200));
-
-            for (int x = 0; x < worldMatrix.Length; x++)
-            {
-                for (int y = 0; y < worldMatrix[0].Length; y++)
-                {
-                    for (int z = 0; z < worldMatrix[0][0].Length; z++)
-                    {
-                        if (data.WorldMatrix[x][y][z] != null)
-                        {
-                            GameBlockDTO blockData = data.WorldMatrix[x][y][z];
-                            worldMatrix[x][y][z] = new GameBlock(blockData);
-                        }
-                    }
-                }
-            }
+            worldMatrix = new WorldMatrix(Bounds);
+            WorldMatrix.placeModel(this);
         }
         
         public void Update(GameTime gameTime)
@@ -78,64 +54,37 @@ namespace Mindstep.EasterEgg.Engine.Game
             }
         }
 
-        public void Initialize(EggEngine _engine)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            engine = _engine;
-
-            foreach (GameBlock block in this)
-            {
-                block.Initialize(Engine);
-            }
+            base.Draw(spriteBatch, Bounds);
+            //    foreach (GameBlock block in this)
+            //    {
+            //        block.Draw(spriteBatch, Bounds);
+            //    }
+            //    /*
+            //    foreach (IEntityDrawable drawable in drawableObjects)
+            //    {
+            //        drawable.Draw(spriteBatch);
+            //    }*/
         }
 
+        internal new void Initialize(EggEngine engine)
+        {
+            this.engine = engine;
+            base.Initialize(engine);
+        }
+
+        public void AddDraw(IEntityDrawable entity)
+        {
+            drawableObjects.Add(entity);
+        }
         public void AddUpdate(IEntityUpdate entity)
         {
             updateObjects.Add(entity);
         }
-
         public void RemoveUpdate(IEntityUpdate entity)
         {
             updateObjects.Remove(entity);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (GameBlock block in this)
-            {
-                block.Draw(spriteBatch, Bounds);
-            }
-            /*
-            foreach (IEntityDrawable drawable in drawableObjects)
-            {
-                drawable.Draw(spriteBatch);
-            }*/
-        }
-
-        public void AddUpdate(IEntityDrawable entity)
-        {
-            drawableObjects.Add(entity);
-        }
-
-        public IEnumerator<GameBlock> GetEnumerator()
-        {
-            foreach (GameBlock[][] yList in WorldMatrix)
-            {
-                foreach (GameBlock[] zList in yList)
-                {
-                    foreach (GameBlock block in zList)
-                    {
-                        if (block != null)
-                        {
-                            yield return block;
-                        }
-                    }
-                }
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

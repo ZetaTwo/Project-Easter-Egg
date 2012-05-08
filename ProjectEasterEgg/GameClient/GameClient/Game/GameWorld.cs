@@ -19,7 +19,7 @@ namespace Mindstep.EasterEgg.Game.Game
 
             //Add game content here
 
-            GameMapDTO mapDTO = Engine.Content.Load<GameMapDTO>("Models/seventhmodel");
+            GameModelDTO mapDTO = Engine.Content.Load<GameModelDTO>("Models/seventhmodel");
             CurrentMap = new GameMap(mapDTO);
             
             pointer = new MousePointer();
@@ -27,7 +27,7 @@ namespace Mindstep.EasterEgg.Game.Game
             AddUpdate(pointer);
             AddDraw(pointer);
 
-            //CurrentMap.WorldMatrix.ToList().ForEach(block => block.ToList().ForEach(b => b.ToList().ForEach(bl => AddDraw(bl))));
+            //CurrentMap.WorldMatrix.ToList().ForEach(block => block.ForEach(b => b.ToList().ForEach(bl => AddDraw(bl))));
         }
     }
 }

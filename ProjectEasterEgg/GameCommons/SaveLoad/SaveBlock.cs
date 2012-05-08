@@ -5,16 +5,22 @@ using System.Text;
 using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework.Graphics;
 using Mindstep.EasterEgg.Commons.Physics;
+using Xna = Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons.Graphic;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    public class SaveBlock : Block
+    public class SaveBlock : BlockImage, IPositionable
     {
+        private Position position;
+        public Position Position { get { return position; } }
+
         public string script;
         public BlockType type;
 
-        public SaveBlock(Position pos)
-            : base(pos)
-        { }
+        public SaveBlock(Position position)
+        {
+            this.position = position;
+        }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Mindstep.EasterEgg.Commons.SaveLoad;
+using SD = System.Drawing;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -17,9 +18,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private SaveModel<Texture2DWithPos> model;
         public SaveModel<Texture2DWithPos> CurrentModel { get { return model; } }
-        private SaveAnimation<Texture2DWithPos> currentAnimation;
-        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return currentAnimation; } }
-        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return currentAnimation.CurrentFrame; } }
+        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return CurrentModel.CurrentAnimation; } }
+        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return CurrentAnimation.CurrentFrame; } }
+
         private string lastSavedDoc;
         private bool changedSinceLastSave;
         public Texture2D whiteOneByOneTexture;
@@ -37,6 +38,12 @@ namespace Mindstep.EasterEgg.MapEditor
             get { return graphicsDeviceService.GraphicsDevice; }
         }
 
+        internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
+
+
+
+
+
         public MainForm()
         {
             Services = new ServiceContainer();
@@ -51,8 +58,6 @@ namespace Mindstep.EasterEgg.MapEditor
             mainView.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
             RefreshTitle();
-            currentAnimation = new SaveAnimation<Texture2DWithPos>("still");
-            currentAnimation.Facing = Facing.POSITIVE_Y;
 
             toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
         }
@@ -84,6 +89,10 @@ namespace Mindstep.EasterEgg.MapEditor
                 Services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
             }
         }
+
+
+
+
 
         private void upButton_Click(object sender, System.EventArgs e)
         {
@@ -199,6 +208,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             model = EggModelLoader.Load(fileName).ToTexture2D(GraphicsDevice);
             lastSavedDoc = fileName;
+            mainView.CurrentEditingMode = EditingMode.Texture;
             changedSinceLastSave = false;
         }
 
@@ -223,7 +233,14 @@ namespace Mindstep.EasterEgg.MapEditor
         private Point lastImportedTextureOffset = Point.Zero;
         private void importImage(string fileName)
         {
-            Texture2DWithPos tex = new Texture2DWithPos(fileName);
+            lastImportedTextureOffset = lastImportedTextureOffset.Add(20, 20);
+
+            Texture2DWithPos tex;
+            using (Stream fileStream = new FileStream(fileName, FileMode.Open))
+            {
+                tex = new Texture2DWithPos(fileName, new SD.Bitmap(fileStream), GraphicsDevice);
+            }
+            tex.pos = lastImportedTextureOffset;
 
             mainView.CurrentEditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in model.animations.GetAllTextures())
@@ -237,18 +254,10 @@ namespace Mindstep.EasterEgg.MapEditor
                     return;
                 }
             }
-            lastImportedTextureOffset = lastImportedTextureOffset.Add(20, 20);
-            tex.pos = lastImportedTextureOffset;
-            using (Stream texStream = new FileStream(fileName, FileMode.Open))
-            {
-                tex.Texture = Texture2D.FromStream(GraphicsDevice, texStream);
-            }
             CurrentFrame.Images.AddToFront(tex);
             UpdatedThings();
         }
         #endregion
-
-        internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
 
         internal void UpdatedSettings()
         {

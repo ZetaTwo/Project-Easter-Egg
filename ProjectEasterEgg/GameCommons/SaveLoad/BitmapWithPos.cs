@@ -14,7 +14,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
     {
         public SD.Bitmap bitmap;
 
-        private string originalPath;
+        protected string originalPath;
         public string OriginalPath { get { return originalPath; } }
 
         public readonly List<SaveBlock> projectedOnto = new List<SaveBlock>();
@@ -38,7 +38,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public override void SaveTo(Stream stream)
         {
-            bitmap.Save(stream, ImageFormat.Png);
+            bitmap.SaveTo(stream);
         }
     }
 }

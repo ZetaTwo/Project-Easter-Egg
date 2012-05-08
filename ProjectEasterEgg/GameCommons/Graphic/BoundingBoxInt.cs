@@ -14,10 +14,27 @@ namespace Mindstep.EasterEgg.Commons
         private float fullDepth;
         public Position Max { get { return max; } }
 
+
+
+
+
+        public BoundingBoxInt()
+        { }
+
         public BoundingBoxInt(IEnumerable<Position> positions)
         {
             addPos(positions);
         }
+
+        public BoundingBoxInt(Position min, Position max)
+        {
+            addPos(min);
+            addPos(max);
+        }
+
+
+
+
 
         public void addPos(IEnumerable<Position> positions)
         {

@@ -82,8 +82,8 @@ namespace Mindstep.EasterEgg.Engine.Physics
         public List<GameBlock> GetNeighbours(GameBlock node)
         {
             List<GameBlock> neighbours = new List<GameBlock>();
-            int width = CurrentMap.WorldMatrix.Length - 1;
-            int height = CurrentMap.WorldMatrix[0].Length - 1;
+            int width = CurrentMap.WorldMatrix.sizeX - 1;
+            int height = CurrentMap.WorldMatrix.sizeY - 1;
             int currentLevel = node.Position.Z;
 
             for (int i = 0; i < 8; i++)
@@ -98,7 +98,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 Position neighbourPosition = new Position(node.Position.X + possibleNeighbours[i][0], node.Position.Y + possibleNeighbours[i][1], currentLevel);
                 Position nextPosition = null;
                 //Check if the current possible is available, it is only available if the next one is free.
-                GameBlock possibleNeighbour = CurrentMap.WorldMatrix[neighbourPosition.X][neighbourPosition.Y][neighbourPosition.Z];
+                GameBlock possibleNeighbour = CurrentMap.WorldMatrix[neighbourPosition.X,neighbourPosition.Y,neighbourPosition.Z];
                 //Base case for a node.
                 GameBlock possibleNext = new GameBlock(BlockType.SOLID, new Position(-1, -1, -1));
                 if (i < 7)
@@ -110,12 +110,12 @@ namespace Mindstep.EasterEgg.Engine.Physics
                         (node.Position.Y == height && possibleNeighbours[i + 1][1] > 0)))
                     {
                         nextPosition = new Position(node.Position.X + possibleNeighbours[i + 1][0], node.Position.Y + possibleNeighbours[i + 1][1], currentLevel);
-                        possibleNext = CurrentMap.WorldMatrix[nextPosition.X][nextPosition.Y][nextPosition.Z];
+                        possibleNext = CurrentMap.WorldMatrix[nextPosition];
                     }
                     else if (!(node.Position.X == 0 || node.Position.Y == 0))
                     {
                         nextPosition = new Position(node.Position.X + possibleNeighbours[0][0], node.Position.Y + possibleNeighbours[0][1], currentLevel);
-                        possibleNext = CurrentMap.WorldMatrix[nextPosition.X][nextPosition.Y][nextPosition.Z];
+                        possibleNext = CurrentMap.WorldMatrix[nextPosition];
                     }
                 }
 
@@ -139,7 +139,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
         #endregion
 
-        public void ClickWorld(Point screen, EasterEgg.Commons.Graphics.Camera camera, BlockAction action)
+        public void ClickWorld(Point screen, EasterEgg.Commons.Graphic.Camera camera, BlockAction action)
         {
             //The entry position
             //screen.Y *= 1;
@@ -157,7 +157,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             {
                 //Choose the current Block
                 Position currentPosition = new Position(position) - CurrentMap.Bounds.Min;
-                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y][currentPosition.Z];
+                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition];
 
                 if (currentBlock != null && currentBlock.Interactable)
                 {
@@ -178,15 +178,15 @@ namespace Mindstep.EasterEgg.Engine.Physics
         private void ClickSolidBlock(Position currentPosition, BlockFaces entry)
         {
             if (entry == BlockFaces.LEFT && //If left side was clicked
-                currentPosition.X < CurrentMap.WorldMatrix.Length - 1 && //and there could be a block in front
-                CurrentMap.WorldMatrix[currentPosition.X + 1][currentPosition.Y][currentPosition.Z].Type != BlockType.SOLID) //and we can stand there
+                currentPosition.X < CurrentMap.WorldMatrix.sizeX - 1 && //and there could be a block in front
+                CurrentMap.WorldMatrix[currentPosition + new Position(1,0,0)].Type != BlockType.SOLID) //and we can stand there
             {
                 //MoveTo(currentBlock + X - k*Z)
             }
 
             if (entry == BlockFaces.RIGHT && //If left side was clicked
-                currentPosition.Y < CurrentMap.WorldMatrix[0].Length - 1 && //and there could be a block in front
-                CurrentMap.WorldMatrix[currentPosition.X][currentPosition.Y + 1][currentPosition.Z].Type != BlockType.SOLID) //and we can stand there
+                currentPosition.Y < CurrentMap.WorldMatrix.sizeY - 1 && //and there could be a block in front
+                CurrentMap.WorldMatrix[currentPosition + new Position(0,1,0)].Type != BlockType.SOLID) //and we can stand there
             {
                 //MoveTo(currentBlock + Y - k*Z)
             }
@@ -230,8 +230,8 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             do
             {
-                GameBlock current = CurrentMap.WorldMatrix[position.X][position.Y][position.Z];
-                GameBlock below = CurrentMap.WorldMatrix[position.X][position.Y][position.Z - 1];
+                GameBlock current = CurrentMap.WorldMatrix[position];
+                GameBlock below = CurrentMap.WorldMatrix[position - new Position(0,0,-1)];
                 position.Z--;
 
                 if (below.Type == BlockType.SOLID)

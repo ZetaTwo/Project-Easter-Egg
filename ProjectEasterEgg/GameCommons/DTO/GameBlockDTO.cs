@@ -12,7 +12,6 @@ namespace Mindstep.EasterEgg.Commons.DTO
     {
         public string scriptName = null;
         public Position Position;
-        public readonly Dictionary<string, AnimationDTO> Animations = new Dictionary<string, AnimationDTO>();
         public BlockType Type;
     }
 }
