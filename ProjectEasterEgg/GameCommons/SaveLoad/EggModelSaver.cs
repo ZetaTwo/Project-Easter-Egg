@@ -5,18 +5,24 @@ using System.Text;
 using Mindstep.EasterEgg.Commons;
 using System.Xml.Linq;
 using Mindstep.EasterEgg.Commons.SaveLoad;
-using System.IO.Packaging;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
     public static class EggModelSaver
     {
-        private static string ResourceRelationshipType =
-            "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
+        //private static string ResourceRelationshipType =
+        //    "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
-        public static void Save<T>(SaveModel<T> model, string path) where T : ImageWithPos
+        /// <summary>
+        /// Tries to save he model at the given path.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="path"></param>
+        /// <returns>true if saved successfully</returns>
+        public static bool Save(SaveModel<Texture2DWithPos> model, string path)
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
@@ -28,7 +34,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
             { // imports
                 XElement imports = new XElement("imports");
                 root.Add(imports);
-                foreach (SaveSubModel<T> subModel in model.subModels)
+                foreach (SaveSubModel<Texture2DWithPos> subModel in model.subModels)
                 {
                     XElement subModelElement = new XElement("model");
                     imports.Add(subModelElement);
@@ -50,38 +56,38 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                     blockElement.SetAttributeValue("type", block.type.GetSaveString());
                     if (!string.IsNullOrWhiteSpace(block.script))
                     {
-                        blockElement.SetAttributeValue("script", Constants.SCRIPT_BLOCK_PREFIX + block.script);
+                        blockElement.SetAttributeValue("script", block.script);
                     }
                 }
             }
 
-            HashSet<T> allTextures = new HashSet<T>();
+            HashSet<Texture2DWithPos> allTextures = new HashSet<Texture2DWithPos>();
             { // animations
 
                 XElement animationsElement = new XElement("animations");
                 root.Add(animationsElement);
-                foreach (SaveAnimation<T> animation in model.animations)
+                foreach (SaveAnimation<Texture2DWithPos> animation in model.animations)
                 {
                     XElement animationElement = new XElement("animation");
                     animationsElement.Add(animationElement);
                     animationElement.SetAttributeValue("name", animation.Name);
                     animationElement.SetAttributeValue("facing", animation.Facing.GetSaveString());
 
-                    foreach (SaveFrame<T> frame in animation.Frames)
+                    foreach (SaveFrame<Texture2DWithPos> frame in animation.Frames)
                     {
                         XElement frameElement = new XElement("frame");
                         frameElement.SetAttributeValue("duration", frame.Duration);
                         animationElement.Add(frameElement);
 
-                        foreach (T tex in frame.Images.BackToFront())
+                        foreach (Texture2DWithPos tex in frame.Images.BackToFront())
                         {
                             XElement textureElement = new XElement("image");
                             frameElement.Add(textureElement);
                             textureElement.SetAttributeValue("name", tex.name);
                             textureElement.SetAttributeValue("coord", tex.pos.GetSaveString());
                             allTextures.Add(tex);
-                            //TODO: foreach (SaveBlock block in tex.projectedOnto)
-                            foreach (SaveBlock block in orderedBlocks)
+                            
+                            foreach (SaveBlock block in tex.projectedOnto)
                             {
                                 XElement projectedOntoElement = new XElement("projectedOnto");
                                 projectedOntoElement.Value = orderedBlocks.IndexOf(block).GetSaveString();
@@ -91,30 +97,28 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                     }
                 }
             }
-            
-            // Create the Package
-            // (If the package file already exists, FileMode.Create will
-            //  automatically delete it first before creating a new one.
-            //  The 'using' statement ensures that 'package' is
-            //  closed and disposed when it goes out of scope.)
-            using (Package package =
-                Package.Open(path, FileMode.Create))
+
+            try
             {
-                // Add the Document part to the Package
-                PackagePart packagePartDocument = package.CreatePart(new Uri("/model.xml", UriKind.Relative), System.Net.Mime.MediaTypeNames.Text.Xml);
+                using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(path, FileMode.Create)))
+                {
+                    zipStream.PutNextEntry(new ZipEntry("model.xml"));
+                    zipStream.Write(doc.ToString());
 
-                packagePartDocument.GetStream().Write(doc.ToString());
-
-                // Add a Package Relationship to the Document Part
-                package.CreateRelationship(packagePartDocument.Uri, TargetMode.Internal, ResourceRelationshipType);
-
-                foreach (ImageWithPos tex in allTextures) {
-                    PackagePart blockImage = package.CreatePart(new Uri("/textures/" + tex.name, UriKind.Relative), "image/png");
-                    tex.SaveTo(blockImage.GetStream());
-                    package.CreateRelationship(blockImage.Uri, TargetMode.Internal, ResourceRelationshipType);
+                    foreach (ImageWithPos tex in allTextures)
+                    {
+                        zipStream.PutNextEntry(new ZipEntry("textures/" + tex.name));
+                        tex.SaveTo(zipStream);
+                    }
                 }
+                System.Console.WriteLine("Saved to: " + path);
+                return true;
             }
-            System.Console.WriteLine("Saved to: " + path);
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Failed to save to: " + path + "\n" + e.Message);
+                return false;
+            }
         }
     }
 }

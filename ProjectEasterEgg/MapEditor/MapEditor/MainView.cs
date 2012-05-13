@@ -24,7 +24,6 @@ namespace Mindstep.EasterEgg.MapEditor
     class MainView : GraphicsDeviceControl
     {
         private static readonly Color SELECTED_TEXTURE_COLOR = Color.LimeGreen;
-        private const bool DEBUG_DRAW_MOUSE_COORDS = false;
 
         private SpriteBatch spriteBatch;
         private Texture2D textureBlock;
@@ -78,8 +77,9 @@ namespace Mindstep.EasterEgg.MapEditor
             textureWireframeBack = mainForm.Content.Load<Texture2D>("block31wireframeBack");
             textureWireframeFilled = mainForm.Content.Load<Texture2D>("block31wireframeFilled");
             blockContextMenu = new ContextMenu(new MenuItem[]{
-                new MenuItem("Edit Block Details", BlockContextMenuEditDetails),
+                new MenuItem("Edit Block Details", blockContextMenu_EditBlockDetails),
             });
+
             menuItemSelectBlocksToProjectOnto = new MenuItem("Select blocks to project onto", TextureContextMenuSelectBlocksToProjectOnto);
             textureContextMenu = new ContextMenu(new MenuItem[]{
                 new MenuItem("Bring To Front", TextureContextMenuBringToFront),
@@ -309,13 +309,12 @@ namespace Mindstep.EasterEgg.MapEditor
                 spriteBatch.DrawRectangle(r, SELECTED_TEXTURE_COLOR, borderWidth);
             }
 
-            if (DEBUG_DRAW_MOUSE_COORDS)
-            {
+#if false //debug draw mouse coords
                 Vector3 v = CoordinateTransform.ScreenToObjectSpace(lastMouseLocation.ToXnaPoint(), camera, CurrentLayer);
                 Vector2 u = CoordinateTransform.ObjectToProjectionSpace(v);
                 spriteBatch.DrawRectangle(new Rectangle((int)u.X, (int)u.Y, 1, 1), Color.Orchid, 5);
                 spriteBatch.DrawString(spriteFont, v.ToString() + "\n" + v.ToPosition().ToString(), u, Color.Orange);
-            }
+#endif
             spriteBatch.End();
         }
 
@@ -334,6 +333,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void MainView_MouseDown(object sender, MouseEventArgs e)
         {
+            selectedBlocks.Clear();
             if (e.Button == MouseButtons.Right)
             {
                 if (CurrentEditingMode == EditingMode.TextureProjection)
@@ -491,7 +491,6 @@ namespace Mindstep.EasterEgg.MapEditor
                         }
                         break;
                 }
-                selectedBlocks.Clear();
             }
         }
 
@@ -519,11 +518,11 @@ namespace Mindstep.EasterEgg.MapEditor
                 selectedTextures.Clear();
                 mainForm.UpdatedThings();
             }
-            if (e.KeyCode == Keys.Up)
+            if (e.KeyCode == Keys.W)
             {
                 CurrentLayer++;
             }
-            if (e.KeyCode == Keys.Down)
+            if (e.KeyCode == Keys.S)
             {
                 CurrentLayer--;
             }
@@ -565,9 +564,11 @@ namespace Mindstep.EasterEgg.MapEditor
             mainForm.UpdatedThings();
         }
 
-        private void BlockContextMenuEditDetails(object sender, EventArgs e)
+        private void blockContextMenu_EditBlockDetails(object sender, EventArgs e)
         {
             new BlockDetailsForm(selectedBlocks, lastMouseLocation);
+            selectedBlocks.Clear();
+            mainForm.UpdatedThings();
         }
         #endregion
 

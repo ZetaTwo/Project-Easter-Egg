@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO.Packaging;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
+using ICSharpCode.SharpZipLib.Zip;
+using System.IO;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
@@ -32,12 +33,14 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public static SaveModel<BitmapWithPos> Load(string directoryPath, string modelName)
         {
             SaveModel<BitmapWithPos> model = new SaveModel<BitmapWithPos>(modelName);
-            using (Package modelFile = Package.Open(directoryPath + "/" + modelName + ".egg"))
+
+            using (ZipFile modelFile = new ZipFile(directoryPath + "/" + modelName + ".egg"))
             {
-                using (PackagedBitmapsManager bitmapManager = new PackagedBitmapsManager(modelFile, "/textures/"))
+                using (PackagedBitmapsManager bitmapManager = new PackagedBitmapsManager(modelFile, "textures/"))
                 {
-                    PackagePart modelXML = modelFile.GetPart(new Uri("/model.xml", UriKind.Relative));
-                    XDocument doc = XDocument.Load(modelXML.GetStream());
+                    ZipEntry xmlEntry = modelFile.GetEntry("model.xml");
+                    Stream xmlStream =  modelFile.GetInputStream(xmlEntry);
+                    XDocument doc = XDocument.Load(xmlStream);
                     XElement root = doc.Element("model");
 
                     // blocks
@@ -52,7 +55,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                             XAttribute scriptAttribute = blockElement.Attribute("script");
                             if (scriptAttribute != null)
                             {
-                                block.script = Constants.SCRIPT_BLOCK_PREFIX + scriptAttribute.Value;
+                                block.script = scriptAttribute.Value;
                             }
                         }
                     }

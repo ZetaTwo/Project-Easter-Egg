@@ -60,8 +60,9 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public static Texture2DWithPos ToTexture2D(this BitmapWithPos bitmapWithPos, GraphicsDevice graphicsDevice)
         {
-            Texture2DWithPos texture = new Texture2DWithPos(bitmapWithPos.OriginalPath, bitmapWithPos.bitmap.CloneFix(), graphicsDevice);
+            Texture2DWithPos texture = new Texture2DWithPos(bitmapWithPos.bitmap.CloneFix(), graphicsDevice);
             texture.pos = bitmapWithPos.pos;
+            texture.name = bitmapWithPos.name;
             texture.projectedOnto.AddRange(bitmapWithPos.projectedOnto);
             return texture;
         }

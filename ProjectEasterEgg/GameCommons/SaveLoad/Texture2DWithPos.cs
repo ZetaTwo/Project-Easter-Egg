@@ -41,17 +41,18 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public Texture2DWithPos()
         { }
 
-        public Texture2DWithPos(string originalPath, SD.Bitmap originalBitmap, GraphicsDevice graphicsDevice)
+        public Texture2DWithPos(SD.Bitmap originalBitmap, GraphicsDevice graphicsDevice)
         {
             this.originalBitmap = originalBitmap;
             restoreBitmapFromOriginal();
             updateTexture2D(graphicsDevice);
+        }
 
-            if (originalPath != null)
-            {
-                this.originalPath = originalPath.Replace('\\', '/');
-                this.name = this.originalPath.Split('/').Last();
-            }
+        public Texture2DWithPos(SD.Bitmap originalBitmap, GraphicsDevice graphicsDevice, string originalPath)
+            : this (originalBitmap, graphicsDevice)
+        {
+            this.originalPath = originalPath.Replace('\\', '/');
+            this.name = this.originalPath.Split('/').Last();
         }
 
 

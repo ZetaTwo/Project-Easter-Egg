@@ -12,7 +12,7 @@ namespace Mindstep.EasterEgg.Commons.DTO
         public List<GameBlockDTO> blocks = new List<GameBlockDTO>();
         public List<AnimationDTO> animations = new List<AnimationDTO>();
         public List<GameModelDTO> subModels = new List<GameModelDTO>();
-        public Dictionary<string, Position> spanwLocations = new Dictionary<string, Position>();
+        public Dictionary<string, Position> spawnLocations = new Dictionary<string, Position>();
 
         public Position min;
         public Position max;

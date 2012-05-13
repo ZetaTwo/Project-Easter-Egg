@@ -13,14 +13,14 @@ namespace Mindstep.EasterEgg.Engine.Game
 {
     public class GameModel
     {
-        public GameModel[] subModels;
+        public readonly List<GameModel> subModels = new List<GameModel>();
 
         public GameBlock[] blocks;
         protected BoundingBoxInt relativeBounds;
 
         public Position position = Position.Zero;
-        public Dictionary<string, Animation> Animations = new Dictionary<string,Animation>();
-        private Dictionary<string, Position> spawnLocations;
+        public readonly Dictionary<string, Animation> Animations = new Dictionary<string,Animation>();
+        protected readonly Dictionary<string, Position> spawnLocations;
 
 
         //public GameModel(GameModelDTO modelData, Position offset)
@@ -40,13 +40,13 @@ namespace Mindstep.EasterEgg.Engine.Game
         public GameModel(GameModelDTO modelData)
         {
             this.blocks = modelData.blocks.Select(block => new GameBlock(block)).ToArray();
-            this.subModels = modelData.subModels.Select(modelDTO => new GameModel(modelDTO)).ToArray();
+            this.subModels.AddRange(modelData.subModels.Select(modelDTO => new GameModel(modelDTO)));
             this.relativeBounds = new BoundingBoxInt(modelData.min, modelData.max);
             foreach (AnimationDTO animationDTO in modelData.animations)
             {
                 this.Animations.Add(animationDTO.Name, new Animation(animationDTO));
             }
-            this.spawnLocations = modelData.spanwLocations;
+            this.spawnLocations = modelData.spawnLocations;
         }
 
         public void Draw(SpriteBatch spriteBatch, BoundingBoxInt worldBounds)

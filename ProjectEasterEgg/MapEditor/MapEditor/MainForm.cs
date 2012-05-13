@@ -171,10 +171,23 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void save(string fileName)
         {
-            EggModelSaver.Save(CurrentModel, fileName);
-            lastSavedDoc = fileName;
-            changedSinceLastSave = false;
-            RefreshTitle();
+            bool savedSuccessfully;
+            
+            do
+            {
+                savedSuccessfully = EggModelSaver.Save(CurrentModel, fileName);
+            }
+            while (!savedSuccessfully &&
+                MessageBox.Show("Unable to save to: " + fileName, "Error saving file",
+                MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop)
+                == System.Windows.Forms.DialogResult.Retry);
+            
+            if (savedSuccessfully)
+            {
+                lastSavedDoc = fileName;
+                changedSinceLastSave = false;
+                RefreshTitle();
+            }
         }
 
 
@@ -210,6 +223,7 @@ namespace Mindstep.EasterEgg.MapEditor
             lastSavedDoc = fileName;
             mainView.CurrentEditingMode = EditingMode.Texture;
             changedSinceLastSave = false;
+            RefreshTitle();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -238,7 +252,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Texture2DWithPos tex;
             using (Stream fileStream = new FileStream(fileName, FileMode.Open))
             {
-                tex = new Texture2DWithPos(fileName, new SD.Bitmap(fileStream), GraphicsDevice);
+                tex = new Texture2DWithPos(new SD.Bitmap(fileStream), GraphicsDevice, fileName);
             }
             tex.pos = lastImportedTextureOffset;
 

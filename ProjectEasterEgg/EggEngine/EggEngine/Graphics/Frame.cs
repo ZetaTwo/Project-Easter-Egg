@@ -20,7 +20,7 @@ namespace Mindstep.EasterEgg.Engine.Graphics
         public Frame(FrameDTO frameData, GraphicsDevice graphicsDevice)
             : this(frameData.duration)
         {
-            textures = new Texture2D[frameData.textures.Count];
+            textures = new Texture2D[frameData.textures.Max(pair => pair.Key)+1];
             foreach (KeyValuePair<int, SaveBlockImage> pair in frameData.textures)
             {
                 textures[pair.Key] = BitmapDataToTexture2D(pair.Value.BitmapBytes, graphicsDevice);

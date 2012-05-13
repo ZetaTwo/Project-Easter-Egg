@@ -47,7 +47,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
         /// <param name="myPos">used to calculate the offset of the from image</param>
         public void stealPixelsFrom(BitmapWithPos from, Xna.Point myPos)
         {
-            Xna.Point offset = myPos.Subtract(from.pos).Subtract(Constants.blockDrawOffset.ToXnaPoint());
+            Xna.Point offset = myPos.Subtract(from.pos);
             graphics.DrawImage(from.bitmap, offset.Multiply(-1).ToSDPoint());
             using (Graphics fromGraphics = Graphics.FromImage(from.bitmap))
             {

@@ -92,9 +92,9 @@ namespace Mindstep.EasterEgg.Commons
         /// <returns></returns>
         public static int RoundDown(this float f)
         {
-            if (f < 0)
+            if (f < 0 && f % 1 != 0)
             {
-                return (int)Math.Round(f-.5f, MidpointRounding.AwayFromZero);
+                return (int)f - 1;
             }
             else
             {
