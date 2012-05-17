@@ -8,35 +8,35 @@ namespace Mindstep.EasterEgg.Commons.Graphic
 {
     public class Camera
     {
-        private static float[] DEFAULT_ZOOM_LEVELS = { .5f, .75f, 1, 2, 4, 6, 8, 12, 16, 24, 32 };
-        private const int DEFAULT_ZOOM_INDEX = 2;
-        private static Point DEFAULT_OFFSET = Point.Zero;
-        private float[] zoomLevels;
-        private int zoomIndex;
+        protected static float[] DEFAULT_ZOOM_LEVELS = { .5f, .75f, 1, 2, 4, 6, 8, 12, 16, 24, 32 };
+        protected const int DEFAULT_ZOOM_INDEX = 2;
+        protected static Point DEFAULT_OFFSET = Point.Zero;
+        protected float[] zoomLevels;
+        protected int zoomIndex;
         /// <summary>
         /// Gets the current zoom level, f, where f = 1 means no zoom
         /// </summary>
         public float Zoom { get { return zoomLevels[zoomIndex]; } }
 
-        private Matrix zoomMatrix;
+        protected Matrix zoomMatrix;
         /// <summary>
         /// Gets the precalculated zoom matrix
         /// </summary>
         public Matrix ZoomMatrix { get { return zoomMatrix; } }
 
-        private Matrix offsetMatrix;
+        protected Matrix offsetMatrix;
         /// <summary>
         /// Gets the precalculated offset matrix
         /// </summary>
         public Matrix OffsetMatrix { get { return offsetMatrix; } }
 
-        private Matrix zoomAndOffsetMatrix;
+        protected Matrix zoomAndOffsetMatrix;
         /// <summary>
         /// Gets the precalculated zoom*offset matrix
         /// </summary>
         public Matrix ZoomAndOffsetMatrix { get { return zoomAndOffsetMatrix; } }
 
-        private Point offset;
+        protected Point offset;
         /// <summary>
         /// A position in projection space describing
         /// the upper left corner of the screen.
@@ -59,7 +59,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
 
 
         public Camera()
-            : this(DEFAULT_ZOOM_LEVELS, DEFAULT_ZOOM_INDEX, DEFAULT_OFFSET) 
+            : this(DEFAULT_ZOOM_LEVELS, DEFAULT_ZOOM_INDEX)
         { }
 
         public Camera(float[] zoomLevels, int zoomIndex)
@@ -82,22 +82,6 @@ namespace Mindstep.EasterEgg.Commons.Graphic
 
 
         /// <summary>
-        /// Zooms in around the upper left corner of the screen
-        /// </summary>
-        public void ZoomIn()
-        {
-            //ZoomIn(Point.Zero);
-        }
-
-        /// <summary>
-        /// Zooms out around the upper left corner of the screen
-        /// </summary>
-        public void ZoomOut()
-        {
-            //ZoomOut(Point.Zero);
-        }
-
-        /// <summary>
         /// Zooms in around the given point
         /// </summary>
         /// <param name="around">A Point in screen space, AKA:
@@ -114,7 +98,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
                 float newZoom = Zoom;
                 float zoomChange = newZoom / oldZoom;
 
-                Point a = around.Subtract(offset);
+                Point a = around.Subtract(Offset);
                 Point b = a.Multiply(zoomChange);
 
                 Offset = Offset.Add(a).Subtract(b);
@@ -136,17 +120,17 @@ namespace Mindstep.EasterEgg.Commons.Graphic
                 float newZoom = Zoom;
                 float zoomChange = newZoom / oldZoom;
 
-                Point a = around.Subtract(offset);
+                Point a = around.Subtract(Offset);
                 Point b = a.Multiply(zoomChange);
 
                 Offset = Offset.Add(a).Subtract(b);
             }
         }
 
-        private void zoomOrOffsetChanged()
+        protected void zoomOrOffsetChanged()
         {
             zoomMatrix = Matrix.CreateScale(Zoom);
-            offsetMatrix = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+            offsetMatrix = Matrix.CreateTranslation(Offset.X, Offset.Y, 0);
             zoomAndOffsetMatrix = ZoomMatrix * OffsetMatrix;
         }
     }

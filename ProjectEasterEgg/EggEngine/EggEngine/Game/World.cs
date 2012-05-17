@@ -42,7 +42,6 @@ namespace Mindstep.EasterEgg.Engine
             {
                 if (!maps.Contains(value))
                 {
-                    value.Initialize(Engine);
                     maps.Add(value);
                 }
 
@@ -72,6 +71,7 @@ namespace Mindstep.EasterEgg.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            CurrentMap.Camera.PrepareForDraw();
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, CurrentMap.Camera.ZoomAndOffsetMatrix);
             CurrentMap.Draw(spriteBatch);
             spriteBatch.End();

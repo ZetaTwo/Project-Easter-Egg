@@ -105,8 +105,8 @@ namespace Mindstep.EasterEgg.MapEditor
             blockTypeColor = new Dictionary<BlockType, Color>();
             blockTypeColor.Add(BlockType.SOLID, Color.Green);
             blockTypeColor.Add(BlockType.WALKABLE, Color.Olive);
-            blockTypeColor.Add(BlockType.STAIRS_UP, Color.Brown);
-            blockTypeColor.Add(BlockType.STAIRS_DOWN, Color.Blue);
+            blockTypeColor.Add(BlockType.STAIRS, Color.Brown);
+            blockTypeColor.Add(BlockType.LADDER, Color.Yellow);
             blockTypeColor.Add(BlockType.SPAWN_LOCATION, Color.White);
 
             blockDrawStateTexture = new Dictionary<BlockDrawState, Texture2D>();
@@ -211,9 +211,9 @@ namespace Mindstep.EasterEgg.MapEditor
             BoundingBoxInt boundingBox = new BoundingBoxInt(mainForm.CurrentModel.blocks.ToPositions());
 
             List<Position> tiles = new List<Position>();
-            for (int x = -5; x < 10; x += 1)
+            for (int x = -5; x <= 5; x++)
             {
-                for (int y = -5; y < 10; y += 1)
+                for (int y = -5; y <= 5; y++)
                 {
                     Position tilePos = new Position(x, y, -1);
                     tiles.Add(tilePos);
@@ -321,7 +321,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawBlock(Texture2D image, BoundingBoxInt boundingBox, Color color, Position pos, float depthOffset = 0)
         {
             float depth = boundingBox.getRelativeDepthOf(pos);
-            Vector2 projCoords = CoordinateTransform.ObjectToProjSpace(pos);
+            Vector2 projCoords = CoordinateTransform.ObjectToProjectionSpace(pos);
             spriteBatch.Draw(image, projCoords + Constants.blockDrawOffset, null, color, 0, Vector2.Zero, 1, SpriteEffects.None, (depth + depthOffset) / camera.Zoom);
         }
 
@@ -409,6 +409,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void MainView_MouseMove(object sender, MouseEventArgs e)
         {
+            mainForm.SetDisplayCoords(CoordinateTransform.ScreenToObjectSpace(e.Location.ToXnaPoint(), camera, currentLayer).ToPosition());
+
             if (!(e.Button == System.Windows.Forms.MouseButtons.Left ||
                 e.Button == System.Windows.Forms.MouseButtons.Right ||
                 e.Button == System.Windows.Forms.MouseButtons.Middle))
@@ -587,6 +589,16 @@ namespace Mindstep.EasterEgg.MapEditor
         private void deleteBlockAt(System.Drawing.Point mouseLocation)
         {
             Position pos = posUnderPoint(mouseLocation);
+            foreach (SaveAnimation<Texture2DWithPos> animation in mainForm.CurrentModel.animations)
+            {
+                foreach (SaveFrame<Texture2DWithPos> frame in animation.Frames)
+                {
+                    foreach (Texture2DWithPos tex in frame.Images.BackToFront())
+                    {
+                        tex.projectedOnto.RemoveAll(block => block.Position == pos);
+                    }
+                }
+            }
             mainForm.CurrentModel.blocks.RemoveAll(block => block.Position == pos);
             mainForm.UpdatedThings();
         }
@@ -620,7 +632,7 @@ namespace Mindstep.EasterEgg.MapEditor
             foreach (SaveBlock block in outOf.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)))
             {
                 System.Drawing.Region blockRegion = BlockRegions.WholeBlock.Offset(
-                    CoordinateTransform.ObjectToProjSpace(block.Position).ToXnaPoint().Add(
+                    CoordinateTransform.ObjectToProjectionSpace(block.Position).ToXnaPoint().Add(
                     Constants.blockDrawOffset.ToXnaPoint()));
                 if (blockRegion.IsVisible(pointInProjSpace))
                 {

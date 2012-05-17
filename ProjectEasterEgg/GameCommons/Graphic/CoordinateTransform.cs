@@ -14,8 +14,12 @@ namespace Mindstep.EasterEgg.Commons
 
         public static Vector2 ObjectToProjectionSpace(Vector3 map)
         {
-            int x = (int)((-map.X + map.Y) * TILE_WIDTH_OVER_2);
-            int y = (int)((map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT);
+            return ObjectToProjectionSpace(map.ToPosition());
+        }
+        public static Vector2 ObjectToProjectionSpace(Position map)
+        {
+            int x = (-map.X + map.Y) * TILE_WIDTH_OVER_2;
+            int y = (map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT;
 
             return new Vector2(x, y);
         }
@@ -23,14 +27,6 @@ namespace Mindstep.EasterEgg.Commons
         public static Vector2 ObjectToBlockDrawCoordsInProjectionSpace(Vector3 map)
         {
             return ObjectToProjectionSpace(map) + Constants.blockDrawOffset;
-        }
-
-        public static Vector2 ObjectToProjSpace(Position map)
-        {
-            int x = (-map.X + map.Y) * TILE_WIDTH_OVER_2;
-            int y = (map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT;
-
-            return new Vector2(x, y);
         }
 
         public static Vector3 ScreenToObjectSpace(Point point, Camera camera, int layer)

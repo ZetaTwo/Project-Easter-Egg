@@ -62,7 +62,9 @@
   <ItemGroup>
     <Compile Include="Character.cs" />
     <Compile Include="EggEngine.cs" />
-    <Compile Include="Game\Camera.cs" />
+    <Compile Include="Game\Child.cs" />
+    <Compile Include="Game\GameCamera.cs" />
+    <Compile Include="Game\GameCharacter.cs" />
     <Compile Include="Game\GameModel.cs" />
     <Compile Include="Game\GameBlock.cs" />
     <Compile Include="Game\GameEntity.cs" />
@@ -74,9 +76,12 @@
     <Compile Include="Game\WorldMatrix.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Frame.cs" />
-    <Compile Include="Input\IInputManager.cs" />
+    <Compile Include="Input\KeyboardInfo.cs" />
+    <Compile Include="Interfaces\Entity.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\MouseInfo.cs" />
     <Compile Include="Input\MousePointer.cs" />
+    <Compile Include="Interfaces\IUpdate.cs" />
     <Compile Include="Physics\Path.cs" />
     <Compile Include="Physics\PriorityQueue.cs" />
     <Compile Include="Script\Base\ScriptBlock.cs" />
@@ -86,7 +91,6 @@
     <Compile Include="Script\ScriptState.cs" />
     <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="Storage\IStorageManager.cs" />
-    <Compile Include="Physics\IPhysicsManager.cs" />
     <Compile Include="Script\IScriptEngine.cs" />
     <Compile Include="Sound\ISoundManager.cs" />
     <Compile Include="Physics\IPhysicsObject.cs" />

@@ -2,53 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mindstep.EasterEgg.Commons;
+using Microsoft.Xna.Framework.Input;
+using SysMouse = Microsoft.Xna.Framework.Input.Mouse;
 
-namespace Mindstep.EasterEgg.Engine
+namespace Mindstep.EasterEgg.Engine.Input
 {
-    public class InputManager : IInputManager
+    public class InputManager
     {
-        EggEngine engine;
-        public EggEngine Engine
-        {
-            get { return engine; }
-        }
-        
-        MouseState currentMouseState;
-        MouseState previousMouseState;
+        private EggEngine engine;
+        public EggEngine Engine { get { return engine; } }
 
-        Vector2 Origin;
-        public Vector2 MouseDelta
-        {
-            get
-            {
-                return new Vector2(currentMouseState.X, currentMouseState.Y) - Origin;
-            }
-        }
+        private MouseInfo mouse;
+        public MouseInfo Mouse { get { return mouse; } }
 
-        public bool ClickLeft { get { return currentMouseState.LeftButton == ButtonState.Pressed; } }
-        public bool ClickRight { get { return currentMouseState.RightButton == ButtonState.Pressed; } }
+        private KeyboardInfo keyboard;
+        public KeyboardInfo Keyboard { get { return keyboard; } }
+
+
+
+
 
         public InputManager()
+        { }
+
+        public void Initialize(EggEngine engine)
         {
+            this.engine = engine;
+            mouse = new MouseInfo(Engine);
+            keyboard = new KeyboardInfo(Engine);
+
+            Engine.Activated += new EventHandler<EventArgs>(WindowFocusGained);
+            Engine.Deactivated += new EventHandler<EventArgs>(WindowFocusLost);
         }
 
-        public void Initialize(EggEngine _engine)
-        {
-            engine = _engine;
 
-            Viewport view = Engine.GraphicsDevice.Viewport;
-            Origin = new Vector2(view.Width / 2, view.Height / 2);
+
+
+
+        public void WindowFocusGained(object sender, EventArgs e)
+        {
+            Mouse.Freeze(SysMouse.GetState().Location());
+            Engine.IsMouseVisible = false;
         }
 
-        public void Update(GameTime gameTime)
+        public void WindowFocusLost(object sender, EventArgs e)
         {
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            Mouse.Unfreeze();
+            Engine.IsMouseVisible = true;
+        }
 
-            Mouse.SetPosition((int)Origin.X, (int)Origin.Y);
+        internal void Update(GameTime gameTime)
+        {
+            Mouse.Update(gameTime);
+            Keyboard.Update(gameTime);
         }
     }
 }

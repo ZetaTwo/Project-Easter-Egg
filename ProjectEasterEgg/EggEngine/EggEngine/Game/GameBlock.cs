@@ -11,8 +11,10 @@ using Mindstep.EasterEgg.Commons.Physics;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class GameBlock : Block
+    public class GameBlock : Block, Child
     {
+        public static GameBlock OutOfBounds = new GameBlock(BlockType.OUT_OF_BOUNDS);
+
         protected EggEngine engine;
         public EggEngine Engine
         {
@@ -25,40 +27,52 @@ namespace Mindstep.EasterEgg.Engine.Game
             get { return scriptName != null; }
         }
 
+        private BlockType type;
+        public BlockType Type
+        {
+            get { return type; }
+        }
+
+        private GameModel parent;
+        public GameModel Parent { get { return parent; } }
 
 
 
-        public GameBlock(GameBlockDTO blockData)
-            : this(blockData.Type, blockData.Position, blockData.scriptName)
+
+
+        public GameBlock(GameModel parent, GameBlockDTO blockData)
+            : this(parent, blockData.Type, blockData.Position, blockData.scriptName)
         { }
 
-        public GameBlock(BlockType blockType, Position position)
-            : this(blockType, position, null)
-        { }
-
-        public GameBlock(BlockType type, Position position, string scriptName)
+        public GameBlock(GameModel parent, BlockType type, Position position, string scriptName = null)
             : base(position)
         {
             if (scriptName != null)
             {
-                this.scriptName = "ScriptBlock" + scriptName;
+                this.scriptName = Constants.SCRIPT_BLOCK_PREFIX + scriptName;
+            }
+            if (type == BlockType.OUT_OF_BOUNDS)
+            {
+                throw new Exception("Can't set blocktype to out_of_bounds!");
             }
             this.type = type;
+            this.parent = parent;
         }
-
-
-
 
         public void Initialize(EggEngine engine)
         {
             this.engine = engine;
         }
 
-        private BlockType type;
-        public BlockType Type
+        private GameBlock(BlockType anyBlockType)
+            : base(Position.Zero)
         {
-            get { return type; }
+            this.type = anyBlockType;
         }
+
+
+
+
 
         public void Interact(BlockAction action)
         {

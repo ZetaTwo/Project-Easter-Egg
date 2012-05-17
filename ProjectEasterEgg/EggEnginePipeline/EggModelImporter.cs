@@ -52,7 +52,7 @@ namespace EggEnginePipeline
                 {
                     if (block.type == BlockType.SPAWN_LOCATION)
                     {
-                        model.spanwLocations.Add(block.script, block.Position);
+                        model.spawnLocations.Add(block.script, block.Position);
                     }
                     else
                     {
@@ -64,6 +64,8 @@ namespace EggEnginePipeline
                         model.blocks.Add(gameBlock);
                     }
                 }
+
+                saveModel.blocks.RemoveAll(block => block.type == BlockType.SPAWN_LOCATION);
             }
 
             //Debugger.Launch();
@@ -77,7 +79,7 @@ namespace EggEnginePipeline
                 {
                     FrameDTO frame = new FrameDTO(saveFrame.Duration);
 
-                    foreach (BitmapWithPos bitmap in saveFrame.Images.FrontToBack())
+                    foreach (BitmapWithPos bitmap in saveFrame.Images.BackToFront())
                     {
                         foreach (SaveBlock saveBlock in bitmap.projectedOnto) {
                             int index = saveModel.blocks.IndexOf(saveBlock);

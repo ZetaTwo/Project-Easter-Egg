@@ -25,7 +25,7 @@ namespace Mindstep.EasterEgg.Engine.Game
             get { return relativeBounds; }
         }
 
-        public Mindstep.EasterEgg.Commons.Graphic.Camera Camera;
+        public GameCamera Camera;
 
         private List<IEntityDrawable> drawableObjects = new List<IEntityDrawable>();
 
@@ -40,10 +40,15 @@ namespace Mindstep.EasterEgg.Engine.Game
         public GameMap(GameModelDTO data)
             : base(data)
         {
-            Camera = new Mindstep.EasterEgg.Commons.Graphic.Camera(new Point(200, 200));
+            Camera = new GameCamera();
 
-            worldMatrix = new WorldMatrix(Bounds);
-            WorldMatrix.placeModel(this);
+            worldMatrix = new WorldMatrix(this);
+        }
+
+        public GameMap(GameModelDTO data, EggEngine engine)
+            : this(data)
+        {
+            Initialize(engine);
         }
         
         public void Update(GameTime gameTime)
@@ -72,6 +77,29 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             this.engine = engine;
             base.Initialize(engine);
+        }
+
+        public bool Spawn(GameModel model, string at)
+        {
+            Position location;
+            if (spawnLocations.TryGetValue(at, out location))
+            {
+                if (worldMatrix.tryToPlaceModel(model, location))
+                {
+                    model.position = location;
+                    model.Parent = this;
+                    subModels.Add(model);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("No known spawn location '" + at + "'.");
+            }
         }
 
         public void AddDraw(IEntityDrawable entity)

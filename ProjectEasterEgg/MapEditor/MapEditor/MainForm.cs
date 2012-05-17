@@ -120,6 +120,13 @@ namespace Mindstep.EasterEgg.MapEditor
             Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(mainView.Zoom * 100, 0) + "%]";
         }
 
+        public void SetDisplayCoords(Position position)
+        {
+            toolStripCoordX.Text = "X:" + position.X;
+            toolStripCoordY.Text = "Y:" + position.Y;
+            toolStripCoordZ.Text = "Z:" + position.Z;
+        }
+
         #region save/open/import
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -283,6 +290,9 @@ namespace Mindstep.EasterEgg.MapEditor
             toolStripEditTextures.Checked = mainView.CurrentEditingMode == EditingMode.Texture ||
                 mainView.CurrentEditingMode == EditingMode.TextureProjection;
 
+            toolStripCoordX.Enabled = toolStripCoordY.Enabled = toolStripCoordZ.Enabled =
+                mainView.CurrentEditingMode == EditingMode.Block;
+            
             //something related to background color could be changed here too
 
             trackBarTextureOpacity.Value = (int)(mainView.TextureOpacity*trackBarTextureOpacity.Maximum);

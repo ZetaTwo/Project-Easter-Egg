@@ -54,6 +54,10 @@ namespace Mindstep.EasterEgg.MapEditor
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.toolStripCoordZ = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripCoordX = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripCoordY = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).BeginInit();
@@ -76,6 +80,10 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockSolid,
             this.toolStripDrawBlockWireframe,
             this.toolStripDrawBlockNone,
+            this.toolStripSeparator4,
+            this.toolStripCoordX,
+            this.toolStripCoordY,
+            this.toolStripCoordZ,
             this.toolStripSeparator3,
             this.toolStripTextureOpacityLabel});
             this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
@@ -319,6 +327,42 @@ namespace Mindstep.EasterEgg.MapEditor
             this.openFileDialog.Title = "Open Model";
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
+            // toolStripCoordZ
+            // 
+            this.toolStripCoordZ.AutoSize = false;
+            this.toolStripCoordZ.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordZ.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordZ.Name = "toolStripCoordZ";
+            this.toolStripCoordZ.Size = new System.Drawing.Size(30, 13);
+            this.toolStripCoordZ.Text = "Z:0";
+            this.toolStripCoordZ.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripCoordX
+            // 
+            this.toolStripCoordX.AutoSize = false;
+            this.toolStripCoordX.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordX.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordX.Name = "toolStripCoordX";
+            this.toolStripCoordX.Size = new System.Drawing.Size(30, 13);
+            this.toolStripCoordX.Text = "X:0";
+            this.toolStripCoordX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripCoordY
+            // 
+            this.toolStripCoordY.AutoSize = false;
+            this.toolStripCoordY.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordY.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordY.Name = "toolStripCoordY";
+            this.toolStripCoordY.Size = new System.Drawing.Size(35, 13);
+            this.toolStripCoordY.Text = "Y:0";
+            this.toolStripCoordY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 23);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,6 +415,10 @@ namespace Mindstep.EasterEgg.MapEditor
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripLabel toolStripCoordX;
+        private System.Windows.Forms.ToolStripLabel toolStripCoordY;
+        private System.Windows.Forms.ToolStripLabel toolStripCoordZ;
     }
 }
 

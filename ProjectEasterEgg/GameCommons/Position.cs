@@ -17,6 +17,19 @@ namespace Mindstep.EasterEgg.Commons
         /// </summary>
         public static readonly Position One = new Position(1, 1, 1);
 
+        public static readonly Position SW = new Position(1, 0, 0);
+        public static readonly Position SE = new Position(0, 1, 0);
+        public static readonly Position NE = -SW;
+        public static readonly Position NW = -SE;
+        public static readonly Position N = NE + NW;
+        public static readonly Position E = NE + SE;
+        public static readonly Position S = SW + SE;
+        public static readonly Position W = SW + NW;
+
+        public static readonly Position Up = new Position(0, 0, 1);
+        public static readonly Position Down = -Up;
+
+
         private int x;
         public int X
         {

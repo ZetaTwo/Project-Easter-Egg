@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mindstep.EasterEgg.Engine.Physics;
+using Mindstep.EasterEgg.Engine.Input;
 
 namespace Mindstep.EasterEgg.Engine
 {
@@ -22,19 +23,19 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
-        public IPhysicsManager Physics
+        public PhysicsManager Physics
         {
             get
             {
-                return Services.GetService(typeof(IPhysicsManager)) as IPhysicsManager;
+                return Services.GetService(typeof(PhysicsManager)) as PhysicsManager;
             }
         }
 
-        public IInputManager Input
+        public InputManager Input
         {
             get
             {
-                return Services.GetService(typeof(IInputManager)) as IInputManager;
+                return Services.GetService(typeof(InputManager)) as InputManager;
             }
         }
 
@@ -69,9 +70,9 @@ namespace Mindstep.EasterEgg.Engine
             Content.RootDirectory = "Content";
 
             Services.AddService(typeof(IScriptEngine), new ScriptEngine(this));
-            Services.AddService(typeof(IPhysicsManager), new PhysicsManager(this));
+            Services.AddService(typeof(PhysicsManager), new PhysicsManager(this));
             Services.AddService(typeof(ISoundManager), new SoundManager(this));
-            Services.AddService(typeof(IInputManager), new InputManager());
+            Services.AddService(typeof(InputManager), new InputManager());
         }
 
         /// <summary>

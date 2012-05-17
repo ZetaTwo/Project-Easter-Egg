@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
@@ -61,50 +62,50 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public void SendBackward(IEnumerable<T> texs)
         {
-            foreach (T tex in texs)
+            foreach (T tex in texs.OrderBy(tex => textures.IndexOf(tex)))
             {
                 SendBackward(tex);
             }
         }
         public void SendBackward(T tex)
         {
-            int index = textures.LastIndexOf(tex);
-
-            textures.Remove(tex);
-            for (index--; index >= 0; index--)
+            T intersectingTex = textures.FirstOrDefault(t => t.Bounds.Intersects(tex.Bounds));
+            if (intersectingTex != null &&
+                textures.IndexOf(intersectingTex) < textures.IndexOf(tex))
             {
-                if (textures[index].Bounds.Intersects(tex.Bounds))
-                {
-                    textures.Insert(index, tex);
-                    break;
-                }
+                Remove(tex);
+                textures.Insert(textures.IndexOf(intersectingTex), tex);
             }
-            AddToBack(tex);
+            else
+            {
+                Remove(tex);
+                AddToBack(tex);
+            }
         }
 
 
 
         public void BringForward(IEnumerable<T> texs)
         {
-            foreach (T tex in texs)
+            foreach (T tex in texs.OrderByDescending(tex => textures.IndexOf(tex)))
             {
                 BringForward(tex);
             }
         }
         public void BringForward(T tex)
         {
-            int index = textures.IndexOf(tex);
-
-            textures.Remove(tex);
-            for (; index < textures.Count; index++)
+            T intersectingTex = textures.LastOrDefault(t => t.Bounds.Intersects(tex.Bounds));
+            if (intersectingTex != null &&
+                textures.IndexOf(intersectingTex) > textures.IndexOf(tex))
             {
-                if (textures[index].Bounds.Intersects(tex.Bounds))
-                {
-                    textures.Insert(index+1, tex);
-                    break;
-                }
+                Remove(tex);
+                textures.Insert(textures.IndexOf(intersectingTex) + 1, tex);
             }
-            AddToFront(tex);
+            else
+            {
+                Remove(tex);
+                AddToFront(tex);
+            }
         }
 
 
@@ -118,6 +119,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         }
         public void AddToBack(T tex)
         {
+            renameTextureIfNecessary(tex);
             textures.Insert(0, tex);
         }
 
@@ -132,6 +134,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         }
         public void AddToFront(T tex)
         {
+            renameTextureIfNecessary(tex);
             textures.Add(tex);
         }
 
@@ -147,6 +150,40 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public void Remove(T tex)
         {
             textures.Remove(tex);
+        }
+
+
+
+
+
+        private void renameTextureIfNecessary(T tex)
+        {
+            if (textures.Any(t => t.name == tex.name))
+            {
+                string originalName;
+                {
+                    Match match = Regex.Match(tex.name, @"^(.*) \(\d+\)$");
+                    if (match.Success)
+                    {
+                        originalName = match.Captures[0].Value;
+                    }
+                    else
+                    {
+                        originalName = tex.name;
+                    }
+                }
+                int lastIndex = 2;
+                foreach (T t in textures)
+                {
+                    Match match = Regex.Match(tex.name, "^" + Regex.Escape(originalName) + @" \(\(d+)\)$");
+                    if (match.Success)
+                    {
+                        lastIndex = Math.Max(lastIndex, int.Parse(match.Captures[0].Value));
+                    }
+                }
+
+                tex.name = originalName + " (" + lastIndex + ")";
+            }
         }
     }
 }

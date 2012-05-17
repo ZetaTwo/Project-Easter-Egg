@@ -24,6 +24,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
             InitializeComponent();
             BlockTypesDropDown.Items.AddRange(Enum.GetNames(typeof(BlockType)));
+            BlockTypesDropDown.Items.Remove(Enum.GetName(typeof(BlockType), BlockType.OUT_OF_BOUNDS));
 
             string blockTypeText, scriptNameText;
             if (this.blocks.All(block => block.type == this.blocks.First().type))
