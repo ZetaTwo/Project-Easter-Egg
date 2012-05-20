@@ -12,14 +12,15 @@ namespace Mindstep.EasterEgg.Commons
         private const int TILE_WIDTH_OVER_2 = Constants.TILE_WIDTH / 2;
         private const int TILE_HEIGHT_OVER_2 = Constants.TILE_HEIGHT / 2;
 
-        public static Vector2 ObjectToProjectionSpace(Vector3 map)
-        {
-            return ObjectToProjectionSpace(map.ToPosition());
-        }
         public static Vector2 ObjectToProjectionSpace(Position map)
         {
-            int x = (-map.X + map.Y) * TILE_WIDTH_OVER_2;
-            int y = (map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT;
+            return ObjectToProjectionSpace(map.ToVector3());
+        }
+
+        public static Vector2 ObjectToProjectionSpace(Vector3 map)
+        {
+            float x = (-map.X + map.Y) * TILE_WIDTH_OVER_2;
+            float y = (map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT;
 
             return new Vector2(x, y);
         }

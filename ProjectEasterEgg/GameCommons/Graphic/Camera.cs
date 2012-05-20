@@ -74,7 +74,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
         {
             this.zoomLevels = zoomLevels;
             this.zoomIndex = zoomIndex;
-            this.zoomIndex = Extensions.Clamp(zoomIndex, 0, zoomLevels.Length);
+            this.zoomIndex = zoomIndex.Clamp(0, zoomLevels.Length);
             this.Offset = offset;
         }
 

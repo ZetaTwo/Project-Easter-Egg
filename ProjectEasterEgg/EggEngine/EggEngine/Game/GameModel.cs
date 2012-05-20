@@ -23,7 +23,8 @@ namespace Mindstep.EasterEgg.Engine.Game
         /// </summary>
         internal Position position = Position.Zero;
         public Position Position { get { return position; } }
-        public readonly Dictionary<string, Animation> Animations = new Dictionary<string,Animation>();
+
+        public readonly Dictionary<string, Animation> Animations = new Dictionary<string, Animation>();
         protected readonly Dictionary<string, Position> spawnLocations;
 
         protected GameModel parent;
@@ -77,17 +78,23 @@ namespace Mindstep.EasterEgg.Engine.Game
 
 
 
-        public void Draw(SpriteBatch spriteBatch, BoundingBoxInt worldBounds)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds)
+        {
+            Draw(gameTime, spriteBatch, worldBounds, 0);
+        }
+
+        protected virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, float depthOffset)
         {
             Frame currentFrame = Animations["still"].Frames[0];
+            Vector3 fractionalRenderPosition = RenderPosition(gameTime);
+            Position wholeRenderPosition = fractionalRenderPosition.RoundUp();
             for (int i = 0; i < blocks.Length; i++)
             {
-                Position absolutePosition = this.AbsolutePosition();
                 if (currentFrame.textures[i] != null)
                 {
-                    float depth = worldBounds.getRelativeDepthOf(blocks[i].Position + absolutePosition);
-                    //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(Position) * 1.3f).ToPoint().ToVector2();
-                    Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(absolutePosition + blocks[i].Position);
+                    float depth = worldBounds.getRelativeDepthOf(wholeRenderPosition + blocks[i].Position, depthOffset);
+                    //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(realPosition) * 1.3f).ToPoint().ToVector2();
+                    Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(fractionalRenderPosition + blocks[i].Position.ToVector3());
                     spriteBatch.Draw(currentFrame.textures[i], screenCoords, null,
                         Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
                 }
@@ -95,7 +102,7 @@ namespace Mindstep.EasterEgg.Engine.Game
 
             foreach (GameModel subModel in subModels)
             {
-                subModel.Draw(spriteBatch, worldBounds);
+                subModel.Draw(gameTime, spriteBatch, worldBounds, depthOffset);
             }
         }
 
@@ -118,6 +125,11 @@ namespace Mindstep.EasterEgg.Engine.Game
                     yield return subModel.Position + blockOffset;
                 }
             }
+        }
+
+        public virtual Vector3 RenderPosition(GameTime gameTime)
+        {
+            return this.AbsolutePosition().ToVector3();
         }
     }
 }

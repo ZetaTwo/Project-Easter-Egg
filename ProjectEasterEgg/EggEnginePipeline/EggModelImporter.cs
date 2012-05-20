@@ -81,6 +81,13 @@ namespace EggEnginePipeline
 
                     foreach (BitmapWithPos bitmap in saveFrame.Images.BackToFront())
                     {
+                        for (int i=0; i< model.blocks.Count; i++) //TODO: temp
+                        {
+                            if (!frame.textures.ContainsKey(i))
+                            {
+                                frame.textures.Add(i, new SaveBlockImage());
+                            }
+                        }
                         foreach (SaveBlock saveBlock in bitmap.projectedOnto) {
                             int index = saveModel.blocks.IndexOf(saveBlock);
                             GameBlockDTO block = model.blocks[index];

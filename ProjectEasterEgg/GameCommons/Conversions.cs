@@ -44,6 +44,10 @@ namespace Mindstep.EasterEgg.Commons
         {
             return new Vector3(pos.X, pos.Y, pos.Z);
         }
+        public static Position RoundUp(this Vector3 pos)
+        {
+            return new Position(pos.X.RoundUp(), pos.Y.RoundUp(), pos.Z.RoundUp());
+        }
 
         public static Color ToXnaColor(this System.Drawing.Color c)
         {

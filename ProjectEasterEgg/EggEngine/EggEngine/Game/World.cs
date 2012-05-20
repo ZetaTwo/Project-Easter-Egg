@@ -69,23 +69,23 @@ namespace Mindstep.EasterEgg.Engine
             samplerState.AddressV = TextureAddressMode.Clamp;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            CurrentMap.Camera.PrepareForDraw();
+            CurrentMap.Camera.PrepareForDraw(gameTime);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, CurrentMap.Camera.ZoomAndOffsetMatrix);
-            CurrentMap.Draw(spriteBatch);
+            CurrentMap.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            DrawWorld(spriteBatch);
+            DrawWorld(gameTime, spriteBatch);
             spriteBatch.End();
         }
 
-        private void DrawWorld(SpriteBatch spriteBatch)
+        private void DrawWorld(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (IEntityDrawable entity in drawables)
             {
-                entity.Draw(spriteBatch);
+                entity.Draw(gameTime, spriteBatch);
             }
         }
 

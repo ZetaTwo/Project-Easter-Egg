@@ -59,9 +59,9 @@ namespace Mindstep.EasterEgg.Engine.Game
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch, Bounds);
+            base.Draw(gameTime, spriteBatch, Bounds);
             //    foreach (GameBlock block in this)
             //    {
             //        block.Draw(spriteBatch, Bounds);

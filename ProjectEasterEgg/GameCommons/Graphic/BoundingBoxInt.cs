@@ -86,6 +86,11 @@ namespace Mindstep.EasterEgg.Commons
         /// <returns>A value between 0.1 and 0.9, where higher is farther away</returns>
         public float getRelativeDepthOf(Position pos)
         {
+            return getRelativeDepthOf(pos, 0);
+        }
+
+        public float getRelativeDepthOf(Position pos, float depthOffsetBeforeNormalization)
+        {
             /* Moving forward one step in X when viewed from directly above
              * moves you sqrt(2)/2 closer to the "bottom corner line".
              * However, when viewed from an angle (60 degrees tilted)
@@ -103,10 +108,11 @@ namespace Mindstep.EasterEgg.Commons
              * 1*cos(60) = 0.5
              * 
              */
-            float depth = (pos.X - Min.X) * 0.62f; //prioritize X over Y
-            depth += (pos.Y - Min.Y) * 0.608f;
+            float depth = depthOffsetBeforeNormalization;
+            depth += (pos.X - Min.X) * 0.62f; //prioritize X over Y
+            depth += (pos.Y - Min.Y) * 0.604f;
             depth += (pos.Z - Min.Z) * 0.5f;
-            return 0.9f - depth/fullDepth*0.8f;
+            return 0.9f - depth / fullDepth * 0.8f;
         }
     }
 }

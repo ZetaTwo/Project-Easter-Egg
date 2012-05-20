@@ -106,7 +106,6 @@ namespace Mindstep.EasterEgg.MapEditor
             blockTypeColor.Add(BlockType.SOLID, Color.Green);
             blockTypeColor.Add(BlockType.WALKABLE, Color.Olive);
             blockTypeColor.Add(BlockType.STAIRS, Color.Brown);
-            blockTypeColor.Add(BlockType.LADDER, Color.Yellow);
             blockTypeColor.Add(BlockType.SPAWN_LOCATION, Color.White);
 
             blockDrawStateTexture = new Dictionary<BlockDrawState, Texture2D>();

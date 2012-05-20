@@ -67,12 +67,14 @@
     <Compile Include="DTO\AnimationDTO.cs" />
     <Compile Include="DTO\GameModelDTO.cs" />
     <Compile Include="DTO\SaveableBlockImage.cs" />
+    <Compile Include="NumericExtensions.cs" />
     <Compile Include="Physics\SpawnLocation.cs" />
     <Compile Include="Graphic\BlockImage.cs" />
     <Compile Include="DTO\FrameDTO.cs" />
     <Compile Include="DTO\GameBlockDTO.cs" />
     <Compile Include="DTO\GameMapDTO.cs" />
     <Compile Include="Physics\IPositionable.cs" />
+    <Compile Include="PointAndVectorExtensions.cs" />
     <Compile Include="SaveLoad\SaveAnimation.cs" />
     <Compile Include="SaveLoad\SaveFrame.cs" />
     <Compile Include="SaveLoad\BitmapWithPos.cs" />

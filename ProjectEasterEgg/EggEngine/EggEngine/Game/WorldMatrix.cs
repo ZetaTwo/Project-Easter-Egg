@@ -7,84 +7,14 @@ using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
-    public class WorldMatrix
+    public class WorldMatrix : OffsetedMatrix<GameBlock>
     {
-        private GameBlock[, ,] matrix;
-        private Position offset;
-
-        /// <summary>
-        /// Elements in the matrix must be set to null before setting them to something else.
-        /// They are initialized as null.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <returns>null if the space is empty or outside the matrix</returns>
-        public GameBlock this[int x, int y, int z]
-        {
-            get
-            {
-                if (!insideBounds(x, y, z))
-                {
-                    return GameBlock.OutOfBounds;
-                }
-                return matrix[x + offset.X, y + offset.Y, z + offset.Z];
-            }
-            set
-            {
-                if (!insideBounds(x, y, z))
-                {
-                    throw new Exception("Can't set a block outside the bounds of the matrix!");
-                }
-                if (value != null && matrix[x + offset.X, y + offset.Y, z + offset.Z] != null)
-                {
-                    throw new Exception("Collision in world matrix, trying to set a block that isn't null");
-                }
-                matrix[x + offset.X, y + offset.Y, z + offset.Z] = value;
-            }
-        }
-
-        private bool insideBounds(int x, int y, int z)
-        {
-            return x.BetweenInclusive(minX, maxX) &&
-                   y.BetweenInclusive(minY, maxY) &&
-                   z.BetweenInclusive(minZ, maxZ);
-        }
-
-        /// <summary>
-        /// Elements in the matrix must be set to null before setting them to something else.
-        /// They are initialized as null.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public GameBlock this[Position pos]
-        {
-            get { return this[pos.X, pos.Y, pos.Z]; }
-            set { this[pos.X, pos.Y, pos.Z] = value; }
-        }
-
-        public int minX { get { return -offset.X; } }
-        public int minY { get { return -offset.Y; } }
-        public int minZ { get { return -offset.Z; } }
-        public int sizeX { get { return matrix.GetLength(0); } }
-        public int sizeY { get { return matrix.GetLength(1); } }
-        public int sizeZ { get { return matrix.GetLength(2); } }
-        public int maxX { get { return minX + sizeX - 1; } }
-        public int maxY { get { return minY + sizeY - 1; } }
-        public int maxZ { get { return minZ + sizeZ - 1; } }
-
-
-
-
-
         public WorldMatrix(BoundingBoxInt bounds)
-        {
-            offset = -bounds.Min;
-            Position size = bounds.Max + offset + Position.One;
-            matrix = (GameBlock[, ,])Array.CreateInstance(typeof(GameBlock), size.X, size.Y, size.Z);
-        }
+            : base(-bounds.Min, bounds.Max - bounds.Min,
+                    GameBlock.OutOfBounds,
+                    new Exception("Can't set a block outside the bounds of the matrix!"),
+                    new Exception("Collision in world matrix, trying to set a block that isn't null"))
+        { }
 
         public WorldMatrix(GameMap gameMap)
             : this(gameMap.Bounds)
@@ -141,9 +71,9 @@ namespace Mindstep.EasterEgg.Engine.Game
         public bool beginMoveModel(GameModel model, Position destination)
         {
             // if space is empty or belongs to the model itself
-            if (canBeAt(model, destination))
+            if (modelCanBeAt(model, destination))
             {
-                //place it at end position
+                //place it at its destination
                 forcePlaceModel(model, destination);
                 return true;
             }
@@ -180,17 +110,30 @@ namespace Mindstep.EasterEgg.Engine.Game
                 pos => this[pos].hasParent(model));
         }
 
-        public bool canBeAt(GameModel model, Position position)
+        public bool modelCanBeAt(GameModel model, Position position)
         {
             return model.getAllRelativeBlockPositions().Offset(position).All(
-                pos => this[pos] == null || this[pos].hasParent(model));
+                pos =>
+                    this[pos] == null ||
+                    //this[pos].Type == BlockType.LADDER || //TODO: support ladder
+                    this[pos].hasParent(model));
         }
 
         public bool modelCanStandAt(GameModel model, Position position)
         {
-            return canBeAt(model, position) &&
+            bool _;
+            return modelCanStandAt(model, position, out _);
+        }
+
+        public bool modelCanStandAt(GameModel model, Position position, out bool canBeAt)
+        {
+            canBeAt = modelCanBeAt(model, position);
+            return canBeAt &&
                 this[position + Position.Down] != null &&
-                this[position + Position.Down].Type == BlockType.WALKABLE;
+                (
+                    this[position + Position.Down].Type == BlockType.WALKABLE ||
+                    this[position + Position.Down].Type == BlockType.STAIRS
+                );
         }
     }
 }

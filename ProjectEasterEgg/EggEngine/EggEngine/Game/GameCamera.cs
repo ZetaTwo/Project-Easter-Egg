@@ -12,8 +12,8 @@ namespace Mindstep.EasterEgg.Engine.Game
 {
     public class GameCamera : Camera
     {
-        private GameModel following;
-        public GameModel Following
+        private GameMovableModel following;
+        public GameMovableModel Following
         {
             get { return following; }
             set
@@ -35,7 +35,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         public Matrix ZoomAndOffsetMatrix { get { return zoomAndOffsetMatrix; } }
 
 
-        public GameCamera(GameModel following)
+        public GameCamera(GameMovableModel following)
         {
             this.Following = following;
         }
@@ -52,12 +52,13 @@ namespace Mindstep.EasterEgg.Engine.Game
             this.Engine = engine;
         }
 
-        public void PrepareForDraw()
+        public void PrepareForDraw(GameTime gameTime)
         {
             if (CameraMode == Mode.FOLLOW)
             {
-                Point offset = CoordinateTransform.ObjectToProjectionSpace(
-                    Following.position.ToVector3()).ToXnaPoint().Multiply(-1)
+                Point offset = CoordinateTransform.ObjectToProjectionSpace(Following.RenderPosition(gameTime))
+                    .ToXnaPoint()
+                    .Multiply(-1)
                     .Add(Engine.Window.ClientBounds.Center)
                     .Subtract(Engine.Window.ClientBounds.Location);
                 if (Offset != offset)

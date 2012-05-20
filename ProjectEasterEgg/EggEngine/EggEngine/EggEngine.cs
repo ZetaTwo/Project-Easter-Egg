@@ -140,7 +140,7 @@ namespace Mindstep.EasterEgg.Engine
             GraphicsDevice.Clear(Color.Red);
 
             // TODO: Add your drawing code here
-            world.Draw(spriteBatch);
+            world.Draw(gameTime, spriteBatch);
 
             base.Draw(gameTime);
         }

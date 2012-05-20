@@ -14,13 +14,6 @@ namespace Mindstep.EasterEgg.Engine.Input
         Texture2D texture;
         SpriteFont font;
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture, Engine.Input.Mouse.Location.ToVector2(), Color.White);
-            Vector3 position = CoordinateTransform.ScreenToObjectSpace(Engine.Input.Mouse.Location, Engine.World.CurrentMap.Camera, 0);
-            spriteBatch.DrawString(font, position.ToString(), Engine.Input.Mouse.Location.Add(new Point(35, 0)).ToVector2(), Color.White);
-        }
-
         public override void Initialize(EggEngine engine)
         {
             base.Initialize(engine);
@@ -29,5 +22,12 @@ namespace Mindstep.EasterEgg.Engine.Input
             font = Engine.Content.Load<SpriteFont>("DefaultFont");
         }
 
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, Engine.Input.Mouse.Location.ToVector2(), Color.White);
+            Vector3 position = CoordinateTransform.ScreenToObjectSpace(Engine.Input.Mouse.Location, Engine.World.CurrentMap.Camera, 0);
+            spriteBatch.DrawString(font, position.ToPosition().ToString(), Engine.Input.Mouse.Location.Add(new Point(35, 0)).ToVector2(), Color.White);
+        }
     }
 }

@@ -17,17 +17,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
         //The direction in which we are going
         Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
 
-        private readonly Position[] possibleNeighbourOffsets = new Position[] {
-                Position.N,
-                Position.NE,
-                Position.E,
-                Position.SE,
-                Position.S,
-                Position.SW,
-                Position.W,
-                Position.NW,
-            };
-
         public GameMap CurrentMap
         {
             get { return Engine.World.CurrentMap; }
@@ -77,109 +66,70 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return null;
         }
 
+        private OffsetedMatrix<bool> neighbours = new OffsetedMatrix<bool>(Position.One, Position.One * 3, false, null, null);
         private IEnumerable<Position> GetNeighbours(GameModel model, Position position)
         {
+            WorldMatrix worldMatrix = model.ParentMap().WorldMatrix;
+            neighbours.Fill(_ => false);
 
-            List<Position> neighbours = new List<Position>();
-            bool NW, NE, SE, SW;
+            {
+                bool NW, NE, SE, SW;
+                neighbours[Position.NW] = worldMatrix.modelCanStandAt(model, position + Position.NW, out NW);
+                neighbours[Position.NE] = worldMatrix.modelCanStandAt(model, position + Position.NE, out NE);
+                neighbours[Position.SE] = worldMatrix.modelCanStandAt(model, position + Position.SE, out SE);
+                neighbours[Position.SW] = worldMatrix.modelCanStandAt(model, position + Position.SW, out SW);
 
-            GameBlock blockBelow = model.ParentMap().WorldMatrix[position + Position.Down];
-            if (blockBelow.Type == BlockType.STAIRS)
-            {
-                neighbours.AddRange(GetNeighbours(model, position + Position.Down));
-            }
-            if (blockBelow.Type == BlockType.LADDER)
-            {
-                neighbours.Add(position + Position.Down);
-            }
+                neighbours[Position.N] = NW && NE && worldMatrix.modelCanStandAt(model, position + Position.N);
+                neighbours[Position.E] = NE && SE && worldMatrix.modelCanStandAt(model, position + Position.E);
+                neighbours[Position.S] = SE && SW && worldMatrix.modelCanStandAt(model, position + Position.S);
+                neighbours[Position.W] = SW && NW && worldMatrix.modelCanStandAt(model, position + Position.W);
 
-            if (NW = model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.NW))
-            {
-                neighbours.Add(position + Position.NW);
-            }
-            if (NE = model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.NE))
-            {
-                neighbours.Add(position + Position.NE);
-            }
-            if (SE = model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.SE))
-            {
-                neighbours.Add(position + Position.SE);
-            }
-            if (SW = model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.SW))
-            {
-                neighbours.Add(position + Position.SW);
-            }
-            if (NW && NE && model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.N))
-            {
-                neighbours.Add(position + Position.N);
-            }
-            if (NE && SE && model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.E))
-            {
-                neighbours.Add(position + Position.E);
-            }
-            if (SE && SW && model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.S))
-            {
-                neighbours.Add(position + Position.S);
-            }
-            if (SW && NW && model.ParentMap().WorldMatrix.modelCanStandAt(model, position + Position.W))
-            {
-                neighbours.Add(position + Position.W);
+                //if we are standing on a stair, try to add the four neighbours a level down
+                if (worldMatrix[position + Position.Down] != null &&
+                    worldMatrix[position + Position.Down].Type == BlockType.STAIRS)
+                {
+                    neighbours[Position.NW + Position.Down] = NW && worldMatrix.modelCanStandAt(model, position + Position.NW + Position.Down);
+                    neighbours[Position.NE + Position.Down] = NE && worldMatrix.modelCanStandAt(model, position + Position.NE + Position.Down);
+                    neighbours[Position.SE + Position.Down] = SE && worldMatrix.modelCanStandAt(model, position + Position.SE + Position.Down);
+                    neighbours[Position.SW + Position.Down] = SW && worldMatrix.modelCanStandAt(model, position + Position.SW + Position.Down);
+                }
             }
 
-            //int width = CurrentMap.WorldMatrix.sizeX - 1;
-            //int height = CurrentMap.WorldMatrix.sizeY - 1;
-            //int currentLevel = node.Position.Z;
+            //check for stairs in the four directions at the same level
+            if (worldMatrix.modelCanBeAt(model, position + Position.Up))
+            {
+                neighbours[Position.NW + Position.Up] =
+                    worldMatrix[position + Position.NW] != null &&
+                    worldMatrix[position + Position.NW].Type == BlockType.STAIRS &&
+                    worldMatrix.modelCanStandAt(model, Position.NW + Position.Up);
+                neighbours[Position.NE + Position.Up] =
+                    worldMatrix[position + Position.NE] != null &&
+                    worldMatrix[position + Position.NE].Type == BlockType.STAIRS &&
+                    worldMatrix.modelCanStandAt(model, Position.NE + Position.Up);
+                neighbours[Position.SE + Position.Up] =
+                    worldMatrix[position + Position.SE] != null &&
+                    worldMatrix[position + Position.SE].Type == BlockType.STAIRS &&
+                    worldMatrix.modelCanStandAt(model, Position.SE + Position.Up);
+                neighbours[Position.SW + Position.Up] =
+                    worldMatrix[position + Position.SW] != null &&
+                    worldMatrix[position + Position.SW].Type == BlockType.STAIRS &&
+                    worldMatrix.modelCanStandAt(model, Position.SW + Position.Up);
+            }
 
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    //check for out of bounds
-            //    if ((node.Position.X == 0 && possibleNeighbours[i][0] < 0) ||
-            //        (node.Position.X == width && possibleNeighbours[i][0] > 0) ||
-            //        (node.Position.Y == 0 && possibleNeighbours[i][1] < 0) ||
-            //        (node.Position.Y == height && possibleNeighbours[i][1] > 0))
-            //        continue;
 
-            //    Position neighbourPosition = new Position(node.Position.X + possibleNeighbours[i][0], node.Position.Y + possibleNeighbours[i][1], currentLevel);
-            //    Position nextPosition = null;
-            //    //Check if the current possible is available, it is only available if the next one is free.
-            //    GameBlock possibleNeighbour = CurrentMap.WorldMatrix[neighbourPosition.X,neighbourPosition.Y,neighbourPosition.Z];
-            //    //Base case for a node.
-            //    GameBlock possibleNext = new GameBlock(BlockType.SOLID, -Position.One);
-            //    if (i < 7)
-            //    {
-                    
-            //        if (!((node.Position.X == 0 && possibleNeighbours[i + 1][0] < 0) ||
-            //            (node.Position.X == width && possibleNeighbours[i + 1][0] > 0) ||
-            //            (node.Position.Y == 0 && possibleNeighbours[i + 1][1] < 0) ||
-            //            (node.Position.Y == height && possibleNeighbours[i + 1][1] > 0)))
-            //        {
-            //            nextPosition = new Position(node.Position.X + possibleNeighbours[i + 1][0], node.Position.Y + possibleNeighbours[i + 1][1], currentLevel);
-            //            possibleNext = CurrentMap.WorldMatrix[nextPosition];
-            //        }
-            //        else if (!(node.Position.X == 0 || node.Position.Y == 0))
-            //        {
-            //            nextPosition = new Position(node.Position.X + possibleNeighbours[0][0], node.Position.Y + possibleNeighbours[0][1], currentLevel);
-            //            possibleNext = CurrentMap.WorldMatrix[nextPosition];
-            //        }
-            //    }
-
-            //    if (possibleNeighbour == null)
-            //    {
-            //        possibleNeighbour = new GameBlock(BlockType.WALKABLE, neighbourPosition);
-            //    }
-
-            //    if (possibleNext == null)
-            //    {
-            //        possibleNext = new GameBlock(BlockType.WALKABLE, nextPosition);
-            //    }
-
-            //    if (possibleNeighbour.Type != BlockType.SOLID && possibleNext.Type != BlockType.SOLID)
-            //    {
-            //        neighbours.Add(possibleNeighbour);
-            //    }
-            //}
-
-            return neighbours;
+            for (int x = neighbours.Min.X; x < neighbours.Max.X; x++)
+            {
+                for (int y = neighbours.Min.Y; y < neighbours.Max.Y; y++)
+                {
+                    for (int z = neighbours.Min.Z; z < neighbours.Max.Z; z++)
+                    {
+                        if (neighbours[x, y, z])
+                        {
+                            yield return position + new Position(x, y, z);
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -189,7 +139,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             //screen.Y *= 1;
             //screen.X *= -1;
             //GameBlock hitBlock = getBlockUnder(pointInProjSpace, b => true);
-            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, CurrentMap.WorldMatrix.maxZ);
+            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, CurrentMap.WorldMatrix.Max.Z);
             if (position.X < CurrentMap.Bounds.Min.X || position.X > CurrentMap.Bounds.Max.X ||
                position.Y < CurrentMap.Bounds.Min.Y || position.Y > CurrentMap.Bounds.Max.Y ||
                position.Z < CurrentMap.Bounds.Min.Z || position.Z > CurrentMap.Bounds.Max.Z)
@@ -222,7 +172,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
         private GameBlock getBlockUnder(Point pointInProjSpace, Predicate<GameBlock> condition)
         {
-            for (int layer = CurrentMap.WorldMatrix.maxZ; layer > CurrentMap.WorldMatrix.minZ; layer--)
+            for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
             {
                 {//above
                     Position positionAbove = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, layer + 1).ToPosition();
@@ -241,14 +191,14 @@ namespace Mindstep.EasterEgg.Engine.Physics
         private void ClickSolidBlock(Position currentPosition, BlockFaces entry)
         {
             if (entry == BlockFaces.LEFT && //If left side was clicked
-                currentPosition.X < CurrentMap.WorldMatrix.sizeX - 1 && //and there could be a block in front
+                currentPosition.X < CurrentMap.WorldMatrix.Size.X - 1 && //and there could be a block in front
                 CurrentMap.WorldMatrix[currentPosition + new Position(1,0,0)].Type != BlockType.SOLID) //and we can stand there
             {
                 //MoveTo(currentBlock + X - k*Z)
             }
 
             if (entry == BlockFaces.RIGHT && //If left side was clicked
-                currentPosition.Y < CurrentMap.WorldMatrix.sizeY - 1 && //and there could be a block in front
+                currentPosition.Y < CurrentMap.WorldMatrix.Size.Y - 1 && //and there could be a block in front
                 CurrentMap.WorldMatrix[currentPosition + new Position(0,1,0)].Type != BlockType.SOLID) //and we can stand there
             {
                 //MoveTo(currentBlock + Y - k*Z)
@@ -261,9 +211,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             //Proceed to next Block
             //calculate step lengths in multiples of delta
-            float stepsX = (float)(Math.Floor(position.X) - position.X) / delta.X;
-            float stepsY = (float)(Math.Floor(position.Y) - position.Y) / delta.Y;
-            float stepsZ = (float)(Math.Floor(position.Z) - position.Z) / delta.Z;
+            float stepsX = (float)(position.X.RoundDown() - position.X) / delta.X;
+            float stepsY = (float)(position.Y.RoundDown() - position.Y) / delta.Y;
+            float stepsZ = (float)(position.Z.RoundDown() - position.Z) / delta.Z;
 
             //Check which is closest
             if (stepsX != 0 && stepsX < stepsY && stepsX < stepsZ) //X is closest

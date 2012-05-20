@@ -129,6 +129,11 @@ namespace Mindstep.EasterEgg.Commons
             return p1 + (-p2);
         }
 
+        public static Position operator *(Position p, int i)
+        {
+            return new Position(p.X*i, p.Y*i, p.Z*i);
+        }
+
         public static Position operator -(Position p)
         {
             return new Position(-p.X, -p.Y, -p.Z);

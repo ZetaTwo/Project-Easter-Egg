@@ -16,7 +16,7 @@ namespace Mindstep.EasterEgg.Game.Game
 {
     class GameWorld : World, IUpdate
     {
-        private GameCharacter character;
+        private GameMovableModel character;
 
         public override void Initialize(EggEngine _engine)
         {
@@ -28,7 +28,7 @@ namespace Mindstep.EasterEgg.Game.Game
             CurrentMap = new GameMap(mapDTO, Engine);
 
             GameModelDTO characterDTO = Engine.Content.Load<GameModelDTO>("Models/character1");
-            character = new GameCharacter(characterDTO, Engine);
+            character = new GameMovableModel(characterDTO, Engine);
 
             CurrentMap.Spawn(character, "spawn");
             CurrentMap.Camera.Initialize(Engine);
