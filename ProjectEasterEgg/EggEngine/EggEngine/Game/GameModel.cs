@@ -87,7 +87,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             Frame currentFrame = Animations["still"].Frames[0];
             Vector3 fractionalRenderPosition = RenderPosition(gameTime);
-            Position wholeRenderPosition = fractionalRenderPosition.RoundUp();
+            Position wholeRenderPosition = fractionalRenderPosition.Ceiling();
             for (int i = 0; i < blocks.Length; i++)
             {
                 if (currentFrame.textures[i] != null)

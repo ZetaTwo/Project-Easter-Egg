@@ -24,7 +24,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
             graphics.FillRegion(Brushes.White, BlockRegions.Top);
             graphics.FillRegion(Brushes.LightGray, BlockRegions.Left);
             graphics.FillRegion(Brushes.Gray, BlockRegions.Right);
-            graphics.FillRegion(Brushes.Teal, BlockRegions.InnerBorder);
+            graphics.FillRegion(Brushes.Pink, BlockRegions.InnerBorder);
         }
 
         /// <summary>

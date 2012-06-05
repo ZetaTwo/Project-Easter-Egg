@@ -19,7 +19,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         private bool moving;
         private long begunMovingAt;
         private Position moveOffset;
-        private float moveSpeed = 300;
+        private float moveSpeed = 500;
 
 
         
@@ -42,16 +42,16 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public void Update(GameTime gameTime)
         {
-            if      (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad8)) MoveOffsetIfNotAlreadyMoving(Position.N, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad9)) MoveOffsetIfNotAlreadyMoving(Position.NE, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad6)) MoveOffsetIfNotAlreadyMoving(Position.E, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad3)) MoveOffsetIfNotAlreadyMoving(Position.SE, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad2)) MoveOffsetIfNotAlreadyMoving(Position.S, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad1)) MoveOffsetIfNotAlreadyMoving(Position.SW, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad4)) MoveOffsetIfNotAlreadyMoving(Position.W, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.NumPad7)) MoveOffsetIfNotAlreadyMoving(Position.NW, gameTime);
-            else if (Engine.Input.Keyboard.IsKeyDown(Keys.F))       MoveOffsetIfNotAlreadyMoving(Position.W * 3, gameTime);
-
+            if (Engine.Input.Keyboard.IsKeyDown(Keys.D8)) MoveOffsetIfNotAlreadyMoving(Position.N, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.D9)) MoveOffsetIfNotAlreadyMoving(Position.NE, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.O)) MoveOffsetIfNotAlreadyMoving(Position.E, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.L)) MoveOffsetIfNotAlreadyMoving(Position.SE, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.K)) MoveOffsetIfNotAlreadyMoving(Position.S, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.J)) MoveOffsetIfNotAlreadyMoving(Position.SW, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.U)) MoveOffsetIfNotAlreadyMoving(Position.W, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.D7)) MoveOffsetIfNotAlreadyMoving(Position.NW, gameTime);
+            else if (Engine.Input.Keyboard.IsKeyDown(Keys.F)) MoveOffsetIfNotAlreadyMoving(Position.W * 3, gameTime);
+            
             if (moving && getT(gameTime) == 1)
             {
                 this.ParentMap().WorldMatrix.endMoveModel(this, Position + moveOffset);

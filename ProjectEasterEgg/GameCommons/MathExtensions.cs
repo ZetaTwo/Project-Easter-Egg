@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.Commons
 {
-    public static class NumericExtensions
+    public static class MathExtensions
     {
         public static int Clamp(this int i, int min, int max)
         {
@@ -50,6 +50,43 @@ namespace Mindstep.EasterEgg.Commons
         public static bool BetweenExclusive(this float f, float above, float below)
         {
             return above < f && f < below;
+        }
+
+        /// <summary>
+        /// Casts a float to an int, rounding it up even if it has a negative value.
+        /// </summary>
+        /// <param name="f">float to cast</param>
+        /// <returns></returns>
+        public static int Ceiling(this float f)
+        {
+            return (int)Math.Ceiling(f);
+        }
+        public static float Ceiling(this float f, int part)
+        {
+            return (float)(f * part).Ceiling() / part;
+        }
+
+        /// <summary>
+        /// Casts a float to an int, rounding it down even if it has a negative value.
+        /// </summary>
+        /// <param name="f">float to cast</param>
+        /// <returns></returns>
+        public static int Floor(this float f)
+        {
+            return (int)Math.Floor(f);
+        }
+        public static float Floor(this float f, int part)
+        {
+            return (float)(f * part).Floor() / part;
+        }
+
+        public static int Round(this float f)
+        {
+            return (int)Math.Round(f, MidpointRounding.ToEven);
+        }
+        public static float Round(this float f, int part)
+        {
+            return (float)(f * part).Round() / part;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Mindstep.EasterEgg.Commons
         }
         public static Point ToXnaPoint(this Vector2 point)
         {
-            return new Point(point.X.RoundDown(), point.Y.RoundDown());
+            return new Point(point.X.Floor(), point.Y.Floor());
         }
 
 
@@ -33,20 +33,24 @@ namespace Mindstep.EasterEgg.Commons
         }
         public static System.Drawing.Point ToSDPoint(this Vector2 point)
         {
-            return new System.Drawing.Point(point.X.RoundDown(), point.Y.RoundDown());
+            return new System.Drawing.Point(point.X.Floor(), point.Y.Floor());
         }
 
-        public static Position ToPosition(this Vector3 pos)
-        {
-            return new Position(pos.X.RoundDown(), pos.Y.RoundDown(), pos.Z.RoundDown());
-        }
         public static Vector3 ToVector3(this Position pos)
         {
             return new Vector3(pos.X, pos.Y, pos.Z);
         }
-        public static Position RoundUp(this Vector3 pos)
+        public static Position ToPosition(this Vector3 pos)
         {
-            return new Position(pos.X.RoundUp(), pos.Y.RoundUp(), pos.Z.RoundUp());
+            return pos.Floor();
+        }
+        public static Position Floor(this Vector3 pos)
+        {
+            return new Position(pos.X.Floor(), pos.Y.Floor(), pos.Z.Floor());
+        }
+        public static Position Ceiling(this Vector3 pos)
+        {
+            return new Position(pos.X.Ceiling(), pos.Y.Ceiling(), pos.Z.Ceiling());
         }
 
         public static Color ToXnaColor(this System.Drawing.Color c)

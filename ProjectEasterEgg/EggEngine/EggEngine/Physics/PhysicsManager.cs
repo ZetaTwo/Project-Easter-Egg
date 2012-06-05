@@ -211,9 +211,9 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             //Proceed to next Block
             //calculate step lengths in multiples of delta
-            float stepsX = (float)(position.X.RoundDown() - position.X) / delta.X;
-            float stepsY = (float)(position.Y.RoundDown() - position.Y) / delta.Y;
-            float stepsZ = (float)(position.Z.RoundDown() - position.Z) / delta.Z;
+            float stepsX = (float)(position.X.Floor() - position.X) / delta.X;
+            float stepsY = (float)(position.Y.Floor() - position.Y) / delta.Y;
+            float stepsZ = (float)(position.Z.Floor() - position.Z) / delta.Z;
 
             //Check which is closest
             if (stepsX != 0 && stepsX < stepsY && stepsX < stepsZ) //X is closest

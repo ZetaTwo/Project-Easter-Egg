@@ -60,26 +60,6 @@ namespace Mindstep.EasterEgg.Commons
             return new Point(r.Width / 2, r.Height / 2);
         }
 
-        /// <summary>
-        /// Casts a float to an int, rounding it up even if it has a negative value.
-        /// </summary>
-        /// <param name="f">float to cast</param>
-        /// <returns></returns>
-        public static int RoundUp(this float f)
-        {
-            return (int)Math.Ceiling(f);
-        }
-
-        /// <summary>
-        /// Casts a float to an int, rounding it down even if it has a negative value.
-        /// </summary>
-        /// <param name="f">float to cast</param>
-        /// <returns></returns>
-        public static int RoundDown(this float f)
-        {
-            return (int)Math.Floor(f);
-        }
-
         public static Point Location(this MouseState mouseState)
         {
             return new Point(mouseState.X, mouseState.Y);

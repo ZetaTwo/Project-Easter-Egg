@@ -19,9 +19,14 @@ namespace Mindstep.EasterEgg.Commons
 
         public static Vector2 ObjectToProjectionSpace(Vector3 map)
         {
-            float x = (-map.X + map.Y) * TILE_WIDTH_OVER_2;
-            float y = (map.X + map.Y) * TILE_HEIGHT_OVER_2 - map.Z * Constants.BLOCK_HEIGHT;
+            Vector3 oo = new Vector3(
+                map.X.Round(Constants.N),
+                map.Y.Round(Constants.N),
+                map.Z.Round(Constants.BLOCK_HEIGHT));
 
+            int x = ((-oo.X + oo.Y) * TILE_WIDTH_OVER_2).Round();
+            int y = ((oo.X + oo.Y) * TILE_HEIGHT_OVER_2 - oo.Z * (int)Constants.BLOCK_HEIGHT).Round();
+            
             return new Vector2(x, y);
         }
 
@@ -37,8 +42,8 @@ namespace Mindstep.EasterEgg.Commons
         
         public static Point ScreenToProjSpace(Point point, Camera camera)
         {
-            int x = ((-camera.Offset.X + point.X) / camera.Zoom).RoundDown();
-            int y = ((-camera.Offset.Y + point.Y) / camera.Zoom).RoundDown();
+            int x = ((-camera.Offset.X + point.X) / camera.Zoom).Floor();
+            int y = ((-camera.Offset.Y + point.Y) / camera.Zoom).Floor();
             return new Point(x, y);
         }
 
