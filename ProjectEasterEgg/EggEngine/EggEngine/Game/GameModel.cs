@@ -80,21 +80,41 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds)
         {
-            Draw(gameTime, spriteBatch, worldBounds, 0);
+            Draw(gameTime, spriteBatch, worldBounds, Vector2.Zero, 0);
         }
 
-        protected virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, float depthOffset)
+        //protected virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, float depthOffset)
+        //{
+        //    Frame currentFrame = Animations["still"].Frames[0];
+        //    Vector3 fractionalRenderPosition = RenderPosition(gameTime);
+        //    Position wholeRenderPosition = fractionalRenderPosition.Ceiling();
+        //    for (int i = 0; i < blocks.Length; i++)
+        //    {
+        //        if (currentFrame.textures[i] != null)
+        //        {
+        //            float depth = worldBounds.getRelativeDepthOf(wholeRenderPosition + blocks[i].Position, depthOffset);
+        //            //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(realPosition) * 1.3f).ToPoint().ToVector2();
+        //            Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(fractionalRenderPosition + blocks[i].Position.ToVector3());
+        //            spriteBatch.Draw(currentFrame.textures[i], screenCoords, null,
+        //                Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
+        //        }
+        //    }
+
+        //    foreach (GameModel subModel in subModels)
+        //    {
+        //        subModel.Draw(gameTime, spriteBatch, worldBounds, depthOffset);
+        //    }
+        //}
+
+        protected virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, Vector2 offset, float depthOffset)
         {
             Frame currentFrame = Animations["still"].Frames[0];
-            Vector3 fractionalRenderPosition = RenderPosition(gameTime);
-            Position wholeRenderPosition = fractionalRenderPosition.Ceiling();
             for (int i = 0; i < blocks.Length; i++)
             {
                 if (currentFrame.textures[i] != null)
                 {
-                    float depth = worldBounds.getRelativeDepthOf(wholeRenderPosition + blocks[i].Position, depthOffset);
-                    //Vector2 screenCoords = (CoordinateTransform.ObjectToProjectionSpace(realPosition) * 1.3f).ToPoint().ToVector2();
-                    Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(fractionalRenderPosition + blocks[i].Position.ToVector3());
+                    float depth = worldBounds.getRelativeDepthOf(RenderPosition(gameTime) + blocks[i].Position, depthOffset);
+                    Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(Position + blocks[i].Position) + offset;
                     spriteBatch.Draw(currentFrame.textures[i], screenCoords, null,
                         Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
                 }
@@ -102,7 +122,7 @@ namespace Mindstep.EasterEgg.Engine.Game
 
             foreach (GameModel subModel in subModels)
             {
-                subModel.Draw(gameTime, spriteBatch, worldBounds, depthOffset);
+                subModel.Draw(gameTime, spriteBatch, worldBounds, offset, depthOffset);
             }
         }
 
@@ -127,9 +147,9 @@ namespace Mindstep.EasterEgg.Engine.Game
             }
         }
 
-        public virtual Vector3 RenderPosition(GameTime gameTime)
+        public virtual Position RenderPosition(GameTime gameTime)
         {
-            return this.AbsolutePosition().ToVector3();
+            return this.AbsolutePosition();
         }
     }
 }

@@ -26,6 +26,18 @@ namespace Mindstep.EasterEgg.Commons
             return new Point(point.X.Floor(), point.Y.Floor());
         }
 
+        public static Vector2 Round(this Vector2 v)
+        {
+            return new Vector2(v.X.Round(), v.Y.Round());
+        }
+        public static Vector2 Floor(this Vector2 v)
+        {
+            return new Vector2(v.X.Floor(), v.Y.Floor());
+        }
+        public static Vector2 Ceiling(this Vector2 v)
+        {
+            return new Vector2(v.X.Ceiling(), v.Y.Ceiling());
+        }
 
         public static System.Drawing.Point ToSDPoint(this Point point)
         {

@@ -56,11 +56,12 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             if (CameraMode == Mode.FOLLOW)
             {
-                Point offset = CoordinateTransform.ObjectToProjectionSpace(Following.RenderPosition(gameTime))
+                Point offset = CoordinateTransform.ObjectToProjectionSpace(Following.Position)
                     .ToXnaPoint()
                     .Multiply(-1)
                     .Add(Engine.Window.ClientBounds.Center)
-                    .Subtract(Engine.Window.ClientBounds.Location);
+                    .Subtract(Engine.Window.ClientBounds.Location)
+                    .Subtract(Following.getCurrentDrawOffset(gameTime).ToXnaPoint());
                 if (Offset != offset)
                 {
                     Offset = offset;

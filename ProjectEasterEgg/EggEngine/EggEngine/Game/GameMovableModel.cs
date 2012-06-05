@@ -59,19 +59,19 @@ namespace Mindstep.EasterEgg.Engine.Game
             }
         }
 
-        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, float depthOffset)
+        protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingBoxInt worldBounds, Vector2 offset, float depthOffset)
         {
             if (moving)
             {
                 depthOffset -= 0.04f;
                 // I don't know why -0.04, but it works :D // Björn
             }
-            base.Draw(gameTime, spriteBatch, worldBounds, depthOffset);
+            base.Draw(gameTime, spriteBatch, worldBounds, offset + getCurrentDrawOffset(gameTime), depthOffset);
         }
 
-        public override Vector3 RenderPosition(GameTime gameTime)
+        public override Position RenderPosition(GameTime gameTime)
         {
-            return this.AbsolutePosition().ToVector3() + getCurrentMoveOffset(gameTime);
+            return this.AbsolutePosition() + getCurrentMoveOffset(gameTime).Ceiling();
         }
 
         public bool MoveOffsetIfNotAlreadyMoving(Position moveOffset, GameTime startTime)
@@ -109,6 +109,22 @@ namespace Mindstep.EasterEgg.Engine.Game
             {
                 return Vector3.Zero;
             }
+        }
+
+        public Vector2 getCurrentDrawOffset(GameTime gameTime)
+        {
+            if (moving)
+            {
+                if (Math.Abs(moveOffset.X) == Math.Abs(moveOffset.Y))
+                {
+                    return (CoordinateTransform.ObjectToProjectionSpace(moveOffset) * getT(gameTime)).Round();
+                }
+                else
+                {
+                    return CoordinateTransform.ObjectToProjectionSpace(getCurrentMoveOffset(gameTime));
+                }
+            }
+            return Vector2.Zero;
         }
     }
 }
