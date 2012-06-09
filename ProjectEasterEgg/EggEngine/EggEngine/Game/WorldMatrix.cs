@@ -9,11 +9,50 @@ namespace Mindstep.EasterEgg.Engine.Game
 {
     public class WorldMatrix : OffsetedMatrix<GameBlock>
     {
+        /// <summary>
+        /// Sets and gets GameBlocks in the WorldMatrix
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns>Never returns null, an empty block is represented by GameBlock.Empty
+        /// and an out of bounds block is represented by GameBlock.OutOfBounds</returns>
+        public override GameBlock this[int x, int y, int z]
+        {
+            get
+            {
+                if (!insideBounds(x, y, z))
+                {
+                    return GameBlock.OutOfBounds;
+                }
+                else if (base[x, y, z] == null)
+                {
+                    return GameBlock.Empty;
+                }
+                else
+                {
+                    return base[x, y, z];
+                }
+            }
+            set
+            {
+                if (!insideBounds(x, y, z))
+                {
+                    throw new Exception("Can't set a block outside the bounds of the matrix!");
+                }
+                else if (value != null && base[x, y, z] != null)
+                {
+                    throw new Exception("Collision in world matrix, trying to set a block that isn't null");
+                }
+                else
+                {
+                    base[x, y, z] = value;
+                }
+            }
+        }
+
         public WorldMatrix(BoundingBoxInt bounds)
-            : base(-bounds.Min, bounds.Max - bounds.Min,
-                    GameBlock.OutOfBounds,
-                    new Exception("Can't set a block outside the bounds of the matrix!"),
-                    new Exception("Collision in world matrix, trying to set a block that isn't null"))
+            : base(-bounds.Min, bounds.Max - bounds.Min)
         { }
 
         public WorldMatrix(GameMap gameMap)
@@ -59,7 +98,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         /// <returns>true if all the positions are null in the world matrix</returns>
         public bool allEmpty(GameModel model, Position absolutePosition)
         {
-            return model.getAllRelativeBlockPositions().Offset(absolutePosition).All(pos => this[pos] == null);
+            return model.getAllRelativeBlockPositions().Offset(absolutePosition).All(pos => this[pos].Type == BlockType.EMPTY);
         }
 
         /// <summary>
@@ -114,7 +153,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             return model.getAllRelativeBlockPositions().Offset(position).All(
                 pos =>
-                    this[pos] == null ||
+                    this[pos].Type == BlockType.EMPTY ||
                     //this[pos].Type == BlockType.LADDER || //TODO: support ladder
                     this[pos].hasParent(model));
         }
@@ -129,7 +168,6 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             canBeAt = modelCanBeAt(model, position);
             return canBeAt &&
-                this[position + Position.Down] != null &&
                 (
                     this[position + Position.Down].Type == BlockType.WALKABLE ||
                     this[position + Position.Down].Type == BlockType.STAIRS

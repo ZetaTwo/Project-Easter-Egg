@@ -24,26 +24,14 @@ namespace Mindstep.EasterEgg.Engine.Game
         /// <param name="y"></param>
         /// <param name="z"></param>
         /// <returns>null if the space is empty or outside the matrix</returns>
-        public T this[int x, int y, int z]
+        public virtual T this[int x, int y, int z]
         {
             get
             {
-                if (!insideBounds(x, y, z))
-                {
-                    return getOutOfBounds;
-                }
                 return matrix[x + offset.X, y + offset.Y, z + offset.Z];
             }
             set
             {
-                if (!insideBounds(x, y, z))
-                {
-                    throw setOutOfBounds;
-                }
-                if (value != null && matrix[x + offset.X, y + offset.Y, z + offset.Z] != null)
-                {
-                    throw setCollision;
-                }
                 matrix[x + offset.X, y + offset.Y, z + offset.Z] = value;
             }
         }
@@ -70,14 +58,10 @@ namespace Mindstep.EasterEgg.Engine.Game
 
 
 
-        public OffsetedMatrix(Position offset, Position size,
-            T getOutOfBounds, Exception setOutOfBounds, Exception setCollision)
+        public OffsetedMatrix(Position offset, Position size)
         {
             this.offset = offset;
             this.size = size;
-            this.getOutOfBounds = getOutOfBounds;
-            this.setOutOfBounds = setOutOfBounds;
-            this.setCollision = setCollision;
 
             matrix = (T[, ,])Array.CreateInstance(typeof(T), size.X+1, size.Y+1, size.Z+1);
         }
@@ -86,7 +70,7 @@ namespace Mindstep.EasterEgg.Engine.Game
 
 
 
-        private bool insideBounds(int x, int y, int z)
+        protected bool insideBounds(int x, int y, int z)
         {
             return x.BetweenInclusive(Min.X, Max.X) &&
                    y.BetweenInclusive(Min.Y, Max.Y) &&

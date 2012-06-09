@@ -55,6 +55,22 @@ namespace Mindstep.EasterEgg.Commons
             return new Vector3((n - m) / 2, (n + m) / 2, layer);
         }
 
+        //public static Vector3 ProjToObjectSpace(Point projPoint, int layer, BlockFaces face)
+        //{
+        //    float m, n;
+        //    switch (face)
+        //    {
+        //        case BlockFaces.TOP:
+        //            m = (float)projPoint.X / TILE_WIDTH_OVER_2;
+        //            n = (float)(projPoint.Y + layer * Constants.BLOCK_HEIGHT) / TILE_HEIGHT_OVER_2;
+        //            return new Vector3((n - m) / 2, (n + m) / 2, layer);
+        //        case BlockFaces.LEFT:
+        //            m = (float)projPoint.X / TILE_WIDTH_OVER_2;
+        //            n = (float)(projPoint.Y + layer * Constants.BLOCK_HEIGHT) / TILE_HEIGHT_OVER_2;
+        //            return new Vector3((n - m) / 2, (n + m) / 2, layer);
+        //    }
+        //}
+
         //public static Vector3 ProjToObjectSpace(Point objPoint, int layer = 0)
         //{
         //    float x = (Constants.TILE_WIDTH * (objPoint.Y - layer * Constants.BLOCK_HEIGHT) + Constants.TILE_HEIGHT * objPoint.X) / (Constants.TILE_WIDTH * Constants.TILE_HEIGHT);

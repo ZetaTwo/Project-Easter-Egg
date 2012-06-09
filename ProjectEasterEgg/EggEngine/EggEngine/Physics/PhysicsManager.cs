@@ -15,7 +15,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
 
         //The direction in which we are going
-        Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
+        private static readonly Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
 
         public GameMap CurrentMap
         {
@@ -66,7 +66,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return null;
         }
 
-        private OffsetedMatrix<bool> neighbours = new OffsetedMatrix<bool>(Position.One, Position.One * 3, false, null, null);
+        private OffsetedMatrix<bool> neighbours = new OffsetedMatrix<bool>(Position.One, Position.One * 3);
         private IEnumerable<Position> GetNeighbours(GameModel model, Position position)
         {
             WorldMatrix worldMatrix = model.ParentMap().WorldMatrix;
@@ -85,8 +85,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 neighbours[Position.W] = SW && NW && worldMatrix.modelCanStandAt(model, position + Position.W);
 
                 //if we are standing on a stair, try to add the four neighbours a level down
-                if (worldMatrix[position + Position.Down] != null &&
-                    worldMatrix[position + Position.Down].Type == BlockType.STAIRS)
+                if (worldMatrix[position + Position.Down].Type == BlockType.STAIRS)
                 {
                     neighbours[Position.NW + Position.Down] = NW && worldMatrix.modelCanStandAt(model, position + Position.NW + Position.Down);
                     neighbours[Position.NE + Position.Down] = NE && worldMatrix.modelCanStandAt(model, position + Position.NE + Position.Down);
@@ -99,19 +98,15 @@ namespace Mindstep.EasterEgg.Engine.Physics
             if (worldMatrix.modelCanBeAt(model, position + Position.Up))
             {
                 neighbours[Position.NW + Position.Up] =
-                    worldMatrix[position + Position.NW] != null &&
                     worldMatrix[position + Position.NW].Type == BlockType.STAIRS &&
                     worldMatrix.modelCanStandAt(model, Position.NW + Position.Up);
                 neighbours[Position.NE + Position.Up] =
-                    worldMatrix[position + Position.NE] != null &&
                     worldMatrix[position + Position.NE].Type == BlockType.STAIRS &&
                     worldMatrix.modelCanStandAt(model, Position.NE + Position.Up);
                 neighbours[Position.SE + Position.Up] =
-                    worldMatrix[position + Position.SE] != null &&
                     worldMatrix[position + Position.SE].Type == BlockType.STAIRS &&
                     worldMatrix.modelCanStandAt(model, Position.SE + Position.Up);
                 neighbours[Position.SW + Position.Up] =
-                    worldMatrix[position + Position.SW] != null &&
                     worldMatrix[position + Position.SW].Type == BlockType.STAIRS &&
                     worldMatrix.modelCanStandAt(model, Position.SW + Position.Up);
             }
@@ -154,13 +149,12 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 Position currentPosition = new Position(position) - CurrentMap.Bounds.Min;
                 GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition];
 
-                if (currentBlock != null && currentBlock.Interactable)
+                if (currentBlock.Interactable)
                 {
                     currentBlock.Interact(action);
                     return;
                 }
-
-                if (currentBlock != null && currentBlock.Type == BlockType.SOLID)
+                else if (currentBlock.Type == BlockType.SOLID)
                 {
                     ClickSolidBlock(currentPosition, entry);
                     return;
@@ -170,7 +164,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             }
         }
 
-        private GameBlock getBlockUnder(Point pointInProjSpace, Predicate<GameBlock> condition)
+        private GameBlock getBlockUnderPoint(Point pointInProjSpace, Predicate<GameBlock> condition)
         {
             for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
             {
@@ -207,7 +201,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             //MoveTo(currentBlock + 1*Z)
         }
 
-        private Vector3 AdvanceNextBlock(Vector3 position, ref BlockFaces entry)
+        private static Vector3 AdvanceNextBlock(Vector3 position, ref BlockFaces entry)
         {
             //Proceed to next Block
             //calculate step lengths in multiples of delta

@@ -13,6 +13,7 @@ namespace Mindstep.EasterEgg.Engine.Game
 {
     public class GameBlock : Block, Child
     {
+        public static GameBlock Empty = new GameBlock(BlockType.EMPTY);
         public static GameBlock OutOfBounds = new GameBlock(BlockType.OUT_OF_BOUNDS);
 
         protected EggEngine engine;
@@ -53,7 +54,11 @@ namespace Mindstep.EasterEgg.Engine.Game
             }
             if (type == BlockType.OUT_OF_BOUNDS)
             {
-                throw new Exception("Can't set blocktype to out_of_bounds!");
+                throw new Exception("Can't set blocktype to OUT_OF_BOUNDS!");
+            }
+            else if (type == BlockType.EMPTY)
+            {
+                throw new Exception("Can't set blocktype to EMPTY!");
             }
             this.type = type;
             this.parent = parent;
