@@ -12,9 +12,6 @@ namespace Mindstep.EasterEgg.Engine.Game
         private T[, ,] matrix;
         private Position offset;
         private Position size;
-        private T getOutOfBounds;
-        private Exception setOutOfBounds;
-        private Exception setCollision;
 
         /// <summary>
         /// Elements in the matrix must be set to null before setting them to something else.

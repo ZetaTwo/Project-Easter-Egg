@@ -67,6 +67,7 @@
     <Compile Include="DTO\AnimationDTO.cs" />
     <Compile Include="DTO\GameModelDTO.cs" />
     <Compile Include="DTO\SaveableBlockImage.cs" />
+    <Compile Include="Graphic\Extensions.cs" />
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Physics\SpawnLocation.cs" />
     <Compile Include="Graphic\BlockImage.cs" />

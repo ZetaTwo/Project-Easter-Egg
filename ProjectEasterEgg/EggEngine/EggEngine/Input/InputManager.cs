@@ -33,26 +33,11 @@ namespace Mindstep.EasterEgg.Engine.Input
             this.engine = engine;
             mouse = new MouseInfo(Engine);
             keyboard = new KeyboardInfo(Engine);
-
-            Engine.Activated += new EventHandler<EventArgs>(WindowFocusGained);
-            Engine.Deactivated += new EventHandler<EventArgs>(WindowFocusLost);
         }
 
 
 
 
-
-        public void WindowFocusGained(object sender, EventArgs e)
-        {
-            Mouse.Freeze(SysMouse.GetState().Location());
-            Engine.IsMouseVisible = false;
-        }
-
-        public void WindowFocusLost(object sender, EventArgs e)
-        {
-            Mouse.Unfreeze();
-            Engine.IsMouseVisible = true;
-        }
 
         internal void Update(GameTime gameTime)
         {

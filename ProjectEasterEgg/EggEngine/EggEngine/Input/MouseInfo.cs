@@ -28,6 +28,20 @@ namespace Mindstep.EasterEgg.Engine.Input
         private bool frozen = false;
         public bool Frozen { get { return frozen; } }
 
+        private bool stealMouse;
+        public bool StealMouse
+        {
+            get { return stealMouse; }
+            set {
+                if (!value && stealMouse)
+                {
+                    Unfreeze();
+                }
+                stealMouse = value;
+                Engine.IsMouseVisible = !value;
+            }
+        }
+
         private Point movement = new Point();
         public Point Movement { get { return movement; } }
 
@@ -42,6 +56,11 @@ namespace Mindstep.EasterEgg.Engine.Input
             : base(engine)
         {
             location = Center.Multiply(2*(2-1.618f)); //starting location of the mouse pointer in game
+
+            Engine.Activated += new EventHandler<EventArgs>(WindowFocusGained);
+            Engine.Deactivated += new EventHandler<EventArgs>(WindowFocusLost);
+
+            StealMouse = false;
         }
 
         internal void Update(GameTime gameTime)
@@ -49,27 +68,30 @@ namespace Mindstep.EasterEgg.Engine.Input
             previousMouseState = currentMouseState;
             currentMouseState = SysMouse.GetState();
 
-            if (!Engine.IsActive)
+            if (StealMouse)
             {
-                movement.X = 0;
-                movement.Y = 0;
-                currentMouseState = new MouseState();
-            }
-            else if (Frozen)
-            {
-                movement.X = currentMouseState.X - Center.X;
-                movement.Y = currentMouseState.Y - Center.Y;
-                CenterMouse();
-            }
-            else
-            {
-                movement.X = currentMouseState.X - previousMouseState.X;
-                movement.Y = currentMouseState.Y - previousMouseState.Y;
-            }
+                if (!Engine.IsActive)
+                {
+                    currentMouseState = new MouseState();
+                    movement.X = 0;
+                    movement.Y = 0;
+                }
+                else if (Frozen)
+                {
+                    movement.X = currentMouseState.X - Center.X;
+                    movement.Y = currentMouseState.Y - Center.Y;
+                    CenterMouse();
+                }
+                else
+                {
+                    movement.X = currentMouseState.X - previousMouseState.X;
+                    movement.Y = currentMouseState.Y - previousMouseState.Y;
+                }
 
-            location = location.Add(Movement);
-            location.X = location.X.Clamp(0, Engine.GraphicsDevice.Viewport.Width - 1);
-            location.Y = location.Y.Clamp(0, Engine.GraphicsDevice.Viewport.Height - 1);
+                location = location.Add(Movement);
+                location.X = location.X.Clamp(0, Engine.GraphicsDevice.Viewport.Width - 1);
+                location.Y = location.Y.Clamp(0, Engine.GraphicsDevice.Viewport.Height - 1);
+            }
 
             locationInProjSpace = CoordinateTransform.ScreenToProjSpace(Location, Engine.World.CurrentMap.Camera);
         }
@@ -77,6 +99,24 @@ namespace Mindstep.EasterEgg.Engine.Input
 
 
 
+
+        public void WindowFocusGained(object sender, EventArgs e)
+        {
+            if (StealMouse)
+            {
+                Freeze(SysMouse.GetState().Location());
+                Engine.IsMouseVisible = false;
+            }
+        }
+
+        public void WindowFocusLost(object sender, EventArgs e)
+        {
+            if (StealMouse)
+            {
+                Unfreeze();
+                Engine.IsMouseVisible = true;
+            }
+        }
 
         public bool IsButtonDown(MouseButton mouseButton)
         {
@@ -127,7 +167,10 @@ namespace Mindstep.EasterEgg.Engine.Input
 
         public void Unfreeze()
         {
-            SysMouse.SetPosition(frozenAt.X, frozenAt.Y);
+            if (frozen)
+            {
+                SysMouse.SetPosition(frozenAt.X, frozenAt.Y);
+            }
             frozen = false;
         }
 
