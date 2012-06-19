@@ -11,7 +11,7 @@ namespace Mindstep.EasterEgg.Commons.Graphic
 {
     public static class Extensions
     {
-        public static IntPtr GetHicon(this System.Drawing.Image image, Point hotSpot)
+        public static IntPtr GetHicon(this System.Drawing.Image image, Microsoft.Xna.Framework.Point hotSpot)
         {
             int left = hotSpot.X;
             int right = image.Width - hotSpot.X;

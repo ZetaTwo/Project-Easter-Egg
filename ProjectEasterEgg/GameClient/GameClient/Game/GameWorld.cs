@@ -11,6 +11,7 @@ using Mindstep.EasterEgg.Commons.DTO;
 using Mindstep.EasterEgg.Commons.Game;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Interfaces;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.Game.Game
 {
@@ -39,6 +40,7 @@ namespace Mindstep.EasterEgg.Game.Game
 
             pointer = new MousePointer();
             pointer.Initialize(Engine);
+            pointer.Cursor = Engine.Content.Load<Texture2D>("Cursors/magnifying-glass2").ToCursor(new Point(9,9));
             AddUpdate(pointer);
             AddDraw(pointer);
         }
