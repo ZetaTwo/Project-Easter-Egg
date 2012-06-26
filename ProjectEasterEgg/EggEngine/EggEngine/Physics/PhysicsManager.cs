@@ -1,32 +1,31 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Game;
+using Mindstep.EasterEgg.Commons.Graphic;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
     public class PhysicsManager
     {
-        EggEngine engine;
-        public EggEngine Engine
-        {
-            get { return engine; }
-        }
+        private EggEngine engine;
+        public EggEngine Engine { get { return engine; } }
+        public GameMap CurrentMap { get { return Engine.World.CurrentMap; } }
 
-        //The direction in which we are going
-        private static readonly Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
 
-        public GameMap CurrentMap
-        {
-            get { return Engine.World.CurrentMap; }
-            //set { world = value; }
-        }
+
+
 
         public PhysicsManager(EggEngine engine)
         {
             this.engine = engine;
         }
+
+
+
+
 
         public void MoveObject(GameEntitySolid character, Position endpoint, GameMap map)
         {
@@ -130,44 +129,19 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
         public IEnumerable<GameBlock> GetBlocksUnderPoint(Point pointInProjSpace)
         {
-            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace.Add(Constants.blockDrawOffset.ToXnaPoint()),
-                CurrentMap.WorldMatrix.Max.Z);
-            BlockFaces entry = BlockFaces.TOP;
+            var positions = CurrentMap.getAllRelativeBlockPositions();
+            System.Drawing.Point sdPoint = pointInProjSpace.ToSDPoint();
 
-            while (position.Z >= CurrentMap.Bounds.Min.Z && // so that we return even if the mouse isn't
-                position.Z >= CurrentMap.Bounds.Min.Z &&    // above the WorldMatrix at all
-                position.Z >= CurrentMap.Bounds.Min.Z)
+            foreach (Position pos in positions.OrderBy(pos => CurrentMap.Bounds.getRelativeDepthOf(pos)))
             {
-                position = AdvanceNextBlock(position, ref entry);
-                //Choose the current Block
-                Position currentPosition = position.Ceiling() - Position.One;
-                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition];
-
-                if (currentBlock != GameBlock.OutOfBounds &&
-                    currentBlock != GameBlock.Empty)
+                System.Drawing.Region blockRegion = BlockRegions.WholeBlock.Offset(
+                    CoordinateTransform.ObjectToProjectionSpace(pos).ToXnaPoint());
+                if (blockRegion.IsVisible(sdPoint))
                 {
-                    yield return currentBlock;
+                    yield return CurrentMap.WorldMatrix[pos];
                 }
             }
         }
-
-        //private GameBlock getBlockUnderPoint(Point pointInProjSpace, Predicate<GameBlock> condition)
-        //{
-        //    for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
-        //    {
-        //        {//above
-        //            Position positionAbove = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, layer + 1).ToPosition();
-        //            positionAbove.Z--;
-        //            GameBlock block = CurrentMap.WorldMatrix[positionAbove];
-        //            if (block != null && condition(block))
-        //            {
-        //                return block;
-        //            }
-        //        }
-
-        //    }
-        //    return null;
-        //}
 
         private void ClickBlock(Position currentPosition, BlockFaces entry)
         {
@@ -186,39 +160,6 @@ namespace Mindstep.EasterEgg.Engine.Physics
             }
 
             //MoveTo(currentBlock + 1*Z)
-        }
-
-        private static Vector3 AdvanceNextBlock(Vector3 position, ref BlockFaces entry)
-        {
-            //Proceed to next Block
-            //calculate step lengths in multiples of delta
-            //TODO: Vector3 steps = (position.Floor() - position)/delta;
-            float stepsX = (float)(position.X.Floor() - position.X) / delta.X;
-            float stepsY = (float)(position.Y.Floor() - position.Y) / delta.Y;
-            float stepsZ = (float)(position.Z.Floor() - position.Z) / delta.Z;
-
-            //Check which is closest
-            if (stepsX != 0 && stepsX < stepsY && stepsX < stepsZ) //X is closest
-            {
-                position += delta * stepsX;
-                entry = BlockFaces.LEFT;
-            }
-            else if (stepsY != 0 && stepsY < stepsX && stepsY < stepsZ) //Y is closest
-            {
-                position += delta * stepsY;
-                entry = BlockFaces.RIGHT;
-            }
-            else //Z is closest
-            {
-                if (stepsZ == 0)
-                {
-                    stepsZ = 1f;
-                }
-                position += delta * stepsZ;
-                entry = BlockFaces.TOP;
-            }
-
-            return position;
         }
 
         private GameBlock FindFloor(Position position)
