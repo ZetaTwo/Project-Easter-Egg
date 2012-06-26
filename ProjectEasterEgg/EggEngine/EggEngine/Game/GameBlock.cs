@@ -81,8 +81,11 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         public void Interact(BlockAction action)
         {
-            ScriptBlock script = Engine.Script.Library.GetBlockScript(scriptName, this, action);
-            Engine.Script.AddScript(script);
+            if (scriptName != null)
+            {
+                ScriptBlock script = Engine.Script.Library.GetBlockScript(scriptName, this, action);
+                Engine.Script.AddScript(script);
+            }
         }
     }
 }

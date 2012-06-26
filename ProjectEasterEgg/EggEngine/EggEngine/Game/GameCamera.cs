@@ -32,7 +32,8 @@ namespace Mindstep.EasterEgg.Engine.Game
             set { cameraMode = value; }
         }
 
-        public Matrix ZoomAndOffsetMatrix { get { return zoomAndOffsetMatrix; } }
+
+
 
 
         public GameCamera(GameMovableModel following)

@@ -92,6 +92,10 @@ namespace Mindstep.EasterEgg.Engine.Input
                 location.X = location.X.Clamp(0, Engine.GraphicsDevice.Viewport.Width - 1);
                 location.Y = location.Y.Clamp(0, Engine.GraphicsDevice.Viewport.Height - 1);
             }
+            else
+            {
+                location = currentMouseState.Location();
+            }
 
             locationInProjSpace = CoordinateTransform.ScreenToProjSpace(Location, Engine.World.CurrentMap.Camera);
         }

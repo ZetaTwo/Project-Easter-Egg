@@ -87,8 +87,8 @@ namespace Mindstep.EasterEgg.Engine
 
             base.Initialize();
 
-            world.Initialize(this);
             Input.Initialize(this);
+            world.Initialize(this);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Mindstep.EasterEgg.Engine
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
+            
             // TODO: Add your update logic here
             Input.Update(gameTime);
             world.Update(gameTime);

@@ -124,7 +124,10 @@ namespace Mindstep.EasterEgg.Engine.Game
                     return CoordinateTransform.ObjectToProjectionSpace(getCurrentMoveOffset(gameTime));
                 }
             }
-            return Vector2.Zero;
+            else
+            {
+                return Vector2.Zero;
+            }
         }
     }
 }

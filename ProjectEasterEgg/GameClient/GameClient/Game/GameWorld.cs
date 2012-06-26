@@ -12,6 +12,7 @@ using Mindstep.EasterEgg.Commons.Game;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mindstep.EasterEgg.Game.Game
 {
@@ -19,9 +20,9 @@ namespace Mindstep.EasterEgg.Game.Game
     {
         private GameMovableModel character;
 
-        public override void Initialize(EggEngine _engine)
+        public override void Initialize(EggEngine engine)
         {
-            base.Initialize(_engine);
+            base.Initialize(engine);
 
             //Add game content here
 
@@ -41,20 +42,32 @@ namespace Mindstep.EasterEgg.Game.Game
             pointer = new MousePointer();
             pointer.Initialize(Engine);
             pointer.Cursor = Engine.Content.Load<Texture2D>("Cursors/magnifying-glass2").ToCursor(new Point(9,9));
+            pointer.Cursor = System.Windows.Forms.Cursors.Cross;
             AddUpdate(pointer);
             AddDraw(pointer);
         }
 
-        public new void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
+            //if (currentBlock.Interactable)
+            //{
+            //    currentBlock.Interact(action);
+            //    return;
+            //}
+            //else if (currentBlock.Type != BlockType.EMPTY)
+            //{
+            //    ClickBlock(currentPosition, entry);
+            //    return;
+            //}
+
             if (Engine.Input.Mouse.ButtonPressed(MouseButton.Left))
             {
-                Engine.Physics.ClickWorld(Engine.Input.Mouse.LocationInProjSpace, CurrentMap.Camera, BlockAction.INTERACT);
+                Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace);
             }
 
             if (Engine.Input.Mouse.ButtonPressed(MouseButton.Right))
             {
-                Engine.Physics.ClickWorld(Engine.Input.Mouse.LocationInProjSpace, CurrentMap.Camera, BlockAction.INSPECT);
+                Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace);
             }
             base.Update(gameTime);
         }

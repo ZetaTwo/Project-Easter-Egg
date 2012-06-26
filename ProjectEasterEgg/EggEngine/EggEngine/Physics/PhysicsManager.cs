@@ -128,61 +128,48 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
         #endregion
 
-        public void ClickWorld(Point pointInProjSpace, EasterEgg.Commons.Graphic.Camera camera, BlockAction action)
+        public IEnumerable<GameBlock> GetBlocksUnderPoint(Point pointInProjSpace)
         {
-            //The entry position
-            //screen.Y *= 1;
-            //screen.X *= -1;
-            //GameBlock hitBlock = getBlockUnder(pointInProjSpace, b => true);
-            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, CurrentMap.WorldMatrix.Max.Z);
-            if (position.X < CurrentMap.Bounds.Min.X || position.X > CurrentMap.Bounds.Max.X ||
-               position.Y < CurrentMap.Bounds.Min.Y || position.Y > CurrentMap.Bounds.Max.Y ||
-               position.Z < CurrentMap.Bounds.Min.Z || position.Z > CurrentMap.Bounds.Max.Z)
-            {
-                return;
-            }
-
+            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace.Add(Constants.blockDrawOffset.ToXnaPoint()),
+                CurrentMap.WorldMatrix.Max.Z);
             BlockFaces entry = BlockFaces.TOP;
-            while (position.Z >= CurrentMap.Bounds.Min.Z)
+
+            while (position.Z >= CurrentMap.Bounds.Min.Z && // so that we return even if the mouse isn't
+                position.Z >= CurrentMap.Bounds.Min.Z &&    // above the WorldMatrix at all
+                position.Z >= CurrentMap.Bounds.Min.Z)
             {
+                position = AdvanceNextBlock(position, ref entry);
                 //Choose the current Block
-                Position currentPosition = new Position(position) - CurrentMap.Bounds.Min;
+                Position currentPosition = position.Ceiling() - Position.One;
                 GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition];
 
-                if (currentBlock.Interactable)
+                if (currentBlock != GameBlock.OutOfBounds &&
+                    currentBlock != GameBlock.Empty)
                 {
-                    currentBlock.Interact(action);
-                    return;
+                    yield return currentBlock;
                 }
-                else if (currentBlock.Type == BlockType.SOLID)
-                {
-                    ClickSolidBlock(currentPosition, entry);
-                    return;
-                }
-
-                position = AdvanceNextBlock(position, ref entry);
             }
         }
 
-        private GameBlock getBlockUnderPoint(Point pointInProjSpace, Predicate<GameBlock> condition)
-        {
-            for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
-            {
-                {//above
-                    Position positionAbove = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, layer + 1).ToPosition();
-                    positionAbove.Z--;
-                    GameBlock block = CurrentMap.WorldMatrix[positionAbove];
-                    if (block != null && condition(block))
-                    {
-                        return block;
-                    }
-                }
+        //private GameBlock getBlockUnderPoint(Point pointInProjSpace, Predicate<GameBlock> condition)
+        //{
+        //    for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
+        //    {
+        //        {//above
+        //            Position positionAbove = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, layer + 1).ToPosition();
+        //            positionAbove.Z--;
+        //            GameBlock block = CurrentMap.WorldMatrix[positionAbove];
+        //            if (block != null && condition(block))
+        //            {
+        //                return block;
+        //            }
+        //        }
 
-            }
-            return null;
-        }
+        //    }
+        //    return null;
+        //}
 
-        private void ClickSolidBlock(Position currentPosition, BlockFaces entry)
+        private void ClickBlock(Position currentPosition, BlockFaces entry)
         {
             if (entry == BlockFaces.LEFT && //If left side was clicked
                 currentPosition.X < CurrentMap.WorldMatrix.Size.X - 1 && //and there could be a block in front
@@ -205,6 +192,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
         {
             //Proceed to next Block
             //calculate step lengths in multiples of delta
+            //TODO: Vector3 steps = (position.Floor() - position)/delta;
             float stepsX = (float)(position.X.Floor() - position.X) / delta.X;
             float stepsY = (float)(position.Y.Floor() - position.Y) / delta.Y;
             float stepsZ = (float)(position.Z.Floor() - position.Z) / delta.Z;

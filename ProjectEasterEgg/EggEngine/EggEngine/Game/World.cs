@@ -29,8 +29,7 @@ namespace Mindstep.EasterEgg.Engine
         List<IEntityDrawable> drawables = new List<IEntityDrawable>();
         List<IEntityUpdate> update = new List<IEntityUpdate>();
 
-        //private Camera camera;
-        SamplerState samplerState;
+        protected SamplerState samplerState;
 
         private List<GameMap> maps = new List<GameMap>();
         
@@ -49,7 +48,7 @@ namespace Mindstep.EasterEgg.Engine
             }
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             CurrentMap.Update(gameTime);
 
@@ -69,7 +68,7 @@ namespace Mindstep.EasterEgg.Engine
             samplerState.AddressV = TextureAddressMode.Clamp;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             CurrentMap.Camera.PrepareForDraw(gameTime);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, samplerState, null, null, null, CurrentMap.Camera.ZoomAndOffsetMatrix);
@@ -81,7 +80,7 @@ namespace Mindstep.EasterEgg.Engine
             spriteBatch.End();
         }
 
-        private void DrawWorld(GameTime gameTime, SpriteBatch spriteBatch)
+        protected void DrawWorld(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (IEntityDrawable entity in drawables)
             {

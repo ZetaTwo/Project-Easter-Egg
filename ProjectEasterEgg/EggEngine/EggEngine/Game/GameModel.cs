@@ -28,6 +28,7 @@ namespace Mindstep.EasterEgg.Engine.Game
         protected readonly Dictionary<string, Position> spawnLocations;
 
         protected GameModel parent;
+        private EggEngine Engine;
         public GameModel Parent
         {
             get { return parent; }
@@ -58,19 +59,20 @@ namespace Mindstep.EasterEgg.Engine.Game
 
         internal void Initialize(EggEngine engine)
         {
+            this.Engine = engine;
             foreach (Animation animation in Animations.Values)
             {
-                animation.Initialize(engine.GraphicsDevice);
+                animation.Initialize(Engine.GraphicsDevice);
             }
 
             foreach (GameBlock block in blocks)
             {
-                block.Initialize(engine);
+                block.Initialize(Engine);
             }
 
             foreach (GameModel subModel in subModels)
             {
-                subModel.Initialize(engine);
+                subModel.Initialize(Engine);
             }
         }
 
@@ -115,8 +117,14 @@ namespace Mindstep.EasterEgg.Engine.Game
                 {
                     float depth = worldBounds.getRelativeDepthOf(RenderPosition(gameTime) + blocks[i].Position, depthOffset);
                     Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(Position + blocks[i].Position) + offset;
+                    Color color = Color.White;
+                    GameBlock a = Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace).FirstOrDefault();
+                    if (a == blocks[i])
+                    {
+                        color = Color.Red;
+                    }
                     spriteBatch.Draw(currentFrame.textures[i], screenCoords, null,
-                        Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
+                        color, 0, Vector2.Zero, 1, SpriteEffects.None, depth);
                 }
             }
 
