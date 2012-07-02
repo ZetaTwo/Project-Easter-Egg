@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Engine.Game;
+using Mindstep.EasterEgg.Commons.Graphic;
 
 namespace Mindstep.EasterEgg.Engine.Physics
 {
@@ -39,7 +41,7 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return (int)Math.Floor((end - start).Length());
         }
 
-        public Path<Position> FindPath(GameModel model, Position start, Position destination)
+        public LinkedList<Position> FindPath(GameModel model, Position start, Position destination)
         {
             var closed = new HashSet<Position>();
             var queue = new PriorityQueue<double, Path<Position>>();
@@ -53,10 +55,11 @@ namespace Mindstep.EasterEgg.Engine.Physics
                 }
                 if (path.LastStep == destination)
                 {
-                    return path;
+                    return new LinkedList<Position>(path.Reverse().Diff());
                 }
                 closed.Add(path.LastStep);
-                foreach (Position node in GetNeighbours(model, path.LastStep))
+                var a = GetNeighbours(model, path.LastStep);
+                foreach (Position node in a)
                 {
                     double d = 1; //Distance between 2 squares in the grid
                     var newPath = path.AddStep(node, d);
@@ -74,10 +77,10 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
             {
                 bool NW, NE, SE, SW;
-                neighbours[Position.NW] = worldMatrix.modelCanStandAt(model, position + Position.NW, out NW);
-                neighbours[Position.NE] = worldMatrix.modelCanStandAt(model, position + Position.NE, out NE);
-                neighbours[Position.SE] = worldMatrix.modelCanStandAt(model, position + Position.SE, out SE);
-                neighbours[Position.SW] = worldMatrix.modelCanStandAt(model, position + Position.SW, out SW);
+                NW = neighbours[Position.NW] = worldMatrix.modelCanStandAt(model, position + Position.NW, out NW);
+                NE = neighbours[Position.NE] = worldMatrix.modelCanStandAt(model, position + Position.NE, out NE);
+                SE = neighbours[Position.SE] = worldMatrix.modelCanStandAt(model, position + Position.SE, out SE);
+                SW = neighbours[Position.SW] = worldMatrix.modelCanStandAt(model, position + Position.SW, out SW);
 
                 neighbours[Position.N] = NW && NE && worldMatrix.modelCanStandAt(model, position + Position.N);
                 neighbours[Position.E] = NE && SE && worldMatrix.modelCanStandAt(model, position + Position.E);
@@ -128,46 +131,49 @@ namespace Mindstep.EasterEgg.Engine.Physics
         }
         #endregion
 
-        public IEnumerable<GameBlock> GetBlocksUnderPoint(Point pointInProjSpace)
+        public IEnumerable<Tuple<GameBlock, BlockFaces>> GetBlocksUnderPoint(Point pointInProjSpace, GameTime gameTime)
         {
-            Vector3 position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace.Add(Constants.blockDrawOffset.ToXnaPoint()),
-                CurrentMap.WorldMatrix.Max.Z);
-            BlockFaces entry = BlockFaces.TOP;
+            Position position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace.Add(Constants.blockDrawOffset.ToXnaPoint()),
+                CurrentMap.WorldMatrix.Max.Z+1).ToPosition();
+            BlockFaces face = BlockFaces.TOP;
 
-            while (position.Z >= CurrentMap.Bounds.Min.Z && // so that we return even if the mouse isn't
-                position.Z >= CurrentMap.Bounds.Min.Z &&    // above the WorldMatrix at all
-                position.Z >= CurrentMap.Bounds.Min.Z)
+            while (position.Z >= CurrentMap.Bounds.Min.Z && // so that we return even if the mouse wasn't
+                position.X >= CurrentMap.Bounds.Min.X &&    // above the WorldMatrix at all
+                position.Y >= CurrentMap.Bounds.Min.Y)
             {
-                position = AdvanceNextBlock(position, ref entry);
-                //Choose the current Block
-                Position currentPosition = position.Ceiling() - Position.One;
-                GameBlock currentBlock = CurrentMap.WorldMatrix[currentPosition];
-
+                GameBlock currentBlock = CurrentMap.WorldMatrix[position];
                 if (currentBlock != GameBlock.OutOfBounds &&
                     currentBlock != GameBlock.Empty)
                 {
-                    yield return currentBlock;
+                    //TODO:1: only return if it hits even with move offset taken into account
+                    //      possibly also check that the pixel hit (or a few around it) isn't transparent.
+                    yield return Tuple.Create(currentBlock, face);
+                }
+
+                else if (BlockRegions.WholeBlock.IsVisible(pointInProjSpace.Subtract(CoordinateTransform
+                    .ObjectToProjectionSpace(position + Position.Down).ToXnaPoint()).ToSDPoint()))
+                {
+                    position = position + Position.Down;
+                    face = BlockFaces.TOP;
+                }
+                else if (BlockRegions.WholeBlock.IsVisible(pointInProjSpace.Subtract(CoordinateTransform
+                    .ObjectToProjectionSpace(position + Position.NE).ToXnaPoint()).ToSDPoint()))
+                {
+                    position = position + Position.NE;
+                    face = BlockFaces.LEFT;
+                }
+                else if (BlockRegions.WholeBlock.IsVisible(pointInProjSpace.Subtract(CoordinateTransform
+                    .ObjectToProjectionSpace(position + Position.NW).ToXnaPoint()).ToSDPoint()))
+                {
+                    position = position + Position.NW;
+                    face = BlockFaces.RIGHT;
+                }
+                else
+                {
+                    throw new Exception("This should never happen.");
                 }
             }
         }
-
-        //private GameBlock getBlockUnderPoint(Point pointInProjSpace, Predicate<GameBlock> condition)
-        //{
-        //    for (int layer = CurrentMap.WorldMatrix.Max.Z; layer > CurrentMap.WorldMatrix.Min.Z; layer--)
-        //    {
-        //        {//above
-        //            Position positionAbove = CoordinateTransform.ProjToObjectSpace(pointInProjSpace, layer + 1).ToPosition();
-        //            positionAbove.Z--;
-        //            GameBlock block = CurrentMap.WorldMatrix[positionAbove];
-        //            if (block != null && condition(block))
-        //            {
-        //                return block;
-        //            }
-        //        }
-
-        //    }
-        //    return null;
-        //}
 
         private void ClickBlock(Position currentPosition, BlockFaces entry)
         {

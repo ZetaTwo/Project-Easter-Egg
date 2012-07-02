@@ -10,6 +10,7 @@ using Mindstep.EasterEgg.Engine.Input;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Mindstep.EasterEgg.Engine.Graphics;
+using System.Linq.Expressions;
 
 namespace Mindstep.EasterEgg.Engine.Game
 {
@@ -20,6 +21,9 @@ namespace Mindstep.EasterEgg.Engine.Game
         private long begunMovingAt;
         private Position moveOffset;
         private float moveSpeed = 500;
+
+        protected LinkedList<Position> PathCheckpoints;
+        public Action<GameTime> DoneMoving;
 
 
         
@@ -56,6 +60,7 @@ namespace Mindstep.EasterEgg.Engine.Game
             {
                 this.ParentMap().WorldMatrix.endMoveModel(this, Position + moveOffset);
                 moving = false;
+                DoneMoving(gameTime);//TODO: don't send current gameTime, but the exact time the model stopped moving. to reduce probable stuttering
             }
         }
 
@@ -72,6 +77,47 @@ namespace Mindstep.EasterEgg.Engine.Game
         public override Position RenderPosition(GameTime gameTime)
         {
             return this.AbsolutePosition() + getCurrentMoveOffset(gameTime).Ceiling();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destination">An absolute Position</param>
+        /// <param name="startTime"></param>
+        /// <returns>True if the character is now/can soon start walking towards the destination</returns>
+        public bool WalkTo(Position destination, GameTime startTime)
+        {
+            Position start = Position;
+            if (moving)
+            {
+                start += moveOffset;
+            }
+            PathCheckpoints = Engine.Physics.FindPath(this, start, destination);
+
+            if (PathCheckpoints == null)
+            {
+                return false;
+            }
+            else
+            {
+                DoneMoving = (gameTime) =>
+                {
+                    if (PathCheckpoints.Count == 0)
+                    {
+                        DoneMoving = null;
+                    }
+                    else
+                    {
+                        MoveOffsetIfNotAlreadyMoving(PathCheckpoints.First.Value, gameTime);
+                        PathCheckpoints.RemoveFirst();
+                    }
+                };
+                if (!moving)
+                {
+                    DoneMoving(startTime);
+                }
+                return true;
+            }
         }
 
         public bool MoveOffsetIfNotAlreadyMoving(Position moveOffset, GameTime startTime)
@@ -91,12 +137,17 @@ namespace Mindstep.EasterEgg.Engine.Game
         {
             if (moving)
             {
-                return ((float)(gameTime.TotalGameTime.TotalMilliseconds - begunMovingAt) / moveOffset.Length() / moveSpeed).upperLimit(1);
+                return getTnoUpperLimit(gameTime).upperLimit(1);
             }
             else
             {
                 return 0;
             }
+        }
+
+        private float getTnoUpperLimit(GameTime gameTime)
+        {
+            return (float)(gameTime.TotalGameTime.TotalMilliseconds - begunMovingAt) / moveOffset.Length() / moveSpeed;
         }
 
         public Vector3 getCurrentMoveOffset(GameTime gameTime)

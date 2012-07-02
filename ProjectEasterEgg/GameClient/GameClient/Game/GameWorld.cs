@@ -62,12 +62,18 @@ namespace Mindstep.EasterEgg.Game.Game
 
             if (Engine.Input.Mouse.ButtonPressed(MouseButton.Left))
             {
-                Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace);
+                var block = Engine.Input.Mouse.BlocksUnder.FirstOrDefault();
+                if (block != null)
+                {
+                    if (block.Item2 == BlockFaces.TOP) {
+                        character.WalkTo(block.Item1.AbsolutePosition()+Position.Up, gameTime);
+                    }
+                }
             }
 
             if (Engine.Input.Mouse.ButtonPressed(MouseButton.Right))
             {
-                Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace);
+                //Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace);
             }
             base.Update(gameTime);
         }

@@ -35,6 +35,20 @@ namespace Mindstep.EasterEgg.Commons
             }
         }
 
+        public static IEnumerable<Position> Diff(this IEnumerable<Position> list)
+        {
+            Position previous = null;
+
+            foreach (Position pos in list)
+            {
+                if (previous != null)
+                {
+                    yield return pos - previous;
+                }
+                previous = pos;
+            }
+        }
+
         public static IEnumerable<System.Drawing.Point> ToSDPoints(this IEnumerable<Point> points)
         {
             foreach (Point point in points)

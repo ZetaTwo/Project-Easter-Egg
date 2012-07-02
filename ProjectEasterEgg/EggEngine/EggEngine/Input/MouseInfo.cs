@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Mindstep.EasterEgg.Commons;
 using SysMouse = Microsoft.Xna.Framework.Input.Mouse;
 using Mindstep.EasterEgg.Engine.Interfaces;
+using Mindstep.EasterEgg.Engine.Game;
 
 namespace Mindstep.EasterEgg.Engine.Input
 {
@@ -47,6 +48,9 @@ namespace Mindstep.EasterEgg.Engine.Input
 
         private Point locationInProjSpace;
         public Point LocationInProjSpace { get { return locationInProjSpace; } }
+
+        private IEnumerable<Tuple<GameBlock, BlockFaces>> blocksUnder;
+        public IEnumerable<Tuple<GameBlock, BlockFaces>> BlocksUnder { get { return blocksUnder; } }
 
 
 
@@ -96,8 +100,9 @@ namespace Mindstep.EasterEgg.Engine.Input
             {
                 location = currentMouseState.Location();
             }
-
+            
             locationInProjSpace = CoordinateTransform.ScreenToProjSpace(Location, Engine.World.CurrentMap.Camera);
+            blocksUnder = Engine.Physics.GetBlocksUnderPoint(locationInProjSpace, gameTime);
         }
 
 
