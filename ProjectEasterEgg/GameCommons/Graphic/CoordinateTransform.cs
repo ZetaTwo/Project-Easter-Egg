@@ -35,6 +35,11 @@ namespace Mindstep.EasterEgg.Commons
             return ObjectToProjectionSpace(map) + Constants.blockDrawOffset;
         }
 
+        public static Vector2 ObjectToBlockDrawCoordsInProjectionSpace(Position map)
+        {
+            return ObjectToProjectionSpace(map) + Constants.blockDrawOffset;
+        }
+
         public static Vector3 ScreenToObjectSpace(Point point, Camera camera, int layer)
         {
             return ProjToObjectSpace(ScreenToProjSpace(point, camera), layer);

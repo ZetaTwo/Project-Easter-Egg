@@ -10,22 +10,25 @@ namespace Mindstep.EasterEgg.Engine.Physics
 {
     public class PhysicsManager
     {
-        private EggEngine engine;
-        public EggEngine Engine { get { return engine; } }
-        public GameMap CurrentMap { get { return Engine.World.CurrentMap; } }
+        EggEngine engine;
+        public EggEngine Engine
+        {
+            get { return engine; }
+        }
 
+        //The direction in which we are going
+        private static readonly Vector3 delta = -Vector3.Normalize(new Vector3(.5f, .5f, (float)((Math.Sqrt(2) / 2) * Math.Cos(MathHelper.ToRadians(30f)))));
 
-
-
+        public GameMap CurrentMap
+        {
+            get { return Engine.World.CurrentMap; }
+            //set { world = value; }
+        }
 
         public PhysicsManager(EggEngine engine)
         {
             this.engine = engine;
         }
-
-
-
-
 
         public void MoveObject(GameEntitySolid character, Position endpoint, GameMap map)
         {
@@ -74,10 +77,10 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
             {
                 bool NW, NE, SE, SW;
-                NW = neighbours[Position.NW] = worldMatrix.modelCanStandAt(model, position + Position.NW, out NW);
-                NE = neighbours[Position.NE] = worldMatrix.modelCanStandAt(model, position + Position.NE, out NE);
-                SE = neighbours[Position.SE] = worldMatrix.modelCanStandAt(model, position + Position.SE, out SE);
-                SW = neighbours[Position.SW] = worldMatrix.modelCanStandAt(model, position + Position.SW, out SW);
+                neighbours[Position.NW] = worldMatrix.modelCanStandAt(model, position + Position.NW, out NW);
+                neighbours[Position.NE] = worldMatrix.modelCanStandAt(model, position + Position.NE, out NE);
+                neighbours[Position.SE] = worldMatrix.modelCanStandAt(model, position + Position.SE, out SE);
+                neighbours[Position.SW] = worldMatrix.modelCanStandAt(model, position + Position.SW, out SW);
 
                 neighbours[Position.N] = NW && NE && worldMatrix.modelCanStandAt(model, position + Position.N);
                 neighbours[Position.E] = NE && SE && worldMatrix.modelCanStandAt(model, position + Position.E);
@@ -130,15 +133,18 @@ namespace Mindstep.EasterEgg.Engine.Physics
 
         public IEnumerable<Tuple<GameBlock, BlockFaces>> GetBlocksUnderPoint(Point pointInProjSpace, GameTime gameTime)
         {
-            Position position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace.Add(Constants.blockDrawOffset.ToXnaPoint()),
+            Position position = CoordinateTransform.ProjToObjectSpace(pointInProjSpace,
                 CurrentMap.WorldMatrix.Max.Z+1).ToPosition();
             BlockFaces face = BlockFaces.TOP;
+            pointInProjSpace = pointInProjSpace.Subtract(Constants.blockDrawOffset.ToXnaPoint());
 
             while (position.Z >= CurrentMap.Bounds.Min.Z && // so that we return even if the mouse wasn't
                 position.X >= CurrentMap.Bounds.Min.X &&    // above the WorldMatrix at all
                 position.Y >= CurrentMap.Bounds.Min.Y)
             {
                 GameBlock currentBlock = CurrentMap.WorldMatrix[position];
+                if (currentBlock != GameBlock.OutOfBounds &&
+                    currentBlock != GameBlock.Empty)
                 {
                     //TODO:1: only return if it hits even with move offset taken into account
                     //      possibly also check that the pixel hit (or a few around it) isn't transparent.
@@ -187,6 +193,39 @@ namespace Mindstep.EasterEgg.Engine.Physics
             }
 
             //MoveTo(currentBlock + 1*Z)
+        }
+
+        private static Vector3 AdvanceNextBlock(Vector3 position, ref BlockFaces entry)
+        {
+            //Proceed to next Block
+            //calculate step lengths in multiples of delta
+            //TODO: Vector3 steps = (position.Floor() - position)/delta;
+            float stepsX = (float)(position.X.Floor() - position.X) / delta.X;
+            float stepsY = (float)(position.Y.Floor() - position.Y) / delta.Y;
+            float stepsZ = (float)(position.Z.Floor() - position.Z) / delta.Z;
+
+            //Check which is closest
+            if (stepsX != 0 && stepsX < stepsY && stepsX < stepsZ) //X is closest
+            {
+                position += delta * stepsX;
+                entry = BlockFaces.LEFT;
+            }
+            else if (stepsY != 0 && stepsY < stepsX && stepsY < stepsZ) //Y is closest
+            {
+                position += delta * stepsY;
+                entry = BlockFaces.RIGHT;
+            }
+            else //Z is closest
+            {
+                if (stepsZ == 0)
+                {
+                    stepsZ = 1f;
+                }
+                position += delta * stepsZ;
+                entry = BlockFaces.TOP;
+            }
+
+            return position;
         }
 
         private GameBlock FindFloor(Position position)

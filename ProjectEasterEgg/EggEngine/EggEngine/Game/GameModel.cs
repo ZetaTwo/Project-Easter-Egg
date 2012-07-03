@@ -116,7 +116,7 @@ namespace Mindstep.EasterEgg.Engine.Game
                 if (currentFrame.textures[i] != null)
                 {
                     float depth = worldBounds.getRelativeDepthOf(RenderPosition(gameTime) + blocks[i].Position, depthOffset);
-                    Vector2 screenCoords = CoordinateTransform.ObjectToProjectionSpace(Position + blocks[i].Position) + offset;
+                    Vector2 screenCoords = CoordinateTransform.ObjectToBlockDrawCoordsInProjectionSpace(Position + blocks[i].Position) + offset;
                     Color color = Color.White;
                     var a = Engine.Physics.GetBlocksUnderPoint(Engine.Input.Mouse.LocationInProjSpace, gameTime).FirstOrDefault();
                     if (a != null && a.Item1 == blocks[i])
