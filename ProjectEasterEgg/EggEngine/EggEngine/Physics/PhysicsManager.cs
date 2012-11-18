@@ -41,6 +41,14 @@ namespace Mindstep.EasterEgg.Engine.Physics
             return (int)Math.Floor((end - start).Length());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="start"></param>
+        /// <param name="destination"></param>
+        /// <returns>A linked list of positions to visit on the way, or <code>null</code>
+        /// if no feasible path was found.</returns>
         public LinkedList<Position> FindPath(GameModel model, Position start, Position destination)
         {
             var closed = new HashSet<Position>();

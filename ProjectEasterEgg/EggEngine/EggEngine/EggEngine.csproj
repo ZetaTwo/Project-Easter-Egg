@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="GameTimeExtensions.cs" />
     <Compile Include="EggEngine.cs" />
     <Compile Include="Game\Child.cs" />
     <Compile Include="Game\GameCamera.cs" />
