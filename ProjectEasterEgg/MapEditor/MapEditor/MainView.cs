@@ -208,25 +208,21 @@ namespace Mindstep.EasterEgg.MapEditor
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, samplerState, null, null, null, camera.ZoomAndOffsetMatrix);
 
             BoundingBoxInt boundingBox = new BoundingBoxInt(mainForm.CurrentModel.blocks.ToPositions());
+            boundingBox.addPos(new Position(-3,-3,-1));
+            boundingBox.addPos(new Position(3, 3, CurrentLayer));
+            const int margin = 2;
+            boundingBox.addPos(boundingBox.Max + new Position(margin, margin, 0));
+            boundingBox.addPos(boundingBox.Min - new Position(margin, margin, 0));
 
-            List<Position> tiles = new List<Position>();
-            for (int x = -5; x <= 5; x++)
+            for (int x = boundingBox.Min.X; x <= boundingBox.Max.X; x++)
             {
-                for (int y = -5; y <= 5; y++)
+                for (int y = boundingBox.Min.Y; y <= boundingBox.Max.Y; y++)
                 {
-                    Position tilePos = new Position(x, y, -1);
-                    tiles.Add(tilePos);
-                    boundingBox.addPos(tilePos);
-                }
-            }
-
-            Position currentLayerOffset = new Position(0, 0, CurrentLayer);
-            foreach (Position tilePos in tiles)
-            {
-                drawBlock(textureGridStriped, boundingBox, Color.White, tilePos, -0.01f);
-                if (CurrentEditingMode == EditingMode.Block)
-                {
-                    drawBlock(textureGridFilled, boundingBox, Color.Green, tilePos + currentLayerOffset, 0.01f);
+                    drawBlock(textureGridStriped, boundingBox, Color.White, new Position(x, y, -1), -0.01f);
+                    if (CurrentEditingMode == EditingMode.Block)
+                    {
+                        drawBlock(textureGridFilled, boundingBox, Color.Green, new Position(x, y, CurrentLayer-1), 0.01f);
+                    }
                 }
             }
 

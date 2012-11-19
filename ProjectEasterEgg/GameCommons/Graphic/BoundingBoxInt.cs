@@ -11,8 +11,8 @@ namespace Mindstep.EasterEgg.Commons
         Position min;
         public Position Min { get { return min; } }
         Position max;
-        private float fullDepth;
         public Position Max { get { return max; } }
+        private float fullDepth;
 
 
 

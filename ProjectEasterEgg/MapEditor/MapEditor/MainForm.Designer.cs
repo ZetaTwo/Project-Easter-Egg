@@ -39,6 +39,10 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockSolid = new System.Windows.Forms.ToolStripButton();
             this.toolStripDrawBlockWireframe = new System.Windows.Forms.ToolStripButton();
             this.toolStripDrawBlockNone = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripCoordX = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripCoordY = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripCoordZ = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextureOpacityLabel = new System.Windows.Forms.ToolStripLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -54,10 +58,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
             this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.toolStripCoordZ = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCoordX = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCoordY = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).BeginInit();
@@ -197,6 +197,42 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockNone.ToolTipText = "Don\'t draw blocks";
             this.toolStripDrawBlockNone.Click += new System.EventHandler(this.toolStripDrawBlockNone_Click);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 23);
+            // 
+            // toolStripCoordX
+            // 
+            this.toolStripCoordX.AutoSize = false;
+            this.toolStripCoordX.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordX.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordX.Name = "toolStripCoordX";
+            this.toolStripCoordX.Size = new System.Drawing.Size(30, 13);
+            this.toolStripCoordX.Text = "X:0";
+            this.toolStripCoordX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripCoordY
+            // 
+            this.toolStripCoordY.AutoSize = false;
+            this.toolStripCoordY.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordY.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordY.Name = "toolStripCoordY";
+            this.toolStripCoordY.Size = new System.Drawing.Size(35, 13);
+            this.toolStripCoordY.Text = "Y:0";
+            this.toolStripCoordY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripCoordZ
+            // 
+            this.toolStripCoordZ.AutoSize = false;
+            this.toolStripCoordZ.ForeColor = System.Drawing.Color.White;
+            this.toolStripCoordZ.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
+            this.toolStripCoordZ.Name = "toolStripCoordZ";
+            this.toolStripCoordZ.Size = new System.Drawing.Size(30, 13);
+            this.toolStripCoordZ.Text = "Z:0";
+            this.toolStripCoordZ.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
@@ -246,8 +282,8 @@ namespace Mindstep.EasterEgg.MapEditor
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
@@ -281,7 +317,7 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             // importFileDialog
             // 
-            this.importFileDialog.Filter = "PNG (*.png)|*.png|Egg model files (*.egg)|*.egg";
+            this.importFileDialog.Filter = "png (*.png)|*.png|Egg model files (*.egg)|*.egg";
             this.importFileDialog.Multiselect = true;
             this.importFileDialog.Title = "Import Textures and Sub Models";
             this.importFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.importFileDialog_FileOk);
@@ -326,42 +362,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.openFileDialog.Filter = "Egg model files (*.egg)|*.egg";
             this.openFileDialog.Title = "Open Model";
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
-            // 
-            // toolStripCoordZ
-            // 
-            this.toolStripCoordZ.AutoSize = false;
-            this.toolStripCoordZ.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordZ.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordZ.Name = "toolStripCoordZ";
-            this.toolStripCoordZ.Size = new System.Drawing.Size(30, 13);
-            this.toolStripCoordZ.Text = "Z:0";
-            this.toolStripCoordZ.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripCoordX
-            // 
-            this.toolStripCoordX.AutoSize = false;
-            this.toolStripCoordX.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordX.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordX.Name = "toolStripCoordX";
-            this.toolStripCoordX.Size = new System.Drawing.Size(30, 13);
-            this.toolStripCoordX.Text = "X:0";
-            this.toolStripCoordX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripCoordY
-            // 
-            this.toolStripCoordY.AutoSize = false;
-            this.toolStripCoordY.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordY.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordY.Name = "toolStripCoordY";
-            this.toolStripCoordY.Size = new System.Drawing.Size(35, 13);
-            this.toolStripCoordY.Text = "Y:0";
-            this.toolStripCoordY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 23);
             // 
             // MainForm
             // 
