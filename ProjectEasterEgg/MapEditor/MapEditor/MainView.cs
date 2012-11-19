@@ -151,9 +151,18 @@ namespace Mindstep.EasterEgg.MapEditor
                     throw new ArgumentException("You are not allowed to " +
                         "set editing mode to TextureProjection manually");
                 }
+                else if (editingMode == EditingMode.TextureProjection)
+                {
+                    textureBeingProjectedDown = null;
+                }
                 editingMode = value;
                 mainForm.UpdatedSettings();
             }
+        }
+        private void enterTextureProjectionMode(Texture2DWithPos textureToProjectDown)
+        {
+            textureBeingProjectedDown = textureToProjectDown;
+            editingMode = EditingMode.TextureProjection;
         }
 
         internal BlockDrawState CurrentBlockDrawState
@@ -183,20 +192,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 settings[CurrentEditingMode].opacity = value;
                 mainForm.UpdatedSettings();
             }
-        }
-
-        private void enterTextureProjectionMode(Texture2DWithPos textureToProjectDown)
-        {
-            textureBeingProjectedDown = textureToProjectDown;
-            editingMode = EditingMode.TextureProjection;
-            mainForm.UpdatedSettings();
-        }
-
-        private void exitTextureProjectionMode()
-        {
-            textureBeingProjectedDown = null;
-            editingMode = EditingMode.Texture;
-            mainForm.UpdatedSettings();
         }
 
         /// <summary>
@@ -333,7 +328,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 if (CurrentEditingMode == EditingMode.TextureProjection)
                 {
-                    exitTextureProjectionMode();
+                    CurrentEditingMode = EditingMode.Texture;
                     //TODO: remove this, an Accept button should popup when projecting textures instead.
                 }
                 else if (draggingTextures) //pressing the other mouse button only cancels the dragging
@@ -508,8 +503,13 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public void MainView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete
-                && selectedTextures.Count != 0)
+            if (e.KeyCode == Keys.Enter &&
+                CurrentEditingMode == EditingMode.TextureProjection)
+            {
+                CurrentEditingMode = EditingMode.Texture;
+            }
+            if (e.KeyCode == Keys.Delete &&
+                selectedTextures.Count != 0)
             {
                 mainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
