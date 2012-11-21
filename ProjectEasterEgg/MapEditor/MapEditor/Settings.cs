@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    internal class Settings
+    public class Settings
     {
-        public Color backgroundColor = Color.Black;
+        public Color backgroundColor;
         public BlockDrawState blockDrawState;
-        public float opacity = 1;
+        public float opacity;
 
         public Settings(Color backgroundColor, BlockDrawState blockDrawState, float opacity)
         {

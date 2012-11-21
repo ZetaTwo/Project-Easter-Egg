@@ -78,16 +78,23 @@
     <Compile Include="BlockDetailsForm.Designer.cs">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlockEditingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlockEditingControl.Designer.cs">
+      <DependentUpon>BlockEditingControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlockViewWrapperControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlockViewWrapperControl.Designer.cs">
+      <DependentUpon>BlockViewWrapperControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="MainView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Helper.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
-    <Compile Include="GraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GraphicsDeviceService.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -99,13 +106,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContainer.cs" />
     <Compile Include="SpinningTriangleControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SpriteFontControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraphicsDeviceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraphicsDeviceControl.Designer.cs">
+      <DependentUpon>GraphicsDeviceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BlockViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlockViewControl.Designer.cs">
+      <DependentUpon>BlockViewControl.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="BlockDetailsForm.resx">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlockViewWrapperControl.resx">
+      <DependentUpon>BlockViewWrapperControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -120,6 +142,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="GraphicsDeviceControl.resx">
+      <DependentUpon>GraphicsDeviceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlockViewControl.resx">
+      <DependentUpon>BlockViewControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

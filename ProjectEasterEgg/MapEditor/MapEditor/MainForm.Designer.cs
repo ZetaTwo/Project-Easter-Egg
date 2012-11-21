@@ -7,8 +7,6 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -56,8 +54,8 @@ namespace Mindstep.EasterEgg.MapEditor
             this.importFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.trackBarTextureOpacity = new System.Windows.Forms.TrackBar();
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
-            this.mainView = new Mindstep.EasterEgg.MapEditor.MainView();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.blockViewWrapperControl = new Mindstep.EasterEgg.MapEditor.BlockViewWrapperControl();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTextureOpacity)).BeginInit();
@@ -346,31 +344,30 @@ namespace Mindstep.EasterEgg.MapEditor
             this.backgroundColorDialog.Color = System.Drawing.Color.Red;
             this.backgroundColorDialog.FullOpen = true;
             // 
-            // mainView
-            // 
-            this.mainView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.mainView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainView.Location = new System.Drawing.Point(0, 27);
-            this.mainView.Margin = new System.Windows.Forms.Padding(0);
-            this.mainView.Name = "mainView";
-            this.mainView.Size = new System.Drawing.Size(1092, 739);
-            this.mainView.TabIndex = 17;
-            this.mainView.Text = "mainView";
-            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "Egg model files (*.egg)|*.egg";
             this.openFileDialog.Title = "Open Model";
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
+            // blockViewWrapperControl
+            // 
+            this.blockViewWrapperControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.blockViewWrapperControl.EditingMode = Mindstep.EasterEgg.MapEditor.EditingMode.Block;
+            this.blockViewWrapperControl.Location = new System.Drawing.Point(0, 27);
+            this.blockViewWrapperControl.MainForm = null;
+            this.blockViewWrapperControl.Name = "blockViewWrapperControl";
+            this.blockViewWrapperControl.Size = new System.Drawing.Size(1092, 692);
+            this.blockViewWrapperControl.TabIndex = 20;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1092, 766);
+            this.ClientSize = new System.Drawing.Size(1092, 719);
+            this.Controls.Add(this.blockViewWrapperControl);
             this.Controls.Add(this.trackBarTextureOpacity);
-            this.Controls.Add(this.mainView);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -391,7 +388,6 @@ namespace Mindstep.EasterEgg.MapEditor
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private MainView mainView;
         private System.Windows.Forms.ToolStripButton drawTextureIndices;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFile;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -419,6 +415,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private System.Windows.Forms.ToolStripLabel toolStripCoordX;
         private System.Windows.Forms.ToolStripLabel toolStripCoordY;
         private System.Windows.Forms.ToolStripLabel toolStripCoordZ;
+        private BlockViewWrapperControl blockViewWrapperControl;
     }
 }
 

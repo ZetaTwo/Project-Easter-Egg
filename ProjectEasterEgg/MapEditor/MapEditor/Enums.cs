@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    enum EditingMode
+    public enum EditingMode
     {
         Block,
         Texture,
         TextureProjection,
     }
 
-    enum BlockDrawState
+    public enum BlockDrawState
     {
         Solid,
         Wireframe,
         None,
     }
 
-    enum ClickOperation
+    public enum ClickOperation
     {
         Add,
         Subtract,

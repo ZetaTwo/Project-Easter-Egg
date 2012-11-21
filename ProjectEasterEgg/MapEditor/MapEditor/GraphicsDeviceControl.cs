@@ -1,46 +1,33 @@
-#region File Description
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // GraphicsDeviceControl.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
+using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
-#endregion
+using Color = System.Drawing.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    // System.Drawing and the XNA Framework both define Color and Rectangle
-    // types. To avoid conflicts, we specify exactly which ones to use.
-    using Color = System.Drawing.Color;
-    using Rectangle = Microsoft.Xna.Framework.Rectangle;
-
-
     /// <summary>
     /// Custom control uses the XNA Framework GraphicsDevice to render onto
     /// a Windows Form. Derived classes can override the Initialize and Draw
     /// methods to add their own drawing code.
     /// </summary>
-    abstract public class GraphicsDeviceControl : Control
+    public partial class GraphicsDeviceControl : UserControl
     {
-        #region Fields
-
-
         // However many GraphicsDeviceControl instances you have, they all share
         // the same underlying GraphicsDevice, managed by this helper service.
         GraphicsDeviceService graphicsDeviceService;
-
-
-        #endregion
-
-        #region Properties
-
 
         /// <summary>
         /// Gets a GraphicsDevice that can be used to draw onto this control.
@@ -64,10 +51,13 @@ namespace Mindstep.EasterEgg.MapEditor
         ServiceContainer services = new ServiceContainer();
 
 
-        #endregion
 
-        #region Initialization
 
+
+        public GraphicsDeviceControl()
+        {
+            InitializeComponent();
+        }
 
         /// <summary>
         /// Initializes the control.
@@ -89,24 +79,7 @@ namespace Mindstep.EasterEgg.MapEditor
         }
 
 
-        /// <summary>
-        /// Disposes the control.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (graphicsDeviceService != null)
-            {
-                graphicsDeviceService.Release(disposing);
-                graphicsDeviceService = null;
-            }
 
-            base.Dispose(disposing);
-        }
-
-
-        #endregion
-
-        #region Paint
 
 
         /// <summary>
@@ -128,7 +101,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 PaintUsingSystemDrawing(e.Graphics, beginDrawError);
             }
         }
-
 
         /// <summary>
         /// Attempts to begin drawing the control. Returns an error message string
@@ -172,7 +144,6 @@ namespace Mindstep.EasterEgg.MapEditor
             return null;
         }
 
-
         /// <summary>
         /// Ends drawing the control. This is called after derived classes
         /// have finished their Draw method, and is responsible for presenting
@@ -185,7 +156,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 Rectangle sourceRectangle = new Rectangle(0, 0, ClientSize.Width,
                                                                 ClientSize.Height);
-
+                
                 GraphicsDevice.Present(sourceRectangle, null, this.Handle);
             }
             catch
@@ -195,6 +166,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 // so we just swallow the exception.
             }
         }
+
 
 
         /// <summary>
@@ -267,6 +239,9 @@ namespace Mindstep.EasterEgg.MapEditor
         }
 
 
+
+
+
         /// <summary>
         /// Ignores WinForms paint-background messages. The default implementation
         /// would clear the control to the current background color, causing
@@ -274,21 +249,11 @@ namespace Mindstep.EasterEgg.MapEditor
         /// other color over the top using the XNA Framework GraphicsDevice.
         /// </summary>
         protected override void OnPaintBackground(PaintEventArgs pevent)
-        {
-        }
+        {}
 
-
-        #endregion
-
-        #region Abstract Methods
-
-        
         /// <summary>
         /// Derived classes override this to draw themselves using the GraphicsDevice.
         /// </summary>
-        protected abstract void Draw();
-
-
-        #endregion
+        protected virtual void Draw() { }
     }
 }

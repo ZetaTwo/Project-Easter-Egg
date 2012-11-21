@@ -48,18 +48,19 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             Services = new ServiceContainer();
             Content = new ContentManager(Services, "ModelEditorContent");
-            SetupContentManager();
+            setupContentManager();
             SpriteBatchExtensions.Initialize(this);
             model = new SaveModel<Texture2DWithPos>("untitled");
 
 
             initializeTextures();
             InitializeComponent();
-            mainView.Initialize(this);
+            blockViewWrapperControl.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
-            RefreshTitle();
 
             toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
+
+            RefreshTitle();
         }
 
         public MainForm(string fileName)
@@ -76,7 +77,7 @@ namespace Mindstep.EasterEgg.MapEditor
             whiteOneByOneTexture.SetData<Color>(new Color[]{Color.White});
         }
 
-        private void SetupContentManager()
+        private void setupContentManager()
         {
             // Don't initialize the graphics device if we are running in the designer.
             if (!DesignMode)
@@ -94,30 +95,20 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        private void upButton_Click(object sender, System.EventArgs e)
-        {
-            mainView.CurrentLayer++;
-        }
-
-        private void downButton_Click(object sender, System.EventArgs e)
-        {
-            mainView.CurrentLayer--;
-        }
-
         #region delegate mousewheel input
         private void mouseWheel(object sender, MouseEventArgs e)
         {
-            if (GetChildAtPoint(e.Location) == mainView)
+            if (GetChildAtPoint(e.Location) == blockViewWrapperControl)
             {
-                System.Drawing.Point newLocation = e.Location.ToXnaPoint().Subtract(mainView.Location.ToXnaPoint()).ToSDPoint();
-                mainView.MainView_MouseWheel(sender, new MouseEventArgs(e.Button, e.Clicks, newLocation.X, newLocation.Y, e.Delta));
+                System.Drawing.Point newLocation = e.Location.ToXnaPoint().Subtract(blockViewWrapperControl.Location.ToXnaPoint()).ToSDPoint();
+                blockViewWrapperControl.OnMouseWheel(new MouseEventArgs(e.Button, e.Clicks, newLocation.X, newLocation.Y, e.Delta));
             }
         }
         #endregion
 
         public void RefreshTitle()
         {
-            Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(mainView.Zoom * 100, 0) + "%]";
+            Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(blockViewWrapperControl.Camera.Zoom * 100, 0) + "%]";
         }
 
         public void SetDisplayCoords(Position position)
@@ -228,7 +219,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             model = EggModelLoader.Load(fileName).ToTexture2D(GraphicsDevice);
             lastSavedDoc = fileName;
-            mainView.CurrentEditingMode = EditingMode.Texture;
+            blockViewWrapperControl.EditingMode = EditingMode.Texture;
             changedSinceLastSave = false;
             RefreshTitle();
         }
@@ -263,7 +254,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             tex.pos = lastImportedTextureOffset;
 
-            mainView.CurrentEditingMode = EditingMode.Texture;
+            blockViewWrapperControl.EditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in model.animations.GetAllTextures())
             {
                 if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
@@ -282,20 +273,20 @@ namespace Mindstep.EasterEgg.MapEditor
 
         internal void UpdatedSettings()
         {
-            toolStripDrawBlockSolid.Checked = mainView.CurrentBlockDrawState == BlockDrawState.Solid;
-            toolStripDrawBlockWireframe.Checked = mainView.CurrentBlockDrawState == BlockDrawState.Wireframe;
-            toolStripDrawBlockNone.Checked = mainView.CurrentBlockDrawState == BlockDrawState.None;
+            toolStripDrawBlockSolid.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.Solid;
+            toolStripDrawBlockWireframe.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.Wireframe;
+            toolStripDrawBlockNone.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.None;
 
-            toolStripEditBlocks.Checked = mainView.CurrentEditingMode == EditingMode.Block;
-            toolStripEditTextures.Checked = mainView.CurrentEditingMode == EditingMode.Texture ||
-                mainView.CurrentEditingMode == EditingMode.TextureProjection;
+            toolStripEditBlocks.Checked = blockViewWrapperControl.EditingMode == EditingMode.Block;
+            toolStripEditTextures.Checked = blockViewWrapperControl.EditingMode == EditingMode.Texture ||
+                blockViewWrapperControl.EditingMode == EditingMode.TextureProjection;
 
             toolStripCoordX.Enabled = toolStripCoordY.Enabled = toolStripCoordZ.Enabled =
-                mainView.CurrentEditingMode == EditingMode.Block;
+                blockViewWrapperControl.EditingMode == EditingMode.Block;
             
             //something related to background color could be changed here too
 
-            trackBarTextureOpacity.Value = (int)(mainView.TextureOpacity*trackBarTextureOpacity.Maximum);
+            trackBarTextureOpacity.Value = (int)(blockViewWrapperControl.BlockViewer.TextureOpacity * trackBarTextureOpacity.Maximum);
 
             UpdatedGraphics();
         }
@@ -307,21 +298,21 @@ namespace Mindstep.EasterEgg.MapEditor
                 changedSinceLastSave = true;
                 RefreshTitle();
             }
-            mainView.Invalidate();
+            //blockViewWrapperControl.Invalidate();
         }
         internal void UpdatedGraphics()
         {
-            mainView.Invalidate();
+            blockViewWrapperControl.Invalidate();
         }
 
         private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
         {
-            mainView.TextureOpacity = (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum;
+            blockViewWrapperControl.BlockViewer.TextureOpacity = (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum;
         }
 
         private void trackBarTextureOpacity_MouseUp(object sender, MouseEventArgs e)
         {
-            mainView.Focus();
+            blockViewWrapperControl.Focus();
         }
 
         private void toolStripBlockDrawStateChanged(object sender, EventArgs e)
@@ -336,33 +327,33 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void toolStripDrawBlockSolid_Click(object sender, EventArgs e)
         {
-            mainView.CurrentBlockDrawState = BlockDrawState.Solid;
+            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.Solid;
         }
 
         private void toolStripDrawBlockWireframe_Click(object sender, EventArgs e)
         {
-            mainView.CurrentBlockDrawState = BlockDrawState.Wireframe;
+            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.Wireframe;
         }
 
         private void toolStripDrawBlockNone_Click(object sender, EventArgs e)
         {
-            mainView.CurrentBlockDrawState = BlockDrawState.None;
+            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.None;
         }
 
         private void toolStripEditBlocks_Click(object sender, EventArgs e)
         {
-            mainView.CurrentEditingMode = EditingMode.Block;
+            blockViewWrapperControl.EditingMode = EditingMode.Block;
         }
 
         private void toolStripEditTextures_Click(object sender, EventArgs e)
         {
-            mainView.CurrentEditingMode = EditingMode.Texture;
+            blockViewWrapperControl.EditingMode = EditingMode.Texture;
         }
 
         private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
         {
             backgroundColorDialog.ShowDialog();
-            mainView.CurrentBackgroundColor = backgroundColorDialog.Color.ToXnaColor();
+            blockViewWrapperControl.BlockViewer.Settings.backgroundColor = backgroundColorDialog.Color.ToXnaColor();
             UpdatedGraphics();
         }
 
