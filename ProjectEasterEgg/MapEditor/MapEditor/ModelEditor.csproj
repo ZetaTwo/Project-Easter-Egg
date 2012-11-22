@@ -123,6 +123,9 @@
     <Compile Include="BlockViewControl.Designer.cs">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolStripTrackBarItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="BlockDetailsForm.resx">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </EmbeddedResource>

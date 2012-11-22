@@ -233,8 +233,8 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 for (int y = boundingBox.Min.Y; y <= boundingBox.Max.Y; y++)
                 {
-                    drawBlock(textureGridStriped, boundingBox, Color.White, new Position(x, y, -1), -0.01f);
-                    drawBlock(textureGridFilled, boundingBox, Color.Green, new Position(x, y, CurrentLayer - 1), 0.01f);
+                    drawBlock(textureGridStriped, boundingBox, Color.White, new Position(x, y, -1), -0.0001f);
+                    drawBlock(textureGridFilled, boundingBox, Color.Green, new Position(x, y, CurrentLayer - 1), 0.0001f);
                 }
             }
         }

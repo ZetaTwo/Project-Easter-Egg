@@ -58,8 +58,6 @@ namespace Mindstep.EasterEgg.MapEditor
             blockViewWrapperControl.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
 
-            toolStrip.Items.Add(new ToolStripControlHost(trackBarTextureOpacity));
-
             RefreshTitle();
         }
 
@@ -285,8 +283,8 @@ namespace Mindstep.EasterEgg.MapEditor
                 blockViewWrapperControl.EditingMode == EditingMode.Block;
             
             //something related to background color could be changed here too
-
-            trackBarTextureOpacity.Value = (int)(blockViewWrapperControl.BlockViewer.TextureOpacity * trackBarTextureOpacity.Maximum);
+            
+            textureOpacityTrackBar.TrackBar.Value = (int)(blockViewWrapperControl.BlockViewer.TextureOpacity * textureOpacityTrackBar.TrackBar.Maximum);
 
             UpdatedGraphics();
         }
@@ -305,12 +303,12 @@ namespace Mindstep.EasterEgg.MapEditor
             blockViewWrapperControl.Invalidate();
         }
 
-        private void trackBarTextureOpacity_Scroll(object sender, EventArgs e)
+        private void textureOpacityTrackBar_Scroll(object sender, EventArgs e)
         {
-            blockViewWrapperControl.BlockViewer.TextureOpacity = (float)trackBarTextureOpacity.Value / trackBarTextureOpacity.Maximum;
+            blockViewWrapperControl.BlockViewer.TextureOpacity = (float)textureOpacityTrackBar.TrackBar.Value / textureOpacityTrackBar.TrackBar.Maximum;
         }
 
-        private void trackBarTextureOpacity_MouseUp(object sender, MouseEventArgs e)
+        private void textureOpacityTrackBar_MouseUp(object sender, MouseEventArgs e)
         {
             blockViewWrapperControl.Focus();
         }
