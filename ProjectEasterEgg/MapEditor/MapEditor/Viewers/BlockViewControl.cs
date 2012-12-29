@@ -151,7 +151,7 @@ namespace Mindstep.EasterEgg.MapEditor
             set
             {
                 Settings.blockDrawState = value;
-                MainForm.UpdatedSettings();
+                Wrapper.UpdatedSettings();
             }
         }
 
@@ -161,7 +161,7 @@ namespace Mindstep.EasterEgg.MapEditor
             set
             {
                 Settings.backgroundColor = value;
-                MainForm.UpdatedSettings();
+                Wrapper.UpdatedSettings();
             }
         }
         public float TextureOpacity
@@ -170,7 +170,7 @@ namespace Mindstep.EasterEgg.MapEditor
             set
             {
                 Settings.opacity = value;
-                MainForm.UpdatedSettings();
+                Wrapper.UpdatedSettings();
             }
         }
 

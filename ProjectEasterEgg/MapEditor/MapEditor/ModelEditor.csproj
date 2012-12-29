@@ -78,24 +78,24 @@
     <Compile Include="BlockDetailsForm.Designer.cs">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BlockEditingControl.cs">
+    <Compile Include="Viewers\BlockEditingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BlockEditingControl.Designer.cs">
+    <Compile Include="Viewers\BlockEditingControl.Designer.cs">
       <DependentUpon>BlockEditingControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="BlockViewWrapperControl.cs">
+    <Compile Include="Viewers\BlockViewWrapperControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BlockViewWrapperControl.Designer.cs">
+    <Compile Include="Viewers\BlockViewWrapperControl.Designer.cs">
       <DependentUpon>BlockViewWrapperControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\Helper.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SpriteBatchExtensions.cs" />
-    <Compile Include="GraphicsDeviceService.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
+    <Compile Include="Backbone\GraphicsDeviceService.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,29 +104,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceContainer.cs" />
-    <Compile Include="SpinningTriangleControl.cs">
+    <Compile Include="Backbone\ServiceContainer.cs" />
+    <Compile Include="Old\SpinningTriangleControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SpriteFontControl.cs">
+    <Compile Include="Old\SpriteFontControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GraphicsDeviceControl.cs">
+    <Compile Include="Backbone\GraphicsDeviceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GraphicsDeviceControl.Designer.cs">
+    <Compile Include="Backbone\GraphicsDeviceControl.Designer.cs">
       <DependentUpon>GraphicsDeviceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="BlockViewControl.cs">
+    <Compile Include="Viewers\BlockViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BlockViewControl.Designer.cs">
+    <Compile Include="Viewers\BlockViewControl.Designer.cs">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextureEditingControl.cs">
+    <Compile Include="Viewers\TextureEditingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextureEditingControl.Designer.cs">
+    <Compile Include="Viewers\TextureEditingControl.Designer.cs">
       <DependentUpon>TextureEditingControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ToolStripTrackBarItem.cs">
@@ -135,10 +135,10 @@
     <EmbeddedResource Include="BlockDetailsForm.resx">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BlockEditingControl.resx">
+    <EmbeddedResource Include="Viewers\BlockEditingControl.resx">
       <DependentUpon>BlockEditingControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BlockViewWrapperControl.resx">
+    <EmbeddedResource Include="Viewers\BlockViewWrapperControl.resx">
       <DependentUpon>BlockViewWrapperControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -154,10 +154,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="GraphicsDeviceControl.resx">
+    <EmbeddedResource Include="Backbone\GraphicsDeviceControl.resx">
       <DependentUpon>GraphicsDeviceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BlockViewControl.resx">
+    <EmbeddedResource Include="Viewers\BlockViewControl.resx">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />

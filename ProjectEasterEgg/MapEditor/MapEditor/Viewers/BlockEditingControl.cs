@@ -50,6 +50,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             base.Initialize(mainForm, wrapper);
             ToolStrips.Add(toolStrip1);
+            ToolStrips.Add(toolStrip2);
 
             MouseDown += new MouseEventHandler(BlockEditingControl_MouseDown);
             MouseUp += new MouseEventHandler(BlockEditingControl_MouseUp);
@@ -243,7 +244,10 @@ namespace Mindstep.EasterEgg.MapEditor
                 for (int y = boundingBox.Min.Y; y <= boundingBox.Max.Y; y++)
                 {
                     drawBlock(textureGridStriped, boundingBox, Color.White, new Position(x, y, -1), -0.0001f);
-                    drawBlock(textureGridFilled, boundingBox, Color.Green, new Position(x, y, CurrentLayer - 1), 0.0001f);
+                    if (toolStripButtonShowGrid.CheckState == CheckState.Checked)
+                    {
+                        drawBlock(textureGridFilled, boundingBox, Color.Green, new Position(x, y, CurrentLayer - 1), 0.0001f);
+                    }
                 }
             }
         }
@@ -272,6 +276,11 @@ namespace Mindstep.EasterEgg.MapEditor
                         break;
                 }
             }
+        }
+
+        private void toolStripButtonShowGrid_CheckedChanged(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 }

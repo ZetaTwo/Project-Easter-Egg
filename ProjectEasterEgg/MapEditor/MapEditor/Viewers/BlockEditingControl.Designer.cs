@@ -28,26 +28,70 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BlockEditingControl));
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonShowGrid = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripCoordX = new System.Windows.Forms.ToolStripLabel();
             this.toolStripCoordY = new System.Windows.Forms.ToolStripLabel();
             this.toolStripCoordZ = new System.Windows.Forms.ToolStripLabel();
+            this.toolStrip2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // toolStrip2
+            // 
+            this.toolStrip2.AllowMerge = false;
+            this.toolStrip2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStrip2.CanOverflow = false;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonShowGrid});
+            this.toolStrip2.Location = new System.Drawing.Point(311, 52);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
+            this.toolStrip2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStrip2.Size = new System.Drawing.Size(59, 27);
+            this.toolStrip2.TabIndex = 19;
+            this.toolStrip2.Text = "toolStrip";
+            // 
+            // toolStripButtonShowGrid
+            // 
+            this.toolStripButtonShowGrid.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStripButtonShowGrid.Checked = true;
+            this.toolStripButtonShowGrid.CheckOnClick = true;
+            this.toolStripButtonShowGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButtonShowGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonShowGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowGrid.Image")));
+            this.toolStripButtonShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonShowGrid.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
+            this.toolStripButtonShowGrid.Name = "toolStripButtonShowGrid";
+            this.toolStripButtonShowGrid.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonShowGrid.Text = "toolStripButton1";
+            this.toolStripButtonShowGrid.ToolTipText = "Show grid";
+            this.toolStripButtonShowGrid.CheckedChanged += new System.EventHandler(this.toolStripButtonShowGrid_CheckedChanged);
+            // 
             // toolStrip1
             // 
-            this.toolStrip1.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.toolStrip1.AllowMerge = false;
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStrip1.CanOverflow = false;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripCoordX,
             this.toolStripCoordY,
             this.toolStripCoordZ});
-            this.toolStrip1.Location = new System.Drawing.Point(183, 54);
+            this.toolStrip1.Location = new System.Drawing.Point(183, 93);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(107, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
+            this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStrip1.Size = new System.Drawing.Size(97, 25);
+            this.toolStrip1.TabIndex = 20;
+            this.toolStrip1.Text = "toolStrip";
             // 
             // toolStripCoordX
             // 
@@ -83,7 +127,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip2);
             this.Name = "BlockEditingControl";
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -93,9 +140,11 @@
 
         #endregion
 
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton toolStripButtonShowGrid;
+        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripLabel toolStripCoordX;
         private System.Windows.Forms.ToolStripLabel toolStripCoordY;
         private System.Windows.Forms.ToolStripLabel toolStripCoordZ;
-        private System.Windows.Forms.ToolStrip toolStrip1;
     }
 }

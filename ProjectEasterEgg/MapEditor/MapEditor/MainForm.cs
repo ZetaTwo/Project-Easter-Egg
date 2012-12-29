@@ -38,8 +38,6 @@ namespace Mindstep.EasterEgg.MapEditor
             get { return graphicsDeviceService.GraphicsDevice; }
         }
 
-        internal bool DrawTextureIndices { get { return drawTextureIndices.Checked; } }
-
 
 
 
@@ -262,23 +260,6 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         #endregion
 
-        internal void UpdatedSettings()
-        {
-            toolStripDrawBlockSolid.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.Solid;
-            toolStripDrawBlockWireframe.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.Wireframe;
-            toolStripDrawBlockNone.Checked = blockViewWrapperControl.BlockViewer.BlockDrawState == BlockDrawState.None;
-
-            toolStripEditBlocks.Checked = blockViewWrapperControl.EditingMode == EditingMode.Block;
-            toolStripEditTextures.Checked = blockViewWrapperControl.EditingMode == EditingMode.Texture ||
-                blockViewWrapperControl.EditingMode == EditingMode.TextureProjection;
-            
-            //something related to background color could be changed here too
-            
-            textureOpacityTrackBar.TrackBar.Value = (int)(blockViewWrapperControl.BlockViewer.TextureOpacity * textureOpacityTrackBar.TrackBar.Maximum);
-
-            UpdatedGraphics();
-        }
-
         internal void UpdatedThings()
         {
             if (!changedSinceLastSave)
@@ -293,58 +274,6 @@ namespace Mindstep.EasterEgg.MapEditor
             blockViewWrapperControl.Invalidate();
         }
 
-        private void textureOpacityTrackBar_Scroll(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.BlockViewer.TextureOpacity = (float)textureOpacityTrackBar.TrackBar.Value / textureOpacityTrackBar.TrackBar.Maximum;
-        }
-
-        private void textureOpacityTrackBar_MouseUp(object sender, MouseEventArgs e)
-        {
-            blockViewWrapperControl.Focus();
-        }
-
-        private void toolStripBlockDrawStateChanged(object sender, EventArgs e)
-        {
-            blockDrawStateChanged();
-        }
-
-        private void blockDrawStateChanged()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void toolStripDrawBlockSolid_Click(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.Solid;
-        }
-
-        private void toolStripDrawBlockWireframe_Click(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.Wireframe;
-        }
-
-        private void toolStripDrawBlockNone_Click(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.BlockViewer.BlockDrawState = BlockDrawState.None;
-        }
-
-        private void toolStripEditBlocks_Click(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.EditingMode = EditingMode.Block;
-        }
-
-        private void toolStripEditTextures_Click(object sender, EventArgs e)
-        {
-            blockViewWrapperControl.EditingMode = EditingMode.Texture;
-        }
-
-        private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
-        {
-            backgroundColorDialog.ShowDialog();
-            blockViewWrapperControl.BlockViewer.Settings.backgroundColor = backgroundColorDialog.Color.ToXnaColor();
-            UpdatedGraphics();
-        }
-
         private void menuStrip_MenuActivate(object sender, EventArgs e)
         {
             menuStrip.Visible = true;
@@ -355,24 +284,28 @@ namespace Mindstep.EasterEgg.MapEditor
             menuStrip.Visible = false;
         }
 
-        private void drawTextureIndices_Click(object sender, EventArgs e)
-        {
-            UpdatedGraphics();
-        }
 
-        internal void AddToolStrips(IEnumerable<Control> toolStripControls)
+
+        internal void AddToolStrip(Control toolStrip)
         {
-            foreach (Control toolStripControl in toolStripControls)
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(toolStrip);
+        }
+        internal void RemoveToolStrip(Control toolStrip)
+        {
+            this.toolStripContainer1.TopToolStripPanel.Controls.Remove(toolStrip);
+        }
+        internal void AddToolStrip(IEnumerable<Control> toolStrips)
+        {
+            foreach (Control toolStrip in toolStrips)
             {
-                this.toolStripContainer1.TopToolStripPanel.Controls.Add(toolStripControl);
+                AddToolStrip(toolStrip);
             }
         }
-
-        internal void RemoveToolStrips(IEnumerable<Control> toolStripControls)
+        internal void RemoveToolStrip(IEnumerable<Control> toolStrips)
         {
-            foreach (Control toolStripControl in toolStripControls)
+            foreach (Control toolStrip in toolStrips)
             {
-                this.toolStripContainer1.TopToolStripPanel.Controls.Remove(toolStripControl);
+                RemoveToolStrip(toolStrip);
             }
         }
     }
