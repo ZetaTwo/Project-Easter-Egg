@@ -38,6 +38,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public BlockEditingControl()
         {
+            InitializeComponent();
             blockContextMenu = new ContextMenu(new MenuItem[]{
                 new MenuItem("Edit Block Details", blockContextMenu_EditBlockDetails),
             });
@@ -48,6 +49,7 @@ namespace Mindstep.EasterEgg.MapEditor
         override public void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
         {
             base.Initialize(mainForm, wrapper);
+            ToolStrips.Add(toolStrip1);
 
             MouseDown += new MouseEventHandler(BlockEditingControl_MouseDown);
             MouseUp += new MouseEventHandler(BlockEditingControl_MouseUp);
@@ -96,7 +98,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void BlockEditingControl_MouseMove(object sender, MouseEventArgs e)
         {
-            MainForm.SetDisplayCoords(CoordinateTransform.ScreenToObjectSpace(e.Location.ToXnaPoint(), Wrapper.Camera, currentLayer).ToPosition());
+            SetDisplayCoords(CoordinateTransform.ScreenToObjectSpace(e.Location.ToXnaPoint(), Wrapper.Camera, currentLayer).ToPosition());
 
             if (drawingBlocks)
             {
@@ -106,6 +108,13 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 deleteBlockAt(e.Location);
             }
+        }
+
+        private void SetDisplayCoords(Position position)
+        {
+            toolStripCoordX.Text = "X:" + position.X;
+            toolStripCoordY.Text = "Y:" + position.Y;
+            toolStripCoordZ.Text = "Z:" + position.Z;
         }
 
         private void BlockEditingControl_MouseUpWithoutMoving(object sender, MouseEventArgs e)
@@ -146,7 +155,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void blockContextMenu_EditBlockDetails(object sender, EventArgs e)
         {
-            new BlockDetailsForm(selectedBlocks, lastMouseLocation);
+            new BlockDetailsForm(selectedBlocks, MousePosition);
             selectedBlocks.Clear();
             MainForm.UpdatedThings();
             Invalidate();

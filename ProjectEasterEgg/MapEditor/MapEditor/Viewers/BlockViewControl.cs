@@ -32,7 +32,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private bool panning;
         private bool mouseHasMovedSinceMouseDown = true;
-        protected SDPoint lastMouseLocation;
+        private SDPoint panningLastMouseLocation;
+
+        public readonly List<Control> ToolStrips = new List<Control>();
 
         protected Texture2D textureBlock;
         protected Texture2D textureDrawing;
@@ -193,14 +195,14 @@ namespace Mindstep.EasterEgg.MapEditor
             }
 
             mouseHasMovedSinceMouseDown = false;
-            lastMouseLocation = e.Location;
+            panningLastMouseLocation = e.Location;
         }
 
         private void BlockViewControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (panning)
             {
-                Point movement = e.Location.ToXnaPoint().Subtract(lastMouseLocation.ToXnaPoint());
+                Point movement = e.Location.ToXnaPoint().Subtract(panningLastMouseLocation.ToXnaPoint());
                 Wrapper.Camera.Offset = Wrapper.Camera.Offset.Add(movement);
                 Invalidate();
             }
@@ -210,7 +212,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
 
             mouseHasMovedSinceMouseDown = true;
-            lastMouseLocation = e.Location;
+            panningLastMouseLocation = e.Location;
         }
 
         private void BlockViewControl_MouseUp(object sender, MouseEventArgs e)

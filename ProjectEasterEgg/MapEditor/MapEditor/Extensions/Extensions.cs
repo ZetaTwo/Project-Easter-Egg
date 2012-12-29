@@ -28,12 +28,12 @@ namespace Mindstep.EasterEgg.MapEditor
             return colors[0];
         }
 
-        //public static IEnumerable<Texture2DWithPos> GetUnderlyingTextures2DWithDoublePos(this IEnumerable<Texture2DWithDoublePos> texs)
-        //{
-        //    foreach (Texture2DWithDoublePos tex in texs)
-        //    {
-        //        yield return tex.t;
-        //    }
-        //}
+        public static IEnumerable<Texture2DWithPos> GetUnderlyingTextures2DWithDoublePos(this IEnumerable<Texture2DWithDoublePos> texs)
+        {
+            foreach (Texture2DWithDoublePos tex in texs)
+            {
+                yield return tex.t;
+            }
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace Mindstep.EasterEgg.MapEditor
             set
             {
                 mainForm = value;
+                EditingMode = editingMode;
             }
         }
 
@@ -59,13 +60,17 @@ namespace Mindstep.EasterEgg.MapEditor
             get { return editingMode; }
             set
             {
-                editingMode = value;
-                blockViewer = blockViewers[editingMode];
+                if (MainForm != null) {
+                    MainForm.RemoveToolStrips(BlockViewer.ToolStrips);
+                    editingMode = value;
+                    MainForm.AddToolStrips(BlockViewer.ToolStrips);
+                }
+                else {
+                    editingMode = value;
+                }
             }
         }
-
-        private BlockViewControl blockViewer;
-        public BlockViewControl BlockViewer { get { return blockViewer; } }
+        public BlockViewControl BlockViewer { get { return blockViewers[editingMode]; } }
 
 
 
@@ -86,6 +91,7 @@ namespace Mindstep.EasterEgg.MapEditor
             camera = new Camera(new float[] { .25f, .5f, .75f, 1, 2, 4, 6, 8, 12, 16, 24, 32 }, 3, new Point(Width / 2, Height / 2));
 
             initializeBlockViewers();
+            EditingMode = EditingMode; //Reset EditingMode after MainForm has been set.
         }
         private void setupBlockViewers()
         {

@@ -123,11 +123,20 @@
     <Compile Include="BlockViewControl.Designer.cs">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="TextureEditingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TextureEditingControl.Designer.cs">
+      <DependentUpon>TextureEditingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolStripTrackBarItem.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="BlockDetailsForm.resx">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BlockEditingControl.resx">
+      <DependentUpon>BlockEditingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BlockViewWrapperControl.resx">
       <DependentUpon>BlockViewWrapperControl.cs</DependentUpon>

@@ -109,13 +109,6 @@ namespace Mindstep.EasterEgg.MapEditor
             Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(blockViewWrapperControl.Camera.Zoom * 100, 0) + "%]";
         }
 
-        public void SetDisplayCoords(Position position)
-        {
-            toolStripCoordX.Text = "X:" + position.X;
-            toolStripCoordY.Text = "Y:" + position.Y;
-            toolStripCoordZ.Text = "Z:" + position.Z;
-        }
-
         #region save/open/import
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -278,9 +271,6 @@ namespace Mindstep.EasterEgg.MapEditor
             toolStripEditBlocks.Checked = blockViewWrapperControl.EditingMode == EditingMode.Block;
             toolStripEditTextures.Checked = blockViewWrapperControl.EditingMode == EditingMode.Texture ||
                 blockViewWrapperControl.EditingMode == EditingMode.TextureProjection;
-
-            toolStripCoordX.Enabled = toolStripCoordY.Enabled = toolStripCoordZ.Enabled =
-                blockViewWrapperControl.EditingMode == EditingMode.Block;
             
             //something related to background color could be changed here too
             
@@ -368,6 +358,22 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawTextureIndices_Click(object sender, EventArgs e)
         {
             UpdatedGraphics();
+        }
+
+        internal void AddToolStrips(IEnumerable<Control> toolStripControls)
+        {
+            foreach (Control toolStripControl in toolStripControls)
+            {
+                this.toolStripContainer1.TopToolStripPanel.Controls.Add(toolStripControl);
+            }
+        }
+
+        internal void RemoveToolStrips(IEnumerable<Control> toolStripControls)
+        {
+            foreach (Control toolStripControl in toolStripControls)
+            {
+                this.toolStripContainer1.TopToolStripPanel.Controls.Remove(toolStripControl);
+            }
         }
     }
 }

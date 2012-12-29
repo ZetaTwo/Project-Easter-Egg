@@ -30,6 +30,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSelectBackgroundColor = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,11 +50,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockSolid = new System.Windows.Forms.ToolStripButton();
             this.toolStripDrawBlockWireframe = new System.Windows.Forms.ToolStripButton();
             this.toolStripDrawBlockNone = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripCoordX = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCoordY = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCoordZ = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.blockViewWrapperControl = new Mindstep.EasterEgg.MapEditor.BlockViewWrapperControl();
             this.textureOpacityTrackBar = new Mindstep.EasterEgg.MapEditor.ToolStripTrackBarItem();
             this.toolStrip.SuspendLayout();
@@ -62,7 +58,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -82,7 +77,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip.Size = new System.Drawing.Size(228, 27);
+            this.toolStrip.Size = new System.Drawing.Size(259, 27);
             this.toolStrip.TabIndex = 15;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -113,12 +108,18 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripButtonSelectBackgroundColor.ToolTipText = "Select Background Color";
             this.toolStripButtonSelectBackgroundColor.Click += new System.EventHandler(this.toolStripButtonSelectBackgroundColor_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            // 
             // menuStrip
             // 
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemFile});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Location = new System.Drawing.Point(0, 27);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(43, 24);
             this.menuStrip.TabIndex = 16;
@@ -222,10 +223,9 @@ namespace Mindstep.EasterEgg.MapEditor
             // toolStripContainer1.TopToolStripPanel
             // 
             this.toolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip);
             // 
             // toolStrip1
             // 
@@ -312,60 +312,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripDrawBlockNone.Text = "toolStripButton1";
             this.toolStripDrawBlockNone.ToolTipText = "Don\'t draw blocks";
             // 
-            // toolStrip2
-            // 
-            this.toolStrip2.AllowMerge = false;
-            this.toolStrip2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.toolStrip2.CanOverflow = false;
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripCoordX,
-            this.toolStripCoordY,
-            this.toolStripCoordZ});
-            this.toolStrip2.Location = new System.Drawing.Point(377, 0);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip2.Size = new System.Drawing.Size(97, 25);
-            this.toolStrip2.TabIndex = 17;
-            // 
-            // toolStripCoordX
-            // 
-            this.toolStripCoordX.AutoSize = false;
-            this.toolStripCoordX.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordX.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordX.Name = "toolStripCoordX";
-            this.toolStripCoordX.Size = new System.Drawing.Size(30, 13);
-            this.toolStripCoordX.Text = "X:0";
-            this.toolStripCoordX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripCoordY
-            // 
-            this.toolStripCoordY.AutoSize = false;
-            this.toolStripCoordY.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordY.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordY.Name = "toolStripCoordY";
-            this.toolStripCoordY.Size = new System.Drawing.Size(35, 13);
-            this.toolStripCoordY.Text = "Y:0";
-            this.toolStripCoordY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripCoordZ
-            // 
-            this.toolStripCoordZ.AutoSize = false;
-            this.toolStripCoordZ.ForeColor = System.Drawing.Color.White;
-            this.toolStripCoordZ.Margin = new System.Windows.Forms.Padding(0, 6, 0, 2);
-            this.toolStripCoordZ.Name = "toolStripCoordZ";
-            this.toolStripCoordZ.Size = new System.Drawing.Size(30, 13);
-            this.toolStripCoordZ.Text = "Z:0";
-            this.toolStripCoordZ.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
-            // 
             // blockViewWrapperControl
             // 
             this.blockViewWrapperControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
@@ -416,8 +362,6 @@ namespace Mindstep.EasterEgg.MapEditor
             this.toolStripContainer1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -448,10 +392,6 @@ namespace Mindstep.EasterEgg.MapEditor
         private System.Windows.Forms.ToolStripButton toolStripDrawBlockSolid;
         private System.Windows.Forms.ToolStripButton toolStripDrawBlockWireframe;
         private System.Windows.Forms.ToolStripButton toolStripDrawBlockNone;
-        private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.ToolStripLabel toolStripCoordX;
-        private System.Windows.Forms.ToolStripLabel toolStripCoordY;
-        private System.Windows.Forms.ToolStripLabel toolStripCoordZ;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
