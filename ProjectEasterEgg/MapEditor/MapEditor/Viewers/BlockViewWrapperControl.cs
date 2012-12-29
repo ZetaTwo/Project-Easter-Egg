@@ -98,6 +98,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
             initializeBlockViewers();
             EditingMode = EditingMode; //Reset EditingMode after MainForm has been set.
+            UpdatedSettings();
         }
         private void setupBlockViewers()
         {

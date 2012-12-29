@@ -286,9 +286,24 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
+        private void toolStripUpdated()
+        {
+            List<Control> list = new List<Control>();
+            foreach (Control toolStrip in toolStripContainer1.TopToolStripPanel.Controls)
+            {
+                list.Add(toolStrip);
+            }
+            list.Reverse();
+            foreach (Control toolStrip in list)
+            {
+                toolStrip.Top = 0;
+                toolStrip.Left = 0;
+            }
+        }
         internal void AddToolStrip(Control toolStrip)
         {
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(toolStrip);
+            toolStripUpdated();
         }
         internal void RemoveToolStrip(Control toolStrip)
         {
@@ -296,7 +311,7 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         internal void AddToolStrip(IEnumerable<Control> toolStrips)
         {
-            foreach (Control toolStrip in toolStrips)
+            foreach (Control toolStrip in toolStrips.OrderBy(t => t.Left))
             {
                 AddToolStrip(toolStrip);
             }
@@ -307,6 +322,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 RemoveToolStrip(toolStrip);
             }
+            toolStripUpdated();
         }
     }
 }

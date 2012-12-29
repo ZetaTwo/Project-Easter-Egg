@@ -40,8 +40,8 @@
             this.toolStripButtonSelectBackgroundColor = new System.Windows.Forms.ToolStripButton();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.textureOpacityTrackBar = new Mindstep.EasterEgg.MapEditor.ToolStripTrackBarItem();
             this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
+            this.textureOpacityTrackBar = new Mindstep.EasterEgg.MapEditor.ToolStripTrackBarItem();
             this.toolStrip2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.toolStrip3.SuspendLayout();
@@ -66,7 +66,7 @@
             this.toolStrip2.Location = new System.Drawing.Point(310, 57);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip2.Size = new System.Drawing.Size(177, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(146, 27);
             this.toolStrip2.TabIndex = 17;
             // 
             // toolStripEditBlocks
@@ -148,7 +148,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSelectBackgroundColor,
             this.drawTextureIndices});
-            this.toolStrip1.Location = new System.Drawing.Point(310, 17);
+            this.toolStrip1.Location = new System.Drawing.Point(201, 57);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -192,13 +192,19 @@
             this.toolStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.textureOpacityTrackBar});
-            this.toolStrip3.Location = new System.Drawing.Point(310, 98);
+            this.toolStrip3.Location = new System.Drawing.Point(503, 57);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip3.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.toolStrip3.Size = new System.Drawing.Size(156, 27);
             this.toolStrip3.TabIndex = 19;
             this.toolStrip3.Text = "toolStrip2";
+            // 
+            // backgroundColorDialog
+            // 
+            this.backgroundColorDialog.AnyColor = true;
+            this.backgroundColorDialog.Color = System.Drawing.Color.Red;
+            this.backgroundColorDialog.FullOpen = true;
             // 
             // textureOpacityTrackBar
             // 
@@ -217,12 +223,6 @@
             this.textureOpacityTrackBar.Value = 0;
             this.textureOpacityTrackBar.Scroll += new System.EventHandler(this.textureOpacityTrackBar_Scroll);
             this.textureOpacityTrackBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textureOpacityTrackBar_MouseUp);
-            // 
-            // backgroundColorDialog
-            // 
-            this.backgroundColorDialog.AnyColor = true;
-            this.backgroundColorDialog.Color = System.Drawing.Color.Red;
-            this.backgroundColorDialog.FullOpen = true;
             // 
             // BlockViewWrapperControl
             // 

@@ -117,7 +117,7 @@ namespace Mindstep.EasterEgg.MapEditor
             // 
             // importFileDialog
             // 
-            this.importFileDialog.Filter = "png (*.png)|*.png|Egg model files (*.egg)|*.egg";
+            this.importFileDialog.Filter = "Textures (*.png)|*.png|Egg model files (*.egg)|*.egg";
             this.importFileDialog.Multiselect = true;
             this.importFileDialog.Title = "Import Textures and Sub Models";
             this.importFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.importFileDialog_FileOk);

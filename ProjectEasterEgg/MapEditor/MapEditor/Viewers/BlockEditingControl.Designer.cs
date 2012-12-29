@@ -49,11 +49,11 @@
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonShowGrid});
-            this.toolStrip2.Location = new System.Drawing.Point(311, 52);
+            this.toolStrip2.Location = new System.Drawing.Point(171, 55);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip2.Size = new System.Drawing.Size(59, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(28, 27);
             this.toolStrip2.TabIndex = 19;
             this.toolStrip2.Text = "toolStrip";
             // 
@@ -85,7 +85,7 @@
             this.toolStripCoordX,
             this.toolStripCoordY,
             this.toolStripCoordZ});
-            this.toolStrip1.Location = new System.Drawing.Point(183, 93);
+            this.toolStrip1.Location = new System.Drawing.Point(230, 57);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
