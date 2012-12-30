@@ -160,6 +160,9 @@
     <EmbeddedResource Include="Viewers\BlockViewControl.resx">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Viewers\TextureEditingControl.resx">
+      <DependentUpon>TextureEditingControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

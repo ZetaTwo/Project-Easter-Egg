@@ -38,10 +38,9 @@
             this.toolStripDrawBlockNone = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSelectBackgroundColor = new System.Windows.Forms.ToolStripButton();
-            this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
             this.textureOpacityTrackBar = new Mindstep.EasterEgg.MapEditor.ToolStripTrackBarItem();
+            this.backgroundColorDialog = new System.Windows.Forms.ColorDialog();
             this.toolStrip2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.toolStrip3.SuspendLayout();
@@ -146,13 +145,12 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSelectBackgroundColor,
-            this.drawTextureIndices});
+            this.toolStripButtonSelectBackgroundColor});
             this.toolStrip1.Location = new System.Drawing.Point(201, 57);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip1.Size = new System.Drawing.Size(58, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(28, 27);
             this.toolStrip1.TabIndex = 18;
             this.toolStrip1.Text = "toolStrip";
             // 
@@ -167,20 +165,7 @@
             this.toolStripButtonSelectBackgroundColor.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonSelectBackgroundColor.Text = "toolStripButton1";
             this.toolStripButtonSelectBackgroundColor.ToolTipText = "Select Background Color";
-            // 
-            // drawTextureIndices
-            // 
-            this.drawTextureIndices.Checked = true;
-            this.drawTextureIndices.CheckOnClick = true;
-            this.drawTextureIndices.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.drawTextureIndices.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.drawTextureIndices.Image = ((System.Drawing.Image)(resources.GetObject("drawTextureIndices.Image")));
-            this.drawTextureIndices.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.drawTextureIndices.Margin = new System.Windows.Forms.Padding(5, 1, 1, 2);
-            this.drawTextureIndices.Name = "drawTextureIndices";
-            this.drawTextureIndices.Size = new System.Drawing.Size(24, 24);
-            this.drawTextureIndices.Text = "Draw Texture Indices";
-            this.drawTextureIndices.Click += new System.EventHandler(this.drawTextureIndices_Click);
+            this.toolStripButtonSelectBackgroundColor.Click += new System.EventHandler(this.toolStripButtonSelectBackgroundColor_Click);
             // 
             // toolStrip3
             // 
@@ -200,12 +185,6 @@
             this.toolStrip3.TabIndex = 19;
             this.toolStrip3.Text = "toolStrip2";
             // 
-            // backgroundColorDialog
-            // 
-            this.backgroundColorDialog.AnyColor = true;
-            this.backgroundColorDialog.Color = System.Drawing.Color.Red;
-            this.backgroundColorDialog.FullOpen = true;
-            // 
             // textureOpacityTrackBar
             // 
             this.textureOpacityTrackBar.AutoSize = false;
@@ -223,6 +202,12 @@
             this.textureOpacityTrackBar.Value = 0;
             this.textureOpacityTrackBar.Scroll += new System.EventHandler(this.textureOpacityTrackBar_Scroll);
             this.textureOpacityTrackBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textureOpacityTrackBar_MouseUp);
+            // 
+            // backgroundColorDialog
+            // 
+            this.backgroundColorDialog.AnyColor = true;
+            this.backgroundColorDialog.Color = System.Drawing.Color.Red;
+            this.backgroundColorDialog.FullOpen = true;
             // 
             // BlockViewWrapperControl
             // 
@@ -256,7 +241,6 @@
         private System.Windows.Forms.ToolStripButton toolStripDrawBlockNone;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonSelectBackgroundColor;
-        private System.Windows.Forms.ToolStripButton drawTextureIndices;
         private System.Windows.Forms.ToolStrip toolStrip3;
         private ToolStripTrackBarItem textureOpacityTrackBar;
         private System.Windows.Forms.ColorDialog backgroundColorDialog;

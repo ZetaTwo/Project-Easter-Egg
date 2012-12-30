@@ -9,12 +9,14 @@ using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using SD = System.Drawing;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class TextureEditingControl : BlockViewControl
     {
-        private bool draggingTextures;
+        private static readonly Color SELECTED_TEXTURE_COLOR = Color.LimeGreen;
+
         private Point mouseCoordAtMouseDown;
 
         private ContextMenu textureContextMenu;
@@ -30,6 +32,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public TextureEditingControl()
         {
+            InitializeComponent();
+            ValidateChildren();
             menuItemSelectBlocksToProjectOnto = new MenuItem("Select blocks to project onto",
                 TextureContextMenuSelectBlocksToProjectOnto);
             textureContextMenu = new ContextMenu(new MenuItem[]{
@@ -41,10 +45,14 @@ namespace Mindstep.EasterEgg.MapEditor
                 menuItemSelectBlocksToProjectOnto,
                 new MenuItem("Delete", TextureContextMenuDelete),
             });
+
+            Settings = new Settings(Color.DarkBlue, BlockDrawState.Solid, 1f);
         }
         public override void Initialize(MainForm MainForm, BlockViewWrapperControl wrapper)
         {
             base.Initialize(MainForm, wrapper);
+            ToolStrips.Add(toolStrip1);
+
             MouseDown += new MouseEventHandler(TextureEditingControl_MouseDown);
             MouseUp += new MouseEventHandler(TextureEditingControl_MouseUp);
             MouseMove += new MouseEventHandler(TextureEditingControl_MouseMove);
@@ -192,18 +200,17 @@ namespace Mindstep.EasterEgg.MapEditor
                 mouseCoordAtMouseDown = e.Location.ToXnaPoint();
                 updateSelectedTextures(e.Location, Helper.getClickOperation());
                 selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.pos);
-                draggingTextures = selectedTextures.Count != 0;
             }
         }
 
         void TextureEditingControl_MouseUp(object sender, MouseEventArgs e)
         {
-            throw new NotImplementedException();
+            Invalidate(); //TODO: needed?
         }
 
         void TextureEditingControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (draggingTextures)
+            if (e.Button == MouseButtons.Left)
             {
                 Point changeInProjectionSpace = e.Location.ToXnaPoint().Subtract(mouseCoordAtMouseDown).Divide(Wrapper.Camera.Zoom);
                 selectedTextures.ForEach(tex => tex.t.pos = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
@@ -223,6 +230,35 @@ namespace Mindstep.EasterEgg.MapEditor
                 selectedTextures.Clear();
                 MainForm.UpdatedThings();
             }
+        }
+
+        protected override void drawTextures()
+        {
+            base.drawTextures();
+
+            if (drawTextureIndices.Checked)
+            {
+                float i = 0;
+                foreach (Texture2DWithPos tex in MainForm.CurrentFrame.Images.BackToFront())
+                {
+                    spriteBatch.DrawString(spriteFont, i.ToString(), tex.pos.ToVector2(),
+                        Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+                    i++;
+                }
+            }
+
+            foreach (Texture2DWithDoublePos selectedTexture in selectedTextures)
+            {
+                int borderWidth = 1;
+                Rectangle r = selectedTexture.t.Bounds;
+                r.Inflate(borderWidth, borderWidth);
+                spriteBatch.DrawRectangle(r, SELECTED_TEXTURE_COLOR, borderWidth);
+            }
+        }
+
+        private void drawTextureIndices_CheckedChanged(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 

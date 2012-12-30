@@ -44,9 +44,9 @@ namespace Mindstep.EasterEgg.MapEditor
         protected Texture2D textureWireframeBack;
         protected Texture2D textureWireframeFilled;
 
-        private SpriteFont spriteFont;
-        private SpriteBatch spriteBatch;
-        private SamplerState samplerState;
+        protected SpriteFont spriteFont;
+        protected SpriteBatch spriteBatch;
+        protected SamplerState samplerState;
 
         /// <summary>
         /// A new MouseEventHandler to hide panning events
@@ -268,6 +268,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
             drawGrid(boundingBox);
             drawBlocks(boundingBox);
+            drawTextures();
 
 #if false //debug draw mouse coords
                 Vector3 v = CoordinateTransform.ScreenToObjectSpace(lastMouseLocation.ToXnaPoint(), Camera, CurrentLayer);
@@ -313,6 +314,19 @@ namespace Mindstep.EasterEgg.MapEditor
             float depth = boundingBox.getRelativeDepthOf(pos);
             Vector2 projCoords = CoordinateTransform.ObjectToProjectionSpace(pos);
             spriteBatch.Draw(image, projCoords + Constants.blockDrawOffset, null, color, 0, Vector2.Zero, 1, SpriteEffects.None, (depth + depthOffset) / Wrapper.Camera.Zoom);
+        }
+
+        virtual protected void drawTextures()
+        {
+            float i = 0;
+            foreach (Texture2DWithPos tex in MainForm.CurrentFrame.Images.BackToFront())
+            {
+                float depth = (1 - i / MainForm.CurrentFrame.Images.Count) * .1f;
+                spriteBatch.Draw(tex.Texture, tex.pos.ToVector2(), null,
+                    new Color(1, 1, 1, TextureOpacity), 0,
+                    Vector2.Zero, 1, SpriteEffects.None, depth / Wrapper.Camera.Zoom);
+                i++;
+            }
         }
     }
 }

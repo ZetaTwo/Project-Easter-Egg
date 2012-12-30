@@ -61,10 +61,11 @@ namespace Mindstep.EasterEgg.MapEditor
             set
             {
                 if (MainForm != null) {
-                    MainForm.RemoveToolStrip(BlockViewer.ToolStrips);
-                    Controls.Remove(BlockViewer);
+                    BlockViewControl old = BlockViewer;
                     editingMode = value;
+                    MainForm.RemoveToolStrip(old.ToolStrips);
                     MainForm.AddToolStrip(BlockViewer.ToolStrips);
+                    Controls.Remove(old);
                     Controls.Add(BlockViewer);
                 }
                 else {
@@ -83,6 +84,7 @@ namespace Mindstep.EasterEgg.MapEditor
             InitializeComponent();
 
             setupBlockViewers();
+            ValidateChildren();
             Invalidated += (sender, e) => BlockViewer.Invalidate();
         }
 
@@ -170,11 +172,6 @@ namespace Mindstep.EasterEgg.MapEditor
         private void toolStripEditTextures_Click(object sender, EventArgs e)
         {
             EditingMode = EditingMode.Texture;
-        }
-
-        private void drawTextureIndices_Click(object sender, EventArgs e)
-        {
-            Invalidate();
         }
 
         private void textureOpacityTrackBar_Scroll(object sender, EventArgs e)
