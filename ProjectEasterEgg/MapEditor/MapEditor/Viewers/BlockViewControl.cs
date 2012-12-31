@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -327,6 +328,27 @@ namespace Mindstep.EasterEgg.MapEditor
                     Vector2.Zero, 1, SpriteEffects.None, depth / Wrapper.Camera.Zoom);
                 i++;
             }
+        }
+
+
+
+
+
+        protected SaveBlock getHitBlock(IEnumerable<SaveBlock> outOf, System.Drawing.Point pointInProjSpace)
+        {
+            BoundingBoxInt boundingBox = new BoundingBoxInt(outOf.ToPositions());
+
+            foreach (SaveBlock block in outOf.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)))
+            {
+                System.Drawing.Region blockRegion = BlockRegions.WholeBlock.Offset(
+                    CoordinateTransform.ObjectToProjectionSpace(block.Position).ToXnaPoint().Add(
+                    Constants.blockDrawOffset.ToXnaPoint()));
+                if (blockRegion.IsVisible(pointInProjSpace))
+                {
+                    return block;
+                }
+            }
+            return null;
         }
     }
 }

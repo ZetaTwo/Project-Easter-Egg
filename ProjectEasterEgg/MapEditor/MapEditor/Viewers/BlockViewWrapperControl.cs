@@ -9,6 +9,7 @@ using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Commons.Graphic;
 using SDPoint = System.Drawing.Point;
 using Microsoft.Xna.Framework;
+using Mindstep.EasterEgg.Commons.SaveLoad;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -54,13 +55,16 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+        public BlockViewControl BlockViewer { get { return blockViewers[editingMode]; } }
         private EditingMode editingMode;
+        private TextureProjectionControl textureProjectionControl;
         public EditingMode EditingMode
         {
             get { return editingMode; }
             set
             {
-                if (MainForm != null) {
+                if (MainForm != null)
+                {
                     BlockViewControl old = BlockViewer;
                     editingMode = value;
                     MainForm.RemoveToolStrip(old.ToolStrips);
@@ -68,12 +72,18 @@ namespace Mindstep.EasterEgg.MapEditor
                     Controls.Remove(old);
                     Controls.Add(BlockViewer);
                 }
-                else {
+                else
+                {
                     editingMode = value;
                 }
+                UpdatedSettings();
             }
         }
-        public BlockViewControl BlockViewer { get { return blockViewers[editingMode]; } }
+        public void enterTextureProjectionMode(Texture2DWithPos textureToProjectDown)
+        {
+            textureProjectionControl.enterTextureProjectionMode(textureToProjectDown);
+            EditingMode = EditingMode.TextureProjection;
+        }
 
 
 
@@ -104,8 +114,10 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         private void setupBlockViewers()
         {
+            textureProjectionControl = new TextureProjectionControl();
             blockViewers.Add(EditingMode.Block, new BlockEditingControl());
             blockViewers.Add(EditingMode.Texture, new TextureEditingControl());
+            blockViewers.Add(EditingMode.TextureProjection, textureProjectionControl);
         }
         private void initializeBlockViewers()
         {

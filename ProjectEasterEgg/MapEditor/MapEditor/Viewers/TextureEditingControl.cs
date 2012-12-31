@@ -87,9 +87,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void TextureContextMenuSelectBlocksToProjectOnto(object sender, EventArgs e)
         {
-            //textureBeingProjectedDown = selectedTextures.Single().t;
-            //Wrapper.EditingMode = 
-            //enterTextureProjectionMode();
+            Wrapper.enterTextureProjectionMode(selectedTextures.Single().t);
         }
         private void TextureContextMenuDelete(object sender, EventArgs e)
         {
@@ -259,17 +257,6 @@ namespace Mindstep.EasterEgg.MapEditor
         private void drawTextureIndices_CheckedChanged(object sender, EventArgs e)
         {
             Invalidate();
-        }
-    }
-
-    class Texture2DWithDoublePos
-    {
-        public Texture2DWithPos t;
-        public Point CoordAtMouseDown;
-
-        public Texture2DWithDoublePos(Texture2DWithPos t)
-        {
-            this.t = t;
         }
     }
 }

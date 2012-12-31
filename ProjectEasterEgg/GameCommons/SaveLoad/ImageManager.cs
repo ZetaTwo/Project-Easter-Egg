@@ -175,7 +175,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                 int lastIndex = 2;
                 foreach (T t in textures)
                 {
-                    Match match = Regex.Match(tex.name, "^" + Regex.Escape(originalName) + @" \(\(d+)\)$");
+                    Match match = Regex.Match(tex.name, "^" + Regex.Escape(originalName) + @" \((d+)\)$");
                     if (match.Success)
                     {
                         lastIndex = Math.Max(lastIndex, int.Parse(match.Captures[0].Value));

@@ -162,6 +162,11 @@ namespace Mindstep.EasterEgg.MapEditor
             Invalidate();
         }
 
+        private void toolStripButtonShowGrid_CheckedChanged(object sender, EventArgs e)
+        {
+            Invalidate();
+        }
+
 
 
 
@@ -216,23 +221,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 mousePosInProjSpace.ToSDPoint());
         }
 
-        private SaveBlock getHitBlock(IEnumerable<SaveBlock> outOf, System.Drawing.Point pointInProjSpace)
-        {
-            BoundingBoxInt boundingBox = new BoundingBoxInt(outOf.ToPositions());
-
-            foreach (SaveBlock block in outOf.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)))
-            {
-                System.Drawing.Region blockRegion = BlockRegions.WholeBlock.Offset(
-                    CoordinateTransform.ObjectToProjectionSpace(block.Position).ToXnaPoint().Add(
-                    Constants.blockDrawOffset.ToXnaPoint()));
-                if (blockRegion.IsVisible(pointInProjSpace))
-                {
-                    return block;
-                }
-            }
-            return null;
-        }
-
 
 
 
@@ -276,11 +264,6 @@ namespace Mindstep.EasterEgg.MapEditor
                         break;
                 }
             }
-        }
-
-        private void toolStripButtonShowGrid_CheckedChanged(object sender, EventArgs e)
-        {
-            Invalidate();
         }
     }
 }

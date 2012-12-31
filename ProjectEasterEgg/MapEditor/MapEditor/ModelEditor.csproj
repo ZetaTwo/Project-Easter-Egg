@@ -123,6 +123,13 @@
     <Compile Include="Viewers\BlockViewControl.Designer.cs">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Viewers\Texture2DWithDoublePos.cs" />
+    <Compile Include="Viewers\TextureProjectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Viewers\TextureProjectionControl.Designer.cs">
+      <DependentUpon>TextureProjectionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Viewers\TextureEditingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -159,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Viewers\BlockViewControl.resx">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Viewers\TextureProjectionControl.resx">
+      <DependentUpon>TextureProjectionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Viewers\TextureEditingControl.resx">
       <DependentUpon>TextureEditingControl.cs</DependentUpon>
