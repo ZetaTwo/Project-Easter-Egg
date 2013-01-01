@@ -129,7 +129,6 @@ namespace Mindstep.EasterEgg.MapEditor
             base.MouseMove += new MouseEventHandler(BlockViewControl_MouseMove);
             MouseWheel += new MouseEventHandler(BlockViewControl_MouseWheel);
             MouseUp += new MouseEventHandler(BlockViewControl_MouseUp);
-            Resize += new EventHandler(BlockViewControl_Resize);
         }
 
         private void setupBlockDrawStateTextures()

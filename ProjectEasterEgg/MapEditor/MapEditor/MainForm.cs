@@ -53,6 +53,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
             initializeTextures();
             InitializeComponent();
+            menuStrip.Visible = false;
+            flowLayoutPanel2.AutoSize = true;
             blockViewWrapperControl.Initialize(this);
             MouseWheel += new MouseEventHandler(mouseWheel);
 
@@ -288,39 +290,52 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void toolStripUpdated()
         {
-            List<Control> list = new List<Control>();
-            foreach (Control toolStrip in toolStripContainer1.TopToolStripPanel.Controls)
+            List<ToolStrip> list = new List<ToolStrip>();
+            foreach (Control toolStrip in flowLayoutPanel2.Controls)
             {
-                list.Add(toolStrip);
+                if (toolStrip is ToolStrip && !(toolStrip is MenuStrip))
+                {
+                    list.Add((ToolStrip)toolStrip);
+                }
             }
             list.Reverse();
-            foreach (Control toolStrip in list)
+            //toolStripContainer1.SuspendLayout();
+            foreach (ToolStrip toolStrip in list)
+            {
+                toolStrip.Visible = false;
+            }
+            foreach (ToolStrip toolStrip in list)
             {
                 toolStrip.Top = 0;
                 toolStrip.Left = 0;
+                toolStrip.Visible = true;
             }
+            //toolStripContainer1.ResumeLayout(true);
         }
+
         internal void AddToolStrip(Control toolStrip)
         {
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(toolStrip);
+            this.flowLayoutPanel2.Controls.Add(toolStrip);
             toolStripUpdated();
         }
         internal void RemoveToolStrip(Control toolStrip)
         {
-            this.toolStripContainer1.TopToolStripPanel.Controls.Remove(toolStrip);
+            this.flowLayoutPanel2.Controls.Remove(toolStrip);
+            toolStripUpdated();
         }
         internal void AddToolStrip(IEnumerable<Control> toolStrips)
         {
             foreach (Control toolStrip in toolStrips.OrderBy(t => t.Left))
             {
-                AddToolStrip(toolStrip);
+                this.flowLayoutPanel2.Controls.Add(toolStrip);
             }
+            toolStripUpdated();
         }
         internal void RemoveToolStrip(IEnumerable<Control> toolStrips)
         {
             foreach (Control toolStrip in toolStrips)
             {
-                RemoveToolStrip(toolStrip);
+                this.flowLayoutPanel2.Controls.Remove(toolStrip);
             }
             toolStripUpdated();
         }
