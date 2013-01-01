@@ -10,6 +10,7 @@ using Mindstep.EasterEgg.Commons.Graphic;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework;
+using SDPoint = System.Drawing.Point;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -156,7 +157,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void blockContextMenu_EditBlockDetails(object sender, EventArgs e)
         {
-            new BlockDetailsForm(selectedBlocks, MousePosition);
+            BlockDetailsForm form = new BlockDetailsForm(selectedBlocks, MousePosition, Wrapper);
+            form.Show();
             selectedBlocks.Clear();
             MainForm.UpdatedThings();
             Invalidate();
@@ -171,7 +173,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        private void createBlockAt(System.Drawing.Point mouseLocation)
+        private void createBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
             if (!MainForm.CurrentModel.blocks.Any(block => block.Position == pos))
@@ -182,7 +184,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Invalidate();
         }
 
-        private void deleteBlockAt(System.Drawing.Point mouseLocation)
+        private void deleteBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
             foreach (SaveAnimation<Texture2DWithPos> animation in MainForm.CurrentModel.animations)
@@ -200,19 +202,19 @@ namespace Mindstep.EasterEgg.MapEditor
             Invalidate();
         }
 
-        private bool existsBlockAt(System.Drawing.Point mouseLocation)
+        private bool existsBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
             return MainForm.CurrentModel.blocks.Any(block => block.Position == pos);
         }
 
-        private Position posUnderPointInCurrentLayer(System.Drawing.Point mouseLocation)
+        private Position posUnderPointInCurrentLayer(SDPoint mouseLocation)
         {
             return CoordinateTransform.ScreenToObjectSpace(
                 mouseLocation.ToXnaPoint(), Wrapper.Camera, CurrentLayer).ToPosition();
         }
 
-        private SaveBlock getHitBlockInCurrentLayer(System.Drawing.Point mouseLocation)
+        private SaveBlock getHitBlockInCurrentLayer(SDPoint mouseLocation)
         {
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mouseLocation.ToXnaPoint(), Wrapper.Camera);
 
@@ -262,6 +264,13 @@ namespace Mindstep.EasterEgg.MapEditor
                     case -1: //below
                         drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
                         break;
+                }
+                if (!string.IsNullOrWhiteSpace(saveBlock.script))
+                {
+                    Vector2 drawCoords = CoordinateTransform.ObjectToProjectionSpace(saveBlock.Position);
+                    drawCoords -= (spriteFont.MeasureString(saveBlock.script)/2).Ceiling();
+                    spriteBatch.DrawString(spriteFont, saveBlock.script, drawCoords,
+                        Color.Cyan, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
                 }
             }
         }

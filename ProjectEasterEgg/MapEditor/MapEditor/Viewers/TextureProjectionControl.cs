@@ -15,10 +15,6 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public partial class TextureProjectionControl : BlockViewControl
     {
-        private ContextMenu textureContextMenu;
-        private MenuItem menuItemSelectBlocksToProjectOnto;
-        private List<SaveBlock> selectedBlocks = new List<SaveBlock>();
-
         private Texture2DWithPos textureBeingProjectedDown;
 
 

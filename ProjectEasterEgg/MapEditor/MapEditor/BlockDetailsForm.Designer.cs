@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.blockTypeLabel = new System.Windows.Forms.Label();
-            this.BlockTypesDropDown = new System.Windows.Forms.ComboBox();
+            this.blockTypesDropDown = new System.Windows.Forms.ComboBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.scriptNameLabel = new System.Windows.Forms.Label();
-            this.ScriptNameBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.CurrentBlockType = new System.Windows.Forms.Label();
-            this.CurrentScriptName = new System.Windows.Forms.Label();
+            this.scriptNameBox = new System.Windows.Forms.TextBox();
+            this.oldScriptNamePrefix = new System.Windows.Forms.Label();
+            this.oldBlockTypePrefix = new System.Windows.Forms.Label();
+            this.oldBlockType = new System.Windows.Forms.Label();
+            this.oldScriptName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // blockTypeLabel
@@ -49,15 +49,19 @@
             this.blockTypeLabel.TabIndex = 2;
             this.blockTypeLabel.Text = "Block type";
             // 
-            // BlockTypesDropDown
+            // blockTypesDropDown
             // 
-            this.BlockTypesDropDown.AllowDrop = true;
-            this.BlockTypesDropDown.FormattingEnabled = true;
-            this.BlockTypesDropDown.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.BlockTypesDropDown.Location = new System.Drawing.Point(12, 64);
-            this.BlockTypesDropDown.Name = "BlockTypesDropDown";
-            this.BlockTypesDropDown.Size = new System.Drawing.Size(121, 21);
-            this.BlockTypesDropDown.TabIndex = 3;
+            this.blockTypesDropDown.AllowDrop = true;
+            this.blockTypesDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.blockTypesDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.blockTypesDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.blockTypesDropDown.FormattingEnabled = true;
+            this.blockTypesDropDown.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.blockTypesDropDown.Location = new System.Drawing.Point(12, 64);
+            this.blockTypesDropDown.Name = "blockTypesDropDown";
+            this.blockTypesDropDown.Size = new System.Drawing.Size(121, 21);
+            this.blockTypesDropDown.TabIndex = 3;
+            this.blockTypesDropDown.SelectedValueChanged += new System.EventHandler(this.blockTypesDropDown_SelectedValueChanged);
             // 
             // cancelButton
             // 
@@ -88,63 +92,64 @@
             this.scriptNameLabel.TabIndex = 6;
             this.scriptNameLabel.Text = "Script to run on click";
             // 
-            // ScriptNameBox
+            // scriptNameBox
             // 
-            this.ScriptNameBox.Location = new System.Drawing.Point(12, 25);
-            this.ScriptNameBox.Name = "ScriptNameBox";
-            this.ScriptNameBox.Size = new System.Drawing.Size(121, 20);
-            this.ScriptNameBox.TabIndex = 7;
+            this.scriptNameBox.Location = new System.Drawing.Point(12, 25);
+            this.scriptNameBox.Name = "scriptNameBox";
+            this.scriptNameBox.Size = new System.Drawing.Size(121, 20);
+            this.scriptNameBox.TabIndex = 7;
+            this.scriptNameBox.TextChanged += new System.EventHandler(this.scriptNameBox_TextChanged);
             // 
-            // label2
+            // oldScriptNamePrefix
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(148, 28);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Current:";
+            this.oldScriptNamePrefix.AutoSize = true;
+            this.oldScriptNamePrefix.Location = new System.Drawing.Point(148, 28);
+            this.oldScriptNamePrefix.Name = "oldScriptNamePrefix";
+            this.oldScriptNamePrefix.Size = new System.Drawing.Size(26, 13);
+            this.oldScriptNamePrefix.TabIndex = 8;
+            this.oldScriptNamePrefix.Text = "Old:";
             // 
-            // label3
+            // oldBlockTypePrefix
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(148, 67);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Current:";
+            this.oldBlockTypePrefix.AutoSize = true;
+            this.oldBlockTypePrefix.Location = new System.Drawing.Point(148, 67);
+            this.oldBlockTypePrefix.Name = "oldBlockTypePrefix";
+            this.oldBlockTypePrefix.Size = new System.Drawing.Size(26, 13);
+            this.oldBlockTypePrefix.TabIndex = 9;
+            this.oldBlockTypePrefix.Text = "Old:";
             // 
-            // CurrentBlockType
+            // oldBlockType
             // 
-            this.CurrentBlockType.AutoSize = true;
-            this.CurrentBlockType.Location = new System.Drawing.Point(198, 67);
-            this.CurrentBlockType.Name = "CurrentBlockType";
-            this.CurrentBlockType.Size = new System.Drawing.Size(35, 13);
-            this.CurrentBlockType.TabIndex = 10;
-            this.CurrentBlockType.Text = "label4";
+            this.oldBlockType.AutoSize = true;
+            this.oldBlockType.Location = new System.Drawing.Point(198, 67);
+            this.oldBlockType.Name = "oldBlockType";
+            this.oldBlockType.Size = new System.Drawing.Size(56, 13);
+            this.oldBlockType.TabIndex = 10;
+            this.oldBlockType.Text = "block type";
             // 
-            // CurrentScriptName
+            // oldScriptName
             // 
-            this.CurrentScriptName.AutoSize = true;
-            this.CurrentScriptName.Location = new System.Drawing.Point(198, 28);
-            this.CurrentScriptName.Name = "CurrentScriptName";
-            this.CurrentScriptName.Size = new System.Drawing.Size(35, 13);
-            this.CurrentScriptName.TabIndex = 11;
-            this.CurrentScriptName.Text = "label5";
+            this.oldScriptName.AutoSize = true;
+            this.oldScriptName.Location = new System.Drawing.Point(198, 28);
+            this.oldScriptName.Name = "oldScriptName";
+            this.oldScriptName.Size = new System.Drawing.Size(61, 13);
+            this.oldScriptName.TabIndex = 11;
+            this.oldScriptName.Text = "script name";
             // 
             // BlockDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(288, 142);
-            this.Controls.Add(this.CurrentScriptName);
-            this.Controls.Add(this.CurrentBlockType);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.ScriptNameBox);
+            this.Controls.Add(this.oldScriptName);
+            this.Controls.Add(this.oldBlockType);
+            this.Controls.Add(this.oldBlockTypePrefix);
+            this.Controls.Add(this.oldScriptNamePrefix);
+            this.Controls.Add(this.scriptNameBox);
             this.Controls.Add(this.scriptNameLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.BlockTypesDropDown);
+            this.Controls.Add(this.blockTypesDropDown);
             this.Controls.Add(this.blockTypeLabel);
             this.Name = "BlockDetailsForm";
             this.Text = "Change Block Details";
@@ -156,14 +161,14 @@
         #endregion
 
         private System.Windows.Forms.Label blockTypeLabel;
-        private System.Windows.Forms.ComboBox BlockTypesDropDown;
+        private System.Windows.Forms.ComboBox blockTypesDropDown;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label scriptNameLabel;
-        private System.Windows.Forms.TextBox ScriptNameBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label CurrentBlockType;
-        private System.Windows.Forms.Label CurrentScriptName;
+        private System.Windows.Forms.TextBox scriptNameBox;
+        private System.Windows.Forms.Label oldScriptNamePrefix;
+        private System.Windows.Forms.Label oldBlockTypePrefix;
+        private System.Windows.Forms.Label oldBlockType;
+        private System.Windows.Forms.Label oldScriptName;
     }
 }

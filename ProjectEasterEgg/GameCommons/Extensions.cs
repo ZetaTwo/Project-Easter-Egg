@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.Physics;
 using Mindstep.EasterEgg.Commons.DTO;
 using Microsoft.Xna.Framework.Input;
+using SDPoint = System.Drawing.Point;
 
 namespace Mindstep.EasterEgg.Commons
 {
@@ -49,7 +50,16 @@ namespace Mindstep.EasterEgg.Commons
             }
         }
 
-        public static IEnumerable<System.Drawing.Point> ToSDPoints(this IEnumerable<Point> points)
+        public static IEnumerable<T> Clone<T>(this IEnumerable<T> list)
+            where T : ICloneable
+        {
+            foreach (T element in list)
+            {
+                yield return (T) element.Clone();
+            }
+        }
+
+        public static IEnumerable<SDPoint> ToSDPoints(this IEnumerable<Point> points)
         {
             foreach (Point point in points)
             {

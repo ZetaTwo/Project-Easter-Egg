@@ -95,13 +95,6 @@ namespace Mindstep.EasterEgg.MapEditor
             selectedTextures.Clear();
             MainForm.UpdatedThings();
         }
-
-        private void blockContextMenu_EditBlockDetails(object sender, EventArgs e)
-        {
-            new BlockDetailsForm(selectedBlocks, MousePosition);
-            selectedBlocks.Clear();
-            MainForm.UpdatedThings();
-        }
         #endregion
 
 
