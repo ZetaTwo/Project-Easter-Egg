@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -23,6 +24,7 @@ namespace Mindstep.EasterEgg.MapEditor
     /// event, using this to invalidate the control, which will cause the animation
     /// to constantly redraw.
     /// </summary>
+    [ToolboxItem(false)]
     class SpinningTriangleControl : GraphicsDeviceControl
     {
         BasicEffect effect;

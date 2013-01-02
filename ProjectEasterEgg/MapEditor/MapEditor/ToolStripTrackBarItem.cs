@@ -5,14 +5,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using SD = System.Drawing;
+using System.ComponentModel;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    class MyTrackBar : TrackBar
-    {
-        protected override void CreateHandle() { if (!IsDisposed) base.CreateHandle(); }
-    }
-
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripTrackBarItem : ToolStripControlHost
     {
@@ -52,5 +48,11 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public event EventHandler Scroll;
         new public event MouseEventHandler MouseUp;
+    }
+
+    [ToolboxItem(false)]
+    class MyTrackBar : TrackBar
+    {
+        protected override void CreateHandle() { if (!IsDisposed) base.CreateHandle(); }
     }
 }

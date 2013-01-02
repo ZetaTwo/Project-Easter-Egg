@@ -58,6 +58,8 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="OperationBase, Version=19.0.0.5019, Culture=neutral, PublicKeyToken=65f37e6466b88cdd, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
@@ -77,6 +79,9 @@
     </Compile>
     <Compile Include="BlockDetailsForm.Designer.cs">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolStripImageList.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Viewers\BlockEditingControl.cs">
       <SubType>UserControl</SubType>

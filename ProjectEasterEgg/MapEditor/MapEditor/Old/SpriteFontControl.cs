@@ -11,6 +11,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
 #endregion
 
 namespace Mindstep.EasterEgg.MapEditor
@@ -22,6 +23,7 @@ namespace Mindstep.EasterEgg.MapEditor
     /// ContentManager, then uses a SpriteBatch to draw text. The control is not
     /// animated, so it only redraws itself in response to WinForms paint messages.
     /// </summary>
+    [ToolboxItem(false)]
     class SpriteFontControl : GraphicsDeviceControl
     {
         ContentManager content;
