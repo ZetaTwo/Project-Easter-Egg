@@ -39,7 +39,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                     XElement subModelElement = new XElement("model");
                     imports.Add(subModelElement);
                     subModelElement.SetAttributeValue("offset", subModel.offset.GetSaveString());
-                    subModelElement.Value = subModel.name;
+                    subModelElement.Value = subModel.Name;
                 }
             }
 

@@ -74,12 +74,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModelManager.cs" />
     <Compile Include="BlockDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BlockDetailsForm.Designer.cs">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModificationEventArgs.cs" />
     <Compile Include="ToolStripImageList.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -14,30 +14,6 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public Facing Facing = Facing.POSITIVE_Y;
         public List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
 
-        private SaveFrame<T> currentFrame;
-        public SaveFrame<T> CurrentFrame
-        {
-            get
-            {
-                if (this.Frames.Count == 0)
-                {
-                    this.Frames.Add(new SaveFrame<T>());
-                }
-                if (currentFrame == null)
-                {
-                    currentFrame = this.Frames[0];
-                }
-                return currentFrame;
-            }
-            set
-            {
-                if (!Frames.Contains(value))
-                {
-                    throw new ArgumentException("Can't set CurrentFrame to a frame that isn't in the frames list");
-                }
-                currentFrame = value;
-            }
-        }
 
 
 

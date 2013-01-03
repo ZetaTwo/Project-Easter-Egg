@@ -63,25 +63,25 @@ namespace Mindstep.EasterEgg.MapEditor
         #region Context menus
         private void TextureContextMenuBringToFront(object sender, EventArgs e)
         {
-            MainForm.CurrentFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            MainForm.ModelManager.CurrentFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             MainForm.UpdatedThings();
         }
 
         private void TextureContextMenuBringForward(object sender, EventArgs e)
         {
-            MainForm.CurrentFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            MainForm.ModelManager.CurrentFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             MainForm.UpdatedThings();
         }
 
         private void TextureContextMenuSendBackward(object sender, EventArgs e)
         {
-            MainForm.CurrentFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            MainForm.ModelManager.CurrentFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             MainForm.UpdatedThings();
         }
 
         private void TextureContextMenuSendToBack(object sender, EventArgs e)
         {
-            MainForm.CurrentFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            MainForm.ModelManager.CurrentFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             MainForm.UpdatedThings();
         }
 
@@ -91,7 +91,7 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         private void TextureContextMenuDelete(object sender, EventArgs e)
         {
-            MainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+            MainForm.ModelManager.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             selectedTextures.Clear();
             MainForm.UpdatedThings();
         }
@@ -129,7 +129,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mouseLocation.ToXnaPoint(), Wrapper.Camera);
 
-            foreach (Texture2DWithPos hitTexture in MainForm.CurrentFrame.Images.FrontToBack())
+            foreach (Texture2DWithPos hitTexture in MainForm.ModelManager.CurrentFrame.Images.FrontToBack())
             {
                 if (hitTexture.Bounds.Contains(mousePosInProjSpace) &&
                     hitTexture.Texture.GetPixelColor(mousePosInProjSpace.Subtract(hitTexture.pos)).A != 0)
@@ -217,7 +217,7 @@ namespace Mindstep.EasterEgg.MapEditor
             //}
             if (e.KeyCode == Keys.Delete && selectedTextures.Count != 0)
             {
-                MainForm.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+                MainForm.ModelManager.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
                 MainForm.UpdatedThings();
             }
@@ -230,7 +230,7 @@ namespace Mindstep.EasterEgg.MapEditor
             if (drawTextureIndices.Checked)
             {
                 float i = 0;
-                foreach (Texture2DWithPos tex in MainForm.CurrentFrame.Images.BackToFront())
+                foreach (Texture2DWithPos tex in MainForm.ModelManager.CurrentFrame.Images.BackToFront())
                 {
                     spriteBatch.DrawString(spriteFont, i.ToString(), tex.pos.ToVector2(),
                         Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);

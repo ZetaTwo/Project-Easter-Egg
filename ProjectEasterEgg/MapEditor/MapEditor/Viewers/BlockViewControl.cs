@@ -292,7 +292,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         virtual protected BoundingBoxInt getBoundingBox()
         {
-            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.CurrentModel.blocks.ToPositions());
+            BoundingBoxInt boundingBox = new BoundingBoxInt(MainForm.ModelManager.CurrentModel.blocks.ToPositions());
             boundingBox.addPos(new Position(-3, -3, -1));
             boundingBox.addPos(new Position(3, 3, -1));
             const int margin = 2;
@@ -303,7 +303,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         virtual protected void drawBlocks(BoundingBoxInt boundingBox)
         {
-            foreach (SaveBlock saveBlock in MainForm.CurrentModel.blocks)
+            foreach (SaveBlock saveBlock in MainForm.ModelManager.CurrentModel.blocks)
             {
                 drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
             }
@@ -319,9 +319,9 @@ namespace Mindstep.EasterEgg.MapEditor
         virtual protected void drawTextures()
         {
             float i = 0;
-            foreach (Texture2DWithPos tex in MainForm.CurrentFrame.Images.BackToFront())
+            foreach (Texture2DWithPos tex in MainForm.ModelManager.CurrentFrame.Images.BackToFront())
             {
-                float depth = (1 - i / MainForm.CurrentFrame.Images.Count) * .1f;
+                float depth = (1 - i / MainForm.ModelManager.CurrentFrame.Images.Count) * .1f;
                 spriteBatch.Draw(tex.Texture, tex.pos.ToVector2(), null,
                     new Color(1, 1, 1, TextureOpacity), 0,
                     Vector2.Zero, 1, SpriteEffects.None, depth / Wrapper.Camera.Zoom);

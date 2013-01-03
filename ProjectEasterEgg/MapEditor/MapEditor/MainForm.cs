@@ -16,10 +16,7 @@ namespace Mindstep.EasterEgg.MapEditor
     {
         private static string TITLE = "Easter Egg Editor";
 
-        private SaveModel<Texture2DWithPos> model;
-        public SaveModel<Texture2DWithPos> CurrentModel { get { return model; } }
-        public SaveAnimation<Texture2DWithPos> CurrentAnimation { get { return CurrentModel.CurrentAnimation; } }
-        public SaveFrame<Texture2DWithPos> CurrentFrame { get { return CurrentAnimation.CurrentFrame; } }
+        public readonly ModelManager<Texture2DWithPos> ModelManager = new ModelManager<Texture2DWithPos>();
 
         private string lastSavedDoc;
         private bool changedSinceLastSave;
@@ -48,7 +45,9 @@ namespace Mindstep.EasterEgg.MapEditor
             Content = new ContentManager(Services, "ModelEditorContent");
             setupContentManager();
             SpriteBatchExtensions.Initialize(this);
-            model = new SaveModel<Texture2DWithPos>("untitled");
+            ModelManager.Models.Add(new SaveModel<Texture2DWithPos>("untitled"));
+            ModelManager.CurrentModel = ModelManager.Models[0];
+            //ModelManager.CurrentModel = new SaveModel<Texture2DWithPos>("untitled");
 
 
             initializeTextures();
@@ -106,7 +105,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public void RefreshTitle()
         {
-            Text = TITLE + " - " + model.name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(blockViewWrapperControl.Camera.Zoom * 100, 0) + "%]";
+            Text = TITLE + " - " + ModelManager.CurrentModel.Name + (changedSinceLastSave ? "*" : "") + " [" + Math.Round(blockViewWrapperControl.Camera.Zoom * 100, 0) + "%]";
         }
 
         #region save/open/import
@@ -129,8 +128,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void saveClicked()
         {
-            if (CurrentModel.blocks.Count == 0 &&
-                CurrentModel.subModels.Count == 0)
+            if (ModelManager.CurrentModel.blocks.Count == 0 &&
+                ModelManager.CurrentModel.subModels.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -142,8 +141,8 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void saveAsClicked()
         {
-            if (CurrentModel.blocks.Count == 0 &&
-                CurrentModel.subModels.Count == 0)
+            if (ModelManager.CurrentModel.blocks.Count == 0 &&
+                ModelManager.CurrentModel.subModels.Count == 0)
             {
                 MessageBox.Show("You can't save an empty model!", "Save error");
             }
@@ -164,7 +163,7 @@ namespace Mindstep.EasterEgg.MapEditor
             
             do
             {
-                savedSuccessfully = EggModelSaver.Save(CurrentModel, fileName);
+                savedSuccessfully = EggModelSaver.Save(ModelManager.CurrentModel, fileName);
             }
             while (!savedSuccessfully &&
                 MessageBox.Show("Unable to save to: " + fileName, "Error saving file",
@@ -187,10 +186,10 @@ namespace Mindstep.EasterEgg.MapEditor
         private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (changedSinceLastSave &&
-                !(CurrentModel.blocks.Count == 0 &&
-                CurrentModel.subModels.Count == 0))
+                !(ModelManager.CurrentModel.blocks.Count == 0 &&
+                ModelManager.CurrentModel.subModels.Count == 0))
             {
-                DialogResult dialogResult = MessageBox.Show("Save changes to " + model.name + "?",
+                DialogResult dialogResult = MessageBox.Show("Save changes to " + ModelManager.CurrentModel.Name + "?",
                     TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 switch (dialogResult)
                 {
@@ -208,7 +207,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void open(string fileName)
         {
-            model = EggModelLoader.Load(fileName).ToTexture2D(GraphicsDevice);
+            SaveModel<Texture2DWithPos> model = EggModelLoader.Load(fileName).ToTexture2D(GraphicsDevice);
+            ModelManager.Models.Add(model);
+            ModelManager.CurrentModel = model;
             lastSavedDoc = fileName;
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
             changedSinceLastSave = false;
@@ -246,7 +247,7 @@ namespace Mindstep.EasterEgg.MapEditor
             tex.pos = lastImportedTextureOffset;
 
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
-            foreach (Texture2DWithPos existingTex in model.animations.GetAllTextures())
+            foreach (Texture2DWithPos existingTex in ModelManager.CurrentModel.animations.GetAllTextures())
             {
                 if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
                 {
@@ -257,7 +258,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     return;
                 }
             }
-            CurrentFrame.Images.AddToFront(tex);
+            ModelManager.CurrentFrame.Images.AddToFront(tex);
             UpdatedThings();
         }
         #endregion

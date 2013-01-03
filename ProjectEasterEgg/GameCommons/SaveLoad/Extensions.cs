@@ -24,7 +24,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public static SaveModel<Texture2DWithPos> ToTexture2D(this SaveModel<BitmapWithPos> model, GraphicsDevice graphicsDevice)
         {
-            SaveModel<Texture2DWithPos> newModel = new SaveModel<Texture2DWithPos>(model.name);
+            SaveModel<Texture2DWithPos> newModel = new SaveModel<Texture2DWithPos>(model.Name);
             newModel.blocks.AddRange(model.blocks);
             foreach (SaveSubModel<BitmapWithPos> subModel in model.subModels)
             {

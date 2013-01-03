@@ -151,7 +151,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.flowLayoutPanel1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(330, 223);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(330, 199);
             this.toolStripContainer1.Location = new System.Drawing.Point(352, 206);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.Size = new System.Drawing.Size(330, 298);
@@ -165,21 +165,21 @@
             // 
             // toolStrip5
             // 
+            this.toolStrip5.CanOverflow = false;
             this.toolStrip5.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripImageList1});
-            this.toolStrip5.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip5.Location = new System.Drawing.Point(24, 0);
             this.toolStrip5.Name = "toolStrip5";
-            this.toolStrip5.Size = new System.Drawing.Size(43, 25);
+            this.toolStrip5.Size = new System.Drawing.Size(196, 49);
             this.toolStrip5.TabIndex = 0;
             // 
             // toolStripImageList1
             // 
-            this.toolStripImageList1.AutoSize = false;
             this.toolStripImageList1.BackColor = System.Drawing.Color.Pink;
             this.toolStripImageList1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripImageList1.Name = "toolStripImageList1";
-            this.toolStripImageList1.Size = new System.Drawing.Size(31, 22);
+            this.toolStripImageList1.Size = new System.Drawing.Size(184, 46);
             this.toolStripImageList1.Text = "toolStripImageList1";
             // 
             // flowLayoutPanel1
