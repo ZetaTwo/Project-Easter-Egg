@@ -48,10 +48,13 @@ namespace Mindstep.EasterEgg.MapEditor
 
             Settings = new Settings(Color.DarkBlue, BlockDrawState.Solid, 1f);
         }
-        public override void Initialize(MainForm MainForm, BlockViewWrapperControl wrapper)
+        public override void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
         {
-            base.Initialize(MainForm, wrapper);
+            base.Initialize(mainForm, wrapper);
             ToolStrips.Add(toolStrip1);
+            toolStripImageList1.Initialize(mainForm.ModelManager);
+            mainForm.ModelManager.FrameChanged += new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(
+                (sender, e) => { selectedTextures.Clear(); Invalidate(); });
 
             MouseDown += new MouseEventHandler(TextureEditingControl_MouseDown);
             MouseUp += new MouseEventHandler(TextureEditingControl_MouseUp);

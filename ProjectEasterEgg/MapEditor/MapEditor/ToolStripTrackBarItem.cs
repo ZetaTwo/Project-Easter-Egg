@@ -48,11 +48,10 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public event EventHandler Scroll;
         new public event MouseEventHandler MouseUp;
-    }
 
-    [ToolboxItem(false)]
-    class MyTrackBar : TrackBar
-    {
-        protected override void CreateHandle() { if (!IsDisposed) base.CreateHandle(); }
+        private class MyTrackBar : TrackBar
+        {
+            protected override void CreateHandle() { if (!IsDisposed) base.CreateHandle(); }
+        }
     }
 }

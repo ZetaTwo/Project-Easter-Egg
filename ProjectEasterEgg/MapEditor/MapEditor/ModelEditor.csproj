@@ -82,7 +82,7 @@
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ModificationEventArgs.cs" />
-    <Compile Include="ToolStripImageList.cs">
+    <Compile Include="Viewers\FrameListPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Viewers\BlockEditingControl.cs">
@@ -129,6 +129,12 @@
     </Compile>
     <Compile Include="Viewers\BlockViewControl.Designer.cs">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Viewers\PanelWithBorder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Viewers\PanelWithBorder.Designer.cs">
+      <DependentUpon>PanelWithBorder.cs</DependentUpon>
     </Compile>
     <Compile Include="Viewers\Texture2DWithDoublePos.cs" />
     <Compile Include="Viewers\TextureProjectionControl.cs">
@@ -225,6 +231,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="block.ico" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\plus1.png" />
+    <None Include="Resources\plus.png" />
+    <None Include="Resources\up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

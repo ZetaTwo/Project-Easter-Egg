@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextureEditingControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
+            this.toolStripImageList1 = new Mindstep.EasterEgg.MapEditor.FrameListPanel();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +49,7 @@
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStrip1.Size = new System.Drawing.Size(63, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(32, 27);
             this.toolStrip1.TabIndex = 19;
             this.toolStrip1.Text = "toolStrip";
             // 
@@ -64,12 +65,28 @@
             this.drawTextureIndices.Text = "Draw Texture Indices";
             this.drawTextureIndices.CheckedChanged += new System.EventHandler(this.drawTextureIndices_CheckedChanged);
             // 
+            // toolStripImageList1
+            // 
+            this.toolStripImageList1.BackColor = System.Drawing.Color.Black;
+            this.toolStripImageList1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStripImageList1.FrameMargin = new System.Windows.Forms.Padding(0, 0, 5, 5);
+            this.toolStripImageList1.FrameRatio = 0.75F;
+            this.toolStripImageList1.Location = new System.Drawing.Point(0, 314);
+            this.toolStripImageList1.Name = "toolStripImageList1";
+            this.toolStripImageList1.Padding = new System.Windows.Forms.Padding(5);
+            this.toolStripImageList1.Size = new System.Drawing.Size(647, 80);
+            this.toolStripImageList1.TabIndex = 23;
+            this.toolStripImageList1.WrapContents = false;
+            // 
             // TextureEditingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.toolStripImageList1);
             this.Controls.Add(this.toolStrip1);
             this.Name = "TextureEditingControl";
+            this.Size = new System.Drawing.Size(647, 394);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -81,5 +98,6 @@
 
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton drawTextureIndices;
+        private FrameListPanel toolStripImageList1;
     }
 }
