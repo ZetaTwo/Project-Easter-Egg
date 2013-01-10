@@ -159,22 +159,25 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void save(string fileName)
         {
-            bool savedSuccessfully;
-            
-            do
+            while (true)
             {
-                savedSuccessfully = EggModelSaver.Save(ModelManager.CurrentModel, fileName);
-            }
-            while (!savedSuccessfully &&
-                MessageBox.Show("Unable to save to: " + fileName, "Error saving file",
-                MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop)
-                == System.Windows.Forms.DialogResult.Retry);
-            
-            if (savedSuccessfully)
-            {
-                lastSavedDoc = fileName;
-                changedSinceLastSave = false;
-                RefreshTitle();
+                try
+                {
+                    EggModelSaver.Save(ModelManager.CurrentModel, fileName);
+                    lastSavedDoc = fileName;
+                    changedSinceLastSave = false;
+                    RefreshTitle();
+                    return;
+                }
+                catch (Exception e)
+                {
+                    if (MessageBox.Show("Unable to save to '"+fileName+"':\n"+e.Message, "Error saving file",
+                                        MessageBoxButtons.RetryCancel, MessageBoxIcon.Stop)
+                                        != System.Windows.Forms.DialogResult.Retry)
+                    {
+                        return;
+                    }
+                }
             }
         }
 

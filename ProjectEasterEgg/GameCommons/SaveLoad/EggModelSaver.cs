@@ -17,12 +17,12 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         //    "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
         /// <summary>
-        /// Tries to save he model at the given path.
+        /// Save the model to the given path.
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="path"></param>
-        /// <returns>true if saved successfully</returns>
-        public static bool Save(SaveModel<Texture2DWithPos> model, string path)
+        /// <param name="path">Path to save to, including file name</param>
+        /// <exception cref="Exception">All possible save exceptions?</exception>
+        public static void Save(SaveModel<Texture2DWithPos> model, string path)
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
@@ -98,26 +98,16 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                 }
             }
 
-            try
+            using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(path, FileMode.Create)))
             {
-                using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(path, FileMode.Create)))
-                {
-                    zipStream.PutNextEntry(new ZipEntry("model.xml"));
-                    zipStream.Write(doc.ToString());
+                zipStream.PutNextEntry(new ZipEntry("model.xml"));
+                zipStream.Write(doc.ToString());
 
-                    foreach (ImageWithPos tex in allTextures)
-                    {
-                        zipStream.PutNextEntry(new ZipEntry("textures/" + tex.name));
-                        tex.SaveTo(zipStream);
-                    }
+                foreach (ImageWithPos tex in allTextures)
+                {
+                    zipStream.PutNextEntry(new ZipEntry("textures/" + tex.name));
+                    tex.SaveTo(zipStream);
                 }
-                System.Console.WriteLine("Saved to: " + path);
-                return true;
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine("Failed to save to: " + path + "\n" + e.Message);
-                return false;
             }
         }
     }
