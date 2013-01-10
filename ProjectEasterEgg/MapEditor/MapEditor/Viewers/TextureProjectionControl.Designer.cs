@@ -46,8 +46,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Maroon;
             this.Controls.Add(this.buttonDone);
             this.Name = "TextureProjectionControl";
+            this.TextureOpacity = 0.5F;
             this.ResumeLayout(false);
 
         }

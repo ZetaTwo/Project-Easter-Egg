@@ -224,7 +224,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         protected virtual void PaintUsingSystemDrawing(Graphics graphics, string text)
         {
-            graphics.Clear(Color.CornflowerBlue);
+            graphics.Clear(BackColor);
 
             using (Brush brush = new SolidBrush(Color.Black))
             {
@@ -248,8 +248,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// flickering when our OnPaint implementation then immediately draws some
         /// other color over the top using the XNA Framework GraphicsDevice.
         /// </summary>
-        protected override void OnPaintBackground(PaintEventArgs pevent)
-        {}
+        protected override void OnPaintBackground(PaintEventArgs pevent) { }
 
         /// <summary>
         /// Derived classes override this to draw themselves using the GraphicsDevice.

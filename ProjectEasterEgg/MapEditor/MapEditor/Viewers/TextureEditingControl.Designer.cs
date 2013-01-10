@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.DarkBlue;
             this.Controls.Add(this.toolStripImageList1);
             this.Controls.Add(this.toolStrip1);
             this.Name = "TextureEditingControl";

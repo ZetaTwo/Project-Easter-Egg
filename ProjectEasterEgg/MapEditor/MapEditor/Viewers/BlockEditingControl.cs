@@ -43,8 +43,6 @@ namespace Mindstep.EasterEgg.MapEditor
             blockContextMenu = new ContextMenu(new MenuItem[]{
                 new MenuItem("Edit Block Details", blockContextMenu_EditBlockDetails),
             });
-
-            Settings = new Settings(Color.Black, BlockDrawState.Wireframe, .3f);
         }
 
         override public void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
@@ -256,7 +254,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 switch (Math.Sign(saveBlock.Position.Z - CurrentLayer))
                 {
                     case 1: //above
-                        drawBlock(blockDrawStateTexture[Settings.blockDrawState], boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                        drawBlock(blockDrawStateTexture[BlockDrawState], boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
                         break;
                     case 0: //at
                         drawBlock(textureDrawing, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);

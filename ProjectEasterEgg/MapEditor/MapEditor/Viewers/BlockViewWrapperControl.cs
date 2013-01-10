@@ -199,7 +199,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
         {
             backgroundColorDialog.ShowDialog();
-            BlockViewer.BackgroundColor = backgroundColorDialog.Color.ToXnaColor();
+            BlockViewer.BackColor = backgroundColorDialog.Color;
         }
     }
 }

@@ -24,8 +24,6 @@ namespace Mindstep.EasterEgg.MapEditor
         public TextureProjectionControl()
         {
             InitializeComponent();
-
-            Settings = new Settings(Color.Maroon, BlockDrawState.Solid, 0.5f);
         }
         public override void Initialize(MainForm MainForm, BlockViewWrapperControl wrapper)
         {

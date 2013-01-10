@@ -45,8 +45,6 @@ namespace Mindstep.EasterEgg.MapEditor
                 menuItemSelectBlocksToProjectOnto,
                 new MenuItem("Delete", TextureContextMenuDelete),
             });
-
-            Settings = new Settings(Color.DarkBlue, BlockDrawState.Solid, 1f);
         }
         public override void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
         {

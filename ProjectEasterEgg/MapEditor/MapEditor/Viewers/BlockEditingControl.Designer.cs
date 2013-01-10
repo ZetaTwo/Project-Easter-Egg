@@ -126,10 +126,13 @@
             // BlockEditingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.BackColor = System.Drawing.Color.Black;
+            this.BlockDrawState = Mindstep.EasterEgg.MapEditor.BlockDrawState.Wireframe;
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.toolStrip2);
             this.Name = "BlockEditingControl";
             this.Size = new System.Drawing.Size(1050, 653);
+            this.TextureOpacity = 0.3F;
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

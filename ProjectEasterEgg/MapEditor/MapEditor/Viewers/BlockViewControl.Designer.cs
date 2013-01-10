@@ -33,6 +33,7 @@
             // BlockViewControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.Name = "BlockViewControl";
             this.Size = new System.Drawing.Size(552, 346);
             this.Resize += new System.EventHandler(this.BlockViewControl_Resize);

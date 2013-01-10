@@ -36,11 +36,12 @@
         {
             this.SuspendLayout();
             // 
-            // UserControl3
+            // GraphicsDeviceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "UserControl3";
+            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.Name = "GraphicsDeviceControl";
             this.Size = new System.Drawing.Size(806, 524);
             this.ResumeLayout(false);
 

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using SD = System.Drawing;
 
 namespace Mindstep.EasterEgg.Commons
 {
     public static class Conversions
     {
-        public static Vector2 ToVector2(this System.Drawing.Point point)
+        public static Vector2 ToVector2(this SD.Point point)
         {
             return new Vector2(point.X, point.Y);
         }
@@ -17,7 +18,7 @@ namespace Mindstep.EasterEgg.Commons
             return new Vector2(point.X, point.Y);
         }
 
-        public static Point ToXnaPoint(this System.Drawing.Point point)
+        public static Point ToXnaPoint(this SD.Point point)
         {
             return new Point(point.X, point.Y);
         }
@@ -39,13 +40,13 @@ namespace Mindstep.EasterEgg.Commons
             return new Vector2(v.X.Ceiling(), v.Y.Ceiling());
         }
 
-        public static System.Drawing.Point ToSDPoint(this Point point)
+        public static SD.Point ToSDPoint(this Point point)
         {
-            return new System.Drawing.Point(point.X, point.Y);
+            return new SD.Point(point.X, point.Y);
         }
-        public static System.Drawing.Point ToSDPoint(this Vector2 point)
+        public static SD.Point ToSDPoint(this Vector2 point)
         {
-            return new System.Drawing.Point(point.X.Floor(), point.Y.Floor());
+            return new SD.Point(point.X.Floor(), point.Y.Floor());
         }
 
         public static Vector3 ToVector3(this Position pos)
@@ -65,9 +66,14 @@ namespace Mindstep.EasterEgg.Commons
             return new Position(pos.X.Ceiling(), pos.Y.Ceiling(), pos.Z.Ceiling());
         }
 
-        public static Color ToXnaColor(this System.Drawing.Color c)
+        public static Color ToXnaColor(this SD.Color c)
         {
             return new Color(c.R, c.G, c.B, c.A);
+        }
+
+        public static SD.Color ToSDColor(this Color c)
+        {
+            return SD.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework.Graphics;
 using Mindstep.EasterEgg.Commons.Graphic;
-using SDPoint = System.Drawing.Point;
 using Mindstep.EasterEgg.Commons.SaveLoad;
+using SD = System.Drawing;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -33,7 +33,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private bool panning;
         private bool mouseHasMovedSinceMouseDown = true;
-        private SDPoint panningLastMouseLocation;
+        private SD.Point panningLastMouseLocation;
 
         public readonly List<Control> ToolStrips = new List<Control>();
 
@@ -76,19 +76,6 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        private Settings settings;
-        internal Settings Settings
-        {
-            get
-            {
-                return settings;
-            }
-            set
-            {
-                settings = value;
-            }
-        }
-
         protected BlockViewWrapperControl Wrapper;
 
 
@@ -98,8 +85,6 @@ namespace Mindstep.EasterEgg.MapEditor
         public BlockViewControl()
         {
             InitializeComponent();
-
-            Settings = new Settings(Color.Orange, BlockDrawState.Solid, 1f);
         }
 
         virtual public void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
@@ -145,32 +130,24 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        public BlockDrawState BlockDrawState
+        private BlockDrawState blockDrawState;
+        virtual public BlockDrawState BlockDrawState
         {
-            get { return settings.blockDrawState; }
+            get { return blockDrawState; }
             set
             {
-                Settings.blockDrawState = value;
-                Wrapper.UpdatedSettings();
+                blockDrawState = value;
+                if (Wrapper != null) Wrapper.UpdatedSettings();
             }
         }
-
-        public Color BackgroundColor
+        private float textureOpacity = 1;
+        virtual public float TextureOpacity
         {
-            get { return settings.backgroundColor; }
+            get { return textureOpacity; }
             set
             {
-                Settings.backgroundColor = value;
-                Wrapper.UpdatedSettings();
-            }
-        }
-        public float TextureOpacity
-        {
-            get { return settings.opacity; }
-            set
-            {
-                Settings.opacity = value;
-                Wrapper.UpdatedSettings();
+                textureOpacity = value;
+                if (Wrapper != null) Wrapper.UpdatedSettings();
             }
         }
 
@@ -261,7 +238,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         override protected void Draw()
         {
-            GraphicsDevice.Clear(BackgroundColor);
+            GraphicsDevice.Clear(BackColor.ToXnaColor());
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, samplerState, null, null, null, Wrapper.Camera.ZoomAndOffsetMatrix);
 
             BoundingBoxInt boundingBox = getBoundingBox();

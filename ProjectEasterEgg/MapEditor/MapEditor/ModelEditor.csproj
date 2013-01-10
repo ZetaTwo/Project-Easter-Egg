@@ -100,7 +100,6 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\Helper.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Backbone\GraphicsDeviceService.cs" />
     <Compile Include="MainForm.cs">
@@ -232,9 +231,7 @@
   <ItemGroup>
     <Content Include="block.ico" />
     <None Include="Resources\cross.png" />
-    <None Include="Resources\plus1.png" />
     <None Include="Resources\plus.png" />
-    <None Include="Resources\up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
