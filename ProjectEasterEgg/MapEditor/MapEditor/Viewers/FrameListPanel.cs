@@ -31,7 +31,7 @@ namespace Mindstep.EasterEgg.MapEditor
         }
 
         private float ratio;
-        private ModelManager<Texture2DWithPos> modelManager;
+        private ModelManager modelManager;
         [DefaultValueAttribute(typeof(float), "0.75f")]
         public float FrameRatio
         {
@@ -58,7 +58,7 @@ namespace Mindstep.EasterEgg.MapEditor
             frameAddNewFrame = new AddFramePanel(this);
             Controls.Add(frameAddNewFrame);
         }
-        public void Initialize(ModelManager<Texture2DWithPos> modelManager)
+        public void Initialize(ModelManager modelManager)
         {
             this.modelManager = modelManager;
             CurrentFrame = AddNewFrame();
@@ -229,7 +229,8 @@ namespace Mindstep.EasterEgg.MapEditor
                 frameListPanel.CurrentFrame.BackColor = DefaultBackColor;
                 frameListPanel.CurrentFrame = this;
                 BackColor = SelectedBackColor;
-            }
+            }
+
             void buttonDelete_MouseClick(object sender, MouseEventArgs e)
             {
                 // Remove clicked frame from the list

@@ -207,13 +207,13 @@ namespace Mindstep.EasterEgg.MapEditor
             if (e.Delta > 0)
             {
                 Wrapper.Camera.ZoomIn(e.Location.ToXnaPoint());
-                MainForm.RefreshTitle();
+                MainForm.UpdateTitle();
                 Invalidate();
             }
             else if (e.Delta < 0)
             {
                 Wrapper.Camera.ZoomOut(e.Location.ToXnaPoint());
-                MainForm.RefreshTitle();
+                MainForm.UpdateTitle();
                 Invalidate();
             }
         }

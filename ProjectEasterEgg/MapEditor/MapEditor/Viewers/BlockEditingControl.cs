@@ -130,7 +130,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     selectedBlocks.Add(hitBlock);
                     Invalidate();
                     blockContextMenu.Show(this, e.Location);
-                    MainForm.UpdatedThings();
+                    MainForm.ChangedSomethingThatNeedsToBeSaved();
                     Invalidate();
                 }
                 //updateSelectedBlocks(e.Location, getClickOperation());
@@ -158,7 +158,7 @@ namespace Mindstep.EasterEgg.MapEditor
             BlockDetailsForm form = new BlockDetailsForm(selectedBlocks, MousePosition, Wrapper);
             form.Show();
             selectedBlocks.Clear();
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 
@@ -178,7 +178,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 MainForm.ModelManager.CurrentModel.blocks.Add(new SaveBlock(pos));
             }
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 
@@ -196,7 +196,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
             MainForm.ModelManager.CurrentModel.blocks.RemoveAll(block => block.Position == pos);
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 

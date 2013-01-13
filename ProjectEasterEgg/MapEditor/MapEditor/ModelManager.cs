@@ -6,17 +6,17 @@ using Mindstep.EasterEgg.Commons.SaveLoad;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
-    public class ModelManager<I> where I : ImageWithPos
+    public class ModelManager
     {
-        public event EventHandler<ModificationEventArgs<SaveModel<I>>> ModelChanged;
-        public event EventHandler<ModificationEventArgs<SaveAnimation<I>>> AnimationChanged;
-        public event EventHandler<ModificationEventArgs<SaveFrame<I>>> FrameChanged;
+        public event EventHandler<ModificationEventArgs<SaveModelWithInfo>> ModelChanged;
+        public event EventHandler<ModificationEventArgs<SaveAnimation<Texture2DWithPos>>> AnimationChanged;
+        public event EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>> FrameChanged;
 
 
 
-        public readonly List<SaveModel<I>> Models = new List<SaveModel<I>>();
-        private SaveModel<I> currentModel;
-        public SaveModel<I> CurrentModel
+        public readonly List<SaveModelWithInfo> Models = new List<SaveModelWithInfo>();
+        private SaveModelWithInfo currentModel;
+        public SaveModelWithInfo CurrentModel
         {
             get
             {
@@ -31,21 +31,21 @@ namespace Mindstep.EasterEgg.MapEditor
                         throw new ArgumentException("Can't set CurrentModel to a model that isn't in the list");
                     }
 
-                    ModificationEventArgs<SaveModel<I>> e = new ModificationEventArgs<SaveModel<I>>(currentModel, value);
+                    ModificationEventArgs<SaveModelWithInfo> e = new ModificationEventArgs<SaveModelWithInfo>(currentModel, value);
                     currentModel = value;
                     if (ModelChanged != null) ModelChanged(this, e);
                 }
             }
         }
 
-        private SaveAnimation<I> currentAnimation;
-        public SaveAnimation<I> CurrentAnimation
+        private SaveAnimation<Texture2DWithPos> currentAnimation;
+        public SaveAnimation<Texture2DWithPos> CurrentAnimation
         {
             get
             {
                 if (CurrentModel.animations.Count == 0)
                 {
-                    CurrentModel.animations.Add(new SaveAnimation<I>());
+                    CurrentModel.animations.Add(new SaveAnimation<Texture2DWithPos>());
                 }
                 if (currentAnimation == null)
                 {
@@ -61,21 +61,22 @@ namespace Mindstep.EasterEgg.MapEditor
                     {
                         throw new ArgumentException("Can't set CurrentAnimation to an animation that isn't in the list");
                     }
-                    ModificationEventArgs<SaveAnimation<I>> e = new ModificationEventArgs<SaveAnimation<I>>(currentAnimation, value);
+                    ModificationEventArgs<SaveAnimation<Texture2DWithPos>> e =
+                        new ModificationEventArgs<SaveAnimation<Texture2DWithPos>>(currentAnimation, value);
                     currentAnimation = value;
                     if (AnimationChanged != null) AnimationChanged(this, e);
                 }
             }
         }
 
-        private SaveFrame<I> currentFrame;
-        public SaveFrame<I> CurrentFrame
+        private SaveFrame<Texture2DWithPos> currentFrame;
+        public SaveFrame<Texture2DWithPos> CurrentFrame
         {
             get
             {
                 if (CurrentAnimation.Frames.Count == 0)
                 {
-                    CurrentAnimation.Frames.Add(new SaveFrame<I>());
+                    CurrentAnimation.Frames.Add(new SaveFrame<Texture2DWithPos>());
                 }
                 if (currentFrame == null)
                 {
@@ -91,7 +92,8 @@ namespace Mindstep.EasterEgg.MapEditor
                     {
                         throw new ArgumentException("Can't set CurrentFrame to a frame that isn't in the list");
                     }
-                    ModificationEventArgs<SaveFrame<I>> e = new ModificationEventArgs<SaveFrame<I>>(currentFrame, value);
+                    ModificationEventArgs<SaveFrame<Texture2DWithPos>> e =
+                        new ModificationEventArgs<SaveFrame<Texture2DWithPos>>(currentFrame, value);
                     currentFrame = value;
                     if (FrameChanged != null) FrameChanged(this, e);
                 }

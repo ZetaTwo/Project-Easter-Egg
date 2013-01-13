@@ -65,25 +65,25 @@ namespace Mindstep.EasterEgg.MapEditor
         private void TextureContextMenuBringToFront(object sender, EventArgs e)
         {
             MainForm.ModelManager.CurrentFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuBringForward(object sender, EventArgs e)
         {
             MainForm.ModelManager.CurrentFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSendBackward(object sender, EventArgs e)
         {
             MainForm.ModelManager.CurrentFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSendToBack(object sender, EventArgs e)
         {
             MainForm.ModelManager.CurrentFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSelectBlocksToProjectOnto(object sender, EventArgs e)
@@ -94,7 +94,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             MainForm.ModelManager.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             selectedTextures.Clear();
-            MainForm.UpdatedThings();
+            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
         #endregion
 
@@ -176,7 +176,7 @@ namespace Mindstep.EasterEgg.MapEditor
                             }
                             break;
                     }
-                    MainForm.UpdatedThings();
+                    MainForm.ChangedSomethingThatNeedsToBeSaved();
                     return;
                 }
             }
@@ -220,7 +220,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 MainForm.ModelManager.CurrentFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
-                MainForm.UpdatedThings();
+                MainForm.ChangedSomethingThatNeedsToBeSaved();
             }
         }
 

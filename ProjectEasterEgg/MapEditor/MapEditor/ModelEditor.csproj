@@ -82,6 +82,7 @@
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ModificationEventArgs.cs" />
+    <Compile Include="SaveModelWithInfo.cs" />
     <Compile Include="Viewers\FrameListPanel.cs">
       <SubType>Component</SubType>
     </Compile>

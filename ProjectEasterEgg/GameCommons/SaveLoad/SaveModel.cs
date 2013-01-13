@@ -20,13 +20,13 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         /// <summary>
         /// Creates a new SaveModel and adds the given blocks, animations and models.
         /// </summary>
-        /// <param name="modelName"></param>
+        /// <param name="name"></param>
         /// <param name="blocks"></param>
         /// <param name="animations"></param>
         /// <param name="subModels"></param>
-        public SaveModel(string modelName, IEnumerable<SaveBlock> blocks, IEnumerable<SaveAnimation<T>> animations, IEnumerable<SaveSubModel<T>> subModels)
+        public SaveModel(string name, IEnumerable<SaveBlock> blocks, IEnumerable<SaveAnimation<T>> animations, IEnumerable<SaveSubModel<T>> subModels)
         {
-            this.Name = modelName;
+            this.Name = name;
             this.blocks.AddRange(blocks);
             this.animations.AddRange(animations);
             this.subModels.AddRange(subModels);
@@ -40,5 +40,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             this.Name = modelName;
         }
+
+        protected SaveModel() { }
     }
 }
