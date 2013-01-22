@@ -44,7 +44,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                SaveBlock hitBlock = getHitBlock(MainForm.ModelManager.CurrentModel.blocks,
+                SaveBlock hitBlock = getHitBlock(MainForm.ModelManager.SelectedModel.Blocks,
                     CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), Wrapper.Camera).ToSDPoint());
                 if (!textureBeingProjectedDown.projectedOnto.Remove(hitBlock))
                 {
@@ -56,7 +56,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         override protected void drawBlocks(BoundingBoxInt boundingBox)
         {
-            foreach (SaveBlock saveBlock in MainForm.ModelManager.CurrentModel.blocks)
+            foreach (SaveBlock saveBlock in MainForm.ModelManager.SelectedModel.Blocks)
             {
                 if (textureBeingProjectedDown.projectedOnto.Contains(saveBlock))
                 {

@@ -43,7 +43,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        private AddFramePanel frameAddNewFrame;
+        private AddFramePanel panelAddNewFrame;
 
 
 
@@ -55,57 +55,77 @@ namespace Mindstep.EasterEgg.MapEditor
             Layout += new LayoutEventHandler(Panel_SizeChanged);
             ControlAdded += new ControlEventHandler(FrameListPanel_ControlAdded);
 
-            frameAddNewFrame = new AddFramePanel(this);
-            Controls.Add(frameAddNewFrame);
+            panelAddNewFrame = new AddFramePanel(this);
+            Controls.Add(panelAddNewFrame);
         }
         public void Initialize(ModelManager modelManager)
         {
             this.modelManager = modelManager;
-            CurrentFrame = AddNewFrame();
+            modelManager.AnimationChanged +=
+                new EventHandler<ModificationEventArgs<SaveAnimationWithInfo>>(modelManager_AnimationChanged);
+            modelManager.FrameChanged +=
+                new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameChanged);
+            modelManager.FrameAdded += new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameAdded);
+            modelManager.FrameRemoved += new EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameRemoved);
         }
 
-        void FrameListPanel_ControlAdded(object sender, ControlEventArgs e)
+        void modelManager_FrameAdded(object sender, AddedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            if (e.Control != frameAddNewFrame)
-            {
-                Controls.Remove(frameAddNewFrame);
-                Controls.Add(frameAddNewFrame);
-            }
+            PicturePanel panel = new PicturePanel(this, e.Element);
+            Controls.Add(panel);
+            Controls.SetChildIndex(panel, modelManager.Frames.IndexOf(e.Element));
         }
 
-
-
-        private PicturePanel CurrentFrame
+        void modelManager_FrameRemoved(object sender, RemovedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            set
+            Controls.Remove(getFramePanel(e.Element));
+        }
+
+        private void modelManager_AnimationChanged(object sender, ModificationEventArgs<SaveAnimationWithInfo> e)
+        {
+            Controls.Clear();
+            Controls.Add(panelAddNewFrame);
+
+            if (e.After != null)
             {
-                modelManager.CurrentFrame = value.SaveFrame;
-                value.BackColor = PicturePanel.SelectedBackColor;
-            }
-            get
-            {
-                foreach (PicturePanel frame in Controls.OfType<PicturePanel>())
+                foreach (var frame in e.After.Frames)
                 {
-                    if (frame.IsCurrentFrame)
-                    {
-                        return frame;
-                    }
+                    Controls.Add(new PicturePanel(this, frame));
                 }
-                return null;
             }
         }
-        //public SaveFrame<Texture2DWithPos> CurrentSaveFrame
-       // {
-        //    get { return modelManager.CurrentFrame; }
-        //}
 
-        private PicturePanel AddNewFrame()
+        private void modelManager_FrameChanged(object sender, ModificationEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            SaveFrame<Texture2DWithPos> saveFrame = new SaveFrame<Texture2DWithPos>();
-            modelManager.CurrentAnimation.Frames.Add(saveFrame);
-            PicturePanel frame = new PicturePanel(this, saveFrame);
-            Controls.Add(frame);
-            return frame;
+            if (getFramePanel(e.Before) != null)
+            {
+                getFramePanel(e.Before).Highlighted = false;
+            }
+            if (getFramePanel(e.After) != null)
+            {
+                getFramePanel(e.After).Highlighted = true;
+            }
+        }
+
+        private void FrameListPanel_ControlAdded(object sender, ControlEventArgs e)
+        {
+            if (e.Control != panelAddNewFrame)
+            {
+                Controls.Remove(panelAddNewFrame);
+                Controls.Add(panelAddNewFrame);
+            }
+        }
+
+        private PicturePanel getFramePanel(SaveFrame<Texture2DWithPos> saveFrame)
+        {
+            foreach (PicturePanel frame in Controls.OfType<PicturePanel>())
+            {
+                if (frame.SaveFrame == saveFrame)
+                {
+                    return frame;
+                }
+            }
+            return null;
         }
 
         void Panel_SizeChanged(object sender, EventArgs e)
@@ -128,18 +148,6 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 frame.Size = newSize;
             }
-        }
-
-        private PicturePanel getFramePanel(SaveFrame<Texture2DWithPos> saveFrame)
-        {
-            foreach (PicturePanel frame in Controls.OfType<PicturePanel>())
-            {
-                if (frame.SaveFrame == saveFrame)
-                {
-                    return frame;
-                }
-            }
-            return null;
         }
 
 
@@ -189,7 +197,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
             virtual public void AddFrameFrame_MouseClick(object sender, MouseEventArgs e)
             {
-                frameListPanel.AddNewFrame();
+                frameListPanel.modelManager.Frames.Add(new SaveFrame<Texture2DWithPos>());
             }
         }
 
@@ -200,9 +208,14 @@ namespace Mindstep.EasterEgg.MapEditor
 
             private Panel buttonDelete;
             public SaveFrame<Texture2DWithPos> SaveFrame;
-            //public readonly SaveFrame<Texture2DWithDoublePos> frame;
 
-            public bool IsCurrentFrame { get { return SaveFrame == frameListPanel.modelManager.CurrentFrame; } }
+            public bool IsSelected { get { return SaveFrame == frameListPanel.modelManager.SelectedFrame; } }
+
+            public bool Highlighted
+            {
+                set { BackColor = value ? SelectedBackColor : DefaultBackColor; }
+                get { return BackColor == SelectedBackColor; }
+            }
 
             public PicturePanel(FrameListPanel frameListPanel, SaveFrame<Texture2DWithPos> saveFrame)
                 : base(frameListPanel)
@@ -226,35 +239,31 @@ namespace Mindstep.EasterEgg.MapEditor
 
             public void PictureFrame_MouseClick(object sender, MouseEventArgs e)
             {
-                frameListPanel.CurrentFrame.BackColor = DefaultBackColor;
-                frameListPanel.CurrentFrame = this;
-                BackColor = SelectedBackColor;
+                frameListPanel.modelManager.SelectedFrame = SaveFrame;
             }
 
             void buttonDelete_MouseClick(object sender, MouseEventArgs e)
             {
+                bool wasSelected = IsSelected;
+                int index = frameListPanel.modelManager.Frames.IndexOf(SaveFrame);
+                int count = frameListPanel.modelManager.Frames.Count;
                 // Remove clicked frame from the list
-                int index = frameListPanel.modelManager.CurrentAnimation.Frames.IndexOf(SaveFrame);
-                int count = frameListPanel.modelManager.CurrentAnimation.Frames.Count;
-                frameListPanel.modelManager.CurrentAnimation.Frames.Remove(SaveFrame);
-                frameListPanel.Controls.Remove(this);
+                frameListPanel.modelManager.Frames.Remove(SaveFrame);
 
                 // And select a new appropriate frame if this frame was selected
-                if (IsCurrentFrame)
+                if (wasSelected)
                 {
                     if (count == 1) //frame was the only one
                     {           //create new frame
-                        frameListPanel.CurrentFrame = frameListPanel.AddNewFrame();
+                        frameListPanel.modelManager.SelectedFrame = new SaveFrame<Texture2DWithPos>();
                     }
-                    else if (count == index+1) //frame was at the last index
+                    else if (index == count-1) //frame was at the last index
                     {           //choose previous frame
-                        frameListPanel.CurrentFrame = frameListPanel.getFramePanel(
-                            frameListPanel.modelManager.CurrentAnimation.Frames[index - 1]);
+                        frameListPanel.modelManager.SelectedFrame = frameListPanel.modelManager.Frames.Last();
                     }
-                    else 
+                    else
                     {           //choose next frame
-                        frameListPanel.CurrentFrame = frameListPanel.getFramePanel(
-                            frameListPanel.modelManager.CurrentAnimation.Frames[index]);
+                        frameListPanel.modelManager.SelectedFrame = frameListPanel.modelManager.Frames[index];
                     }
                 }
             }

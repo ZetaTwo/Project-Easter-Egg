@@ -50,7 +50,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                             Position pos = blockElement.Attribute("offset").Value.LoadPosition();
 
                             SaveBlock block = new SaveBlock(pos);
-                            model.blocks.Add(block);
+                            model.Blocks.Add(block);
                             block.type = blockElement.Attribute("type").Value.LoadBlockType();
                             XAttribute scriptAttribute = blockElement.Attribute("script");
                             if (scriptAttribute != null)
@@ -64,7 +64,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                     foreach (XElement modelElement in root.Element("imports").Elements("model"))
                     {
                         Position offset = modelElement.Attribute("offset").Value.LoadPosition();
-                        model.subModels.Add(new SaveSubModel<BitmapWithPos>(Load(directoryPath, modelElement.Value), offset));
+                        model.SubModels.Add(new SaveSubModel<BitmapWithPos>(Load(directoryPath, modelElement.Value), offset));
                     }
 
                     // animations
@@ -72,7 +72,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                     {
                         SaveAnimation<BitmapWithPos> animation = new SaveAnimation<BitmapWithPos>(animationElement.Attribute("name").Value);
                         animation.Facing = animationElement.Attribute("facing").Value.LoadFacing();
-                        model.animations.Add(animation);
+                        model.Animations.Add(animation);
 
                         foreach (XElement frameElement in animationElement.Elements("frame"))
                         {
@@ -85,7 +85,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                                 frame.Images.AddToFront(bitmapWithPos);
                                 bitmapWithPos.pos = imageElement.Attribute("coord").Value.LoadPoint();
                                 bitmapWithPos.name = imageElement.Attribute("name").Value;
-                                bitmapWithPos.projectedOnto.AddRange(imageElement.Elements("projectedOnto").Select(e => model.blocks[e.Value.LoadInt()]));
+                                bitmapWithPos.projectedOnto.AddRange(imageElement.Elements("projectedOnto").Select(e => model.Blocks[e.Value.LoadInt()]));
                                 bitmapWithPos.bitmap = bitmapManager[bitmapWithPos.name];
                             }
                         }

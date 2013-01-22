@@ -9,9 +9,9 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
     public class SaveModel<T> where T : ImageWithPos
     {
         public string Name;
-        public readonly List<SaveBlock> blocks = new List<SaveBlock>();
-        public readonly List<SaveSubModel<T>> subModels = new List<SaveSubModel<T>>();
-        public readonly List<SaveAnimation<T>> animations = new List<SaveAnimation<T>>();
+        public readonly List<SaveBlock> Blocks = new List<SaveBlock>();
+        public readonly List<SaveSubModel<T>> SubModels = new List<SaveSubModel<T>>();
+        public readonly List<SaveAnimation<T>> Animations = new List<SaveAnimation<T>>();
 
 
 
@@ -27,20 +27,20 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public SaveModel(string name, IEnumerable<SaveBlock> blocks, IEnumerable<SaveAnimation<T>> animations, IEnumerable<SaveSubModel<T>> subModels)
         {
             this.Name = name;
-            this.blocks.AddRange(blocks);
-            this.animations.AddRange(animations);
-            this.subModels.AddRange(subModels);
+            this.Blocks.AddRange(blocks);
+            this.Animations.AddRange(animations);
+            this.SubModels.AddRange(subModels);
         }
 
         /// <summary>
         /// Creates a new SaveModel.
         /// </summary>
-        /// <param name="modelName">Name for the model</param>
-        public SaveModel(string modelName)
+        /// <param name="name">Name for the model</param>
+        public SaveModel(string name)
         {
-            this.Name = modelName;
+            this.Name = name;
         }
 
-        protected SaveModel() { }
+        protected SaveModel() {}
     }
 }

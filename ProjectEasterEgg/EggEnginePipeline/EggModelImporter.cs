@@ -40,15 +40,15 @@ namespace EggEnginePipeline
             SaveModel<BitmapWithPos> saveModel = EggModelLoader.Load(filename);
             
             // imports
-            foreach (SaveSubModel<BitmapWithPos> subModels in saveModel.subModels)
+            foreach (SaveSubModel<BitmapWithPos> subModels in saveModel.SubModels)
             {
                 //TODO: Add support for sub models
             }
 
-            BoundingBoxInt bounds = new BoundingBoxInt(saveModel.blocks.ToPositions());
+            BoundingBoxInt bounds = new BoundingBoxInt(saveModel.Blocks.ToPositions());
             //blocks
             {
-                foreach (SaveBlock block in saveModel.blocks)
+                foreach (SaveBlock block in saveModel.Blocks)
                 {
                     if (block.type == BlockType.SPAWN_LOCATION)
                     {
@@ -65,13 +65,13 @@ namespace EggEnginePipeline
                     }
                 }
 
-                saveModel.blocks.RemoveAll(block => block.type == BlockType.SPAWN_LOCATION);
+                saveModel.Blocks.RemoveAll(block => block.type == BlockType.SPAWN_LOCATION);
             }
 
             //Debugger.Launch();
 
             //animations
-            foreach (SaveAnimation<BitmapWithPos> saveAnimation in saveModel.animations)
+            foreach (SaveAnimation<BitmapWithPos> saveAnimation in saveModel.Animations)
             {
                 AnimationDTO animation = new AnimationDTO(saveAnimation.Name, saveAnimation.Facing);
 
@@ -89,7 +89,7 @@ namespace EggEnginePipeline
                             }
                         }
                         foreach (SaveBlock saveBlock in bitmap.projectedOnto) {
-                            int index = saveModel.blocks.IndexOf(saveBlock);
+                            int index = saveModel.Blocks.IndexOf(saveBlock);
                             GameBlockDTO block = model.blocks[index];
 
                             if (!frame.textures.ContainsKey(index)) {

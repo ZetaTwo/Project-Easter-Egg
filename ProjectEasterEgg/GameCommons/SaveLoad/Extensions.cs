@@ -27,14 +27,14 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             T newModel = new T();
             newModel.Name = model.Name;
-            newModel.blocks.AddRange(model.blocks);
-            foreach (SaveSubModel<BitmapWithPos> subModel in model.subModels)
+            newModel.Blocks.AddRange(model.Blocks);
+            foreach (SaveSubModel<BitmapWithPos> subModel in model.SubModels)
             {
-                newModel.subModels.Add(subModel.ToTexture2D(graphicsDevice));
+                newModel.SubModels.Add(subModel.ToTexture2D(graphicsDevice));
             }
-            foreach (SaveAnimation<BitmapWithPos> animation in model.animations)
+            foreach (SaveAnimation<BitmapWithPos> animation in model.Animations)
             {
-                newModel.animations.Add(animation.ToTexture2D(graphicsDevice));
+                newModel.Animations.Add(animation.ToTexture2D(graphicsDevice));
             }
             return newModel;
         }

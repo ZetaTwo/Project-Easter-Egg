@@ -12,7 +12,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public string Name;
         public Facing Facing = Facing.POSITIVE_Y;
-        public List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
+        public readonly List<SaveFrame<T>> Frames = new List<SaveFrame<T>>();
 
 
 

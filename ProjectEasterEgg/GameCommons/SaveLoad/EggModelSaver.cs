@@ -28,13 +28,13 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
             XElement root = new XElement("model");
             doc.Add(root);
 
-            BoundingBoxInt boundingBox = new BoundingBoxInt(model.blocks.ToPositions());
-            List<SaveBlock> orderedBlocks = model.blocks.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)).ToList();
+            BoundingBoxInt boundingBox = new BoundingBoxInt(model.Blocks.ToPositions());
+            List<SaveBlock> orderedBlocks = model.Blocks.OrderBy(block => boundingBox.getRelativeDepthOf(block.Position)).ToList();
 
             { // imports
                 XElement imports = new XElement("imports");
                 root.Add(imports);
-                foreach (SaveSubModel<Texture2DWithPos> subModel in model.subModels)
+                foreach (SaveSubModel<Texture2DWithPos> subModel in model.SubModels)
                 {
                     XElement subModelElement = new XElement("model");
                     imports.Add(subModelElement);
@@ -66,7 +66,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
                 XElement animationsElement = new XElement("animations");
                 root.Add(animationsElement);
-                foreach (SaveAnimation<Texture2DWithPos> animation in model.animations)
+                foreach (SaveAnimation<Texture2DWithPos> animation in model.Animations)
                 {
                     XElement animationElement = new XElement("animation");
                     animationsElement.Add(animationElement);

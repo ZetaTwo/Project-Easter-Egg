@@ -12,12 +12,15 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public string path = null;
         public bool changedSinceLastSave = false;
+        new public readonly ListWithSelectedElement<SaveAnimationWithInfo> Animations =
+            new ListWithSelectedElement<SaveAnimationWithInfo>();
 
-        /// <summary>
+
+        /// <summary>
         /// Create a new model with the default name, and no path
         /// </summary>
         public SaveModelWithInfo()
-            : base(UNTITELED_MODEL_NAME) { }
+            : base(UNTITELED_MODEL_NAME) {}
 
 
         /// <summary>
@@ -25,6 +28,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// </summary>
         /// <param name="path"></param>
         public SaveModelWithInfo(string path)
+            : this()
         {
             this.path = path;
         }

@@ -11,7 +11,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public Position offset;
 
         public SaveSubModel(SaveModel<T> baseModel, Position offset)
-            : base(baseModel.Name, baseModel.blocks, baseModel.animations, baseModel.subModels)
+            : base(baseModel.Name, baseModel.Blocks, baseModel.Animations, baseModel.SubModels)
         {
             this.offset = offset;
         }

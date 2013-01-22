@@ -122,7 +122,7 @@ namespace Mindstep.EasterEgg.MapEditor
             if (e.Button == MouseButtons.Right)
             {
                 Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), Wrapper.Camera);
-                SaveBlock hitBlock = getHitBlock(MainForm.ModelManager.CurrentModel.blocks, mousePosInProjSpace.ToSDPoint());
+                SaveBlock hitBlock = getHitBlock(MainForm.ModelManager.SelectedModel.Blocks, mousePosInProjSpace.ToSDPoint());
 
                 if (hitBlock != null)
                 {
@@ -174,9 +174,9 @@ namespace Mindstep.EasterEgg.MapEditor
         private void createBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
-            if (!MainForm.ModelManager.CurrentModel.blocks.Any(block => block.Position == pos))
+            if (!MainForm.ModelManager.SelectedModel.Blocks.Any(block => block.Position == pos))
             {
-                MainForm.ModelManager.CurrentModel.blocks.Add(new SaveBlock(pos));
+                MainForm.ModelManager.SelectedModel.Blocks.Add(new SaveBlock(pos));
             }
             MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
@@ -185,7 +185,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private void deleteBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
-            foreach (SaveAnimation<Texture2DWithPos> animation in MainForm.ModelManager.CurrentModel.animations)
+            foreach (SaveAnimation<Texture2DWithPos> animation in MainForm.ModelManager.SelectedModel.Animations)
             {
                 foreach (SaveFrame<Texture2DWithPos> frame in animation.Frames)
                 {
@@ -195,7 +195,7 @@ namespace Mindstep.EasterEgg.MapEditor
                     }
                 }
             }
-            MainForm.ModelManager.CurrentModel.blocks.RemoveAll(block => block.Position == pos);
+            MainForm.ModelManager.SelectedModel.Blocks.RemoveAll(block => block.Position == pos);
             MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
@@ -203,7 +203,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private bool existsBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
-            return MainForm.ModelManager.CurrentModel.blocks.Any(block => block.Position == pos);
+            return MainForm.ModelManager.SelectedModel.Blocks.Any(block => block.Position == pos);
         }
 
         private Position posUnderPointInCurrentLayer(SDPoint mouseLocation)
@@ -217,7 +217,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Point mousePosInProjSpace = CoordinateTransform.ScreenToProjSpace(mouseLocation.ToXnaPoint(), Wrapper.Camera);
 
             return getHitBlock(
-                MainForm.ModelManager.CurrentModel.blocks.Where(block => block.Position.Z == CurrentLayer),
+                MainForm.ModelManager.SelectedModel.Blocks.Where(block => block.Position.Z == CurrentLayer),
                 mousePosInProjSpace.ToSDPoint());
         }
 
@@ -249,7 +249,7 @@ namespace Mindstep.EasterEgg.MapEditor
 
         override protected void drawBlocks(BoundingBoxInt boundingBox)
         {
-            foreach (SaveBlock saveBlock in MainForm.ModelManager.CurrentModel.blocks)
+            foreach (SaveBlock saveBlock in MainForm.ModelManager.SelectedModel.Blocks)
             {
                 switch (Math.Sign(saveBlock.Position.Z - CurrentLayer))
                 {
