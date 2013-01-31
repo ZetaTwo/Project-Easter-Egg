@@ -54,6 +54,15 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+        new public void AddRange(IEnumerable<T> collection)
+        {
+            foreach (T item in collection)
+            {
+                Add(item);
+            }
+        }
+
+
         new public bool Remove(T item)
         {
             bool success = base.Remove(item);
@@ -74,8 +83,24 @@ namespace Mindstep.EasterEgg.MapEditor
             selected = default(T);
         }
 
-        [Obsolete("Not implemented yet.", true)]
-        new public int RemoveAll(Predicate<T> match)        { throw new NotImplementedException(); }
+        new public int RemoveAll(Predicate<T> match)
+        {
+            int removedCount = 0;
+            for (int i = 0; i < Count; )
+            {
+                if (match(this[i]))
+                {
+                    Remove(this[i]);
+                    removedCount++;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return removedCount;
+        }
+
         [Obsolete("Not implemented yet.", true)]
         new public void RemoveAt(int index)                 { throw new NotImplementedException(); }
         [Obsolete("Not implemented yet.", true)]

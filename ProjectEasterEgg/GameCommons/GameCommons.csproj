@@ -81,7 +81,6 @@
     <Compile Include="SaveLoad\BitmapWithPos.cs" />
     <Compile Include="SaveLoad\Texture2DWithPos.cs" />
     <Compile Include="SaveLoad\ImageManager.cs" />
-    <Compile Include="SaveLoad\EggModelSaver.cs" />
     <Compile Include="SaveLoad\EggModelLoader.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />

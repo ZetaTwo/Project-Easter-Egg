@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedEventArgs.cs" />
+    <Compile Include="Backbone\EggModelSaver.cs" />
     <Compile Include="ModelManager.cs" />
     <Compile Include="ListWithSelectedElement.cs" />
     <Compile Include="BlockDetailsForm.cs">
@@ -85,8 +86,8 @@
     </Compile>
     <Compile Include="ModificationEventArgs.cs" />
     <Compile Include="RemovedEventArgs.cs" />
-    <Compile Include="SaveAnimationWithInfo.cs" />
-    <Compile Include="SaveModelWithInfo.cs" />
+    <Compile Include="Animation.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="Viewers\FrameListPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -227,6 +228,10 @@
     <ProjectReference Include="..\..\GameCommons\GameCommons.csproj">
       <Project>{8CC9ECC9-CFD1-4180-8750-9182A69FE103}</Project>
       <Name>GameCommons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\SharpZipLib\ICSharpCode.SharpZLib.csproj">
+      <Project>{0E7413FF-EB9E-4714-ACF2-BE3A6A7B2FFD}</Project>
+      <Name>ICSharpCode.SharpZLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapEditorContentLibrary\ModelEditorContentLibrary.csproj">
       <Project>{396ADBE6-FB16-4DBA-8C70-C16A46B448EA}</Project>

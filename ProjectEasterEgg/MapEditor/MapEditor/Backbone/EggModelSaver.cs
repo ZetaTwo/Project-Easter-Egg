@@ -9,7 +9,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace Mindstep.EasterEgg.Commons.SaveLoad
+namespace Mindstep.EasterEgg.MapEditor
 {
     public static class EggModelSaver
     {
@@ -22,7 +22,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         /// <param name="model"></param>
         /// <param name="path">Path to save to, including file name</param>
         /// <exception cref="Exception">All possible save exceptions?</exception>
-        public static void Save(SaveModel<Texture2DWithPos> model, string path)
+        public static void Save(MapEditor.Model model)
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
@@ -66,7 +66,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
                 XElement animationsElement = new XElement("animations");
                 root.Add(animationsElement);
-                foreach (SaveAnimation<Texture2DWithPos> animation in model.Animations)
+                foreach (Animation animation in model.Animations)
                 {
                     XElement animationElement = new XElement("animation");
                     animationsElement.Add(animationElement);
@@ -98,7 +98,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                 }
             }
 
-            using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(path, FileMode.Create)))
+            using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(model.path, FileMode.Create)))
             {
                 zipStream.PutNextEntry(new ZipEntry("model.xml"));
                 zipStream.Write(doc.ToString());

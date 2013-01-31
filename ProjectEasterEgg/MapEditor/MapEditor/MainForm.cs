@@ -10,6 +10,7 @@ using System.IO;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using SD = System.Drawing;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -57,8 +58,8 @@ namespace Mindstep.EasterEgg.MapEditor
         public MainForm()
             : this(false)
         {
-            ModelManager.Models.Add(new SaveModelWithInfo());
-            ModelManager.Animations.Add(new SaveAnimationWithInfo());
+            ModelManager.Models.Add(new Model());
+            ModelManager.Animations.Add(new Animation());
             ModelManager.Frames.Add(new SaveFrame<Texture2DWithPos>());
 
             UpdateTitle();
@@ -142,7 +143,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        private void saveFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
             writeSave(saveFileDialog.FileName);
         }
@@ -153,9 +154,10 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 try
                 {
-                    EggModelSaver.Save(ModelManager.SelectedModel, fileName);
-                    ModelManager.SelectedModel.changedSinceLastSave = false;
                     ModelManager.SelectedModel.path = fileName;
+                    EggModelSaver.Save(ModelManager.SelectedModel);
+
+                    ModelManager.SelectedModel.changedSinceLastSave = false;
                     ModelManager.SelectedModel.Name = Regex.Match(fileName,
                         "([^/\\\\]*)(\\.egg)?$", RegexOptions.RightToLeft).Groups[1].Value;
                     UpdateTitle();
@@ -202,9 +204,11 @@ namespace Mindstep.EasterEgg.MapEditor
 
         private void open(string path)
         {
-            SaveModelWithInfo model = EggModelLoader.Load(path).ToTexture2D<SaveModelWithInfo>(GraphicsDevice);
+            Model model = new Model(EggModelLoader.Load(path).ToTexture2D(GraphicsDevice));
             ModelManager.Models.Add(model);
             ModelManager.SelectedModel = model;
+            ModelManager.SelectedAnimation = ModelManager.Animations[0];
+            ModelManager.SelectedFrame = ModelManager.Frames[0];
             model.path = path;
             model.changedSinceLastSave = false;
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
@@ -242,8 +246,7 @@ namespace Mindstep.EasterEgg.MapEditor
             tex.pos = lastImportedTextureOffset;
 
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
-            foreach (Texture2DWithPos existingTex in((IEnumerable<SaveAnimation<Texture2DWithPos>>)
-                ModelManager.Animations).GetAllTextures())
+            foreach (Texture2DWithPos existingTex in((IEnumerable<Animation>)ModelManager.Animations).GetAllTextures())
             {
                 if (existingTex.name == tex.name && existingTex.OriginalPath != tex.OriginalPath)
                 {

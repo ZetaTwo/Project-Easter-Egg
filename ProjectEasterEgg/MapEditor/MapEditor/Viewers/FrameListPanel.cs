@@ -62,7 +62,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             this.modelManager = modelManager;
             modelManager.AnimationChanged +=
-                new EventHandler<ModificationEventArgs<SaveAnimationWithInfo>>(modelManager_AnimationChanged);
+                new EventHandler<ModificationEventArgs<Animation>>(modelManager_AnimationChanged);
             modelManager.FrameChanged +=
                 new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameChanged);
             modelManager.FrameAdded += new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameAdded);
@@ -81,7 +81,7 @@ namespace Mindstep.EasterEgg.MapEditor
             Controls.Remove(getFramePanel(e.Element));
         }
 
-        private void modelManager_AnimationChanged(object sender, ModificationEventArgs<SaveAnimationWithInfo> e)
+        private void modelManager_AnimationChanged(object sender, ModificationEventArgs<Animation> e)
         {
             Controls.Clear();
             Controls.Add(panelAddNewFrame);

@@ -8,13 +8,13 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     public class ModelManager
     {
-        public event EventHandler<AddedEventArgs<SaveModelWithInfo>> ModelAdded;
-        public event EventHandler<RemovedEventArgs<SaveModelWithInfo>> ModelRemoved;
-        public event EventHandler<ModificationEventArgs<SaveModelWithInfo>> ModelChanged;
+        public event EventHandler<AddedEventArgs<Model>> ModelAdded;
+        public event EventHandler<RemovedEventArgs<Model>> ModelRemoved;
+        public event EventHandler<ModificationEventArgs<Model>> ModelChanged;
 
-        public event EventHandler<AddedEventArgs<SaveAnimationWithInfo>> AnimationAdded;
-        public event EventHandler<RemovedEventArgs<SaveAnimationWithInfo>> AnimationRemoved;
-        public event EventHandler<ModificationEventArgs<SaveAnimationWithInfo>> AnimationChanged;
+        public event EventHandler<AddedEventArgs<Animation>> AnimationAdded;
+        public event EventHandler<RemovedEventArgs<Animation>> AnimationRemoved;
+        public event EventHandler<ModificationEventArgs<Animation>> AnimationChanged;
 
         public event EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>> FrameAdded;
         public event EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>> FrameRemoved;
@@ -22,9 +22,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        private EventHandler<AddedEventArgs<SaveAnimationWithInfo>> addedAnimationEventHandler;
-        private EventHandler<RemovedEventArgs<SaveAnimationWithInfo>> removedAnimationEventHandler;
-        private EventHandler<ModificationEventArgs<SaveAnimationWithInfo>> selectedAnimationEventHandler;
+        private EventHandler<AddedEventArgs<Animation>> addedAnimationEventHandler;
+        private EventHandler<RemovedEventArgs<Animation>> removedAnimationEventHandler;
+        private EventHandler<ModificationEventArgs<Animation>> selectedAnimationEventHandler;
 
         private EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>> addedFrameEventHandler;
         private EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>> removedFrameEventHandler;
@@ -36,13 +36,13 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public ModelManager()
         {
-            Models.Added += new EventHandler<AddedEventArgs<SaveModelWithInfo>>(Model_Added);
-            Models.Removed += new EventHandler<RemovedEventArgs<SaveModelWithInfo>>(Model_Removed);
-            Models.SelectedChanged += new EventHandler<ModificationEventArgs<SaveModelWithInfo>>(Model_SelectedChanged);
+            Models.Added += new EventHandler<AddedEventArgs<Model>>(Model_Added);
+            Models.Removed += new EventHandler<RemovedEventArgs<Model>>(Model_Removed);
+            Models.SelectedChanged += new EventHandler<ModificationEventArgs<Model>>(Model_SelectedChanged);
 
-            addedAnimationEventHandler = new EventHandler<AddedEventArgs<SaveAnimationWithInfo>>(Animation_Added);
-            removedAnimationEventHandler = new EventHandler<RemovedEventArgs<SaveAnimationWithInfo>>(Animation_Removed);
-            selectedAnimationEventHandler = new EventHandler<ModificationEventArgs<SaveAnimationWithInfo>>(Animation_SelectedChanged);
+            addedAnimationEventHandler = new EventHandler<AddedEventArgs<Animation>>(Animation_Added);
+            removedAnimationEventHandler = new EventHandler<RemovedEventArgs<Animation>>(Animation_Removed);
+            selectedAnimationEventHandler = new EventHandler<ModificationEventArgs<Animation>>(Animation_SelectedChanged);
 
             addedFrameEventHandler = new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Added);
             removedFrameEventHandler = new EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Removed);
@@ -53,17 +53,17 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        void Model_Added(object sender, AddedEventArgs<SaveModelWithInfo> e)
+        void Model_Added(object sender, AddedEventArgs<Model> e)
         {
             if (ModelAdded != null) ModelAdded(this, e);
         }
-        void Model_Removed(object sender, RemovedEventArgs<SaveModelWithInfo> e)
+        void Model_Removed(object sender, RemovedEventArgs<Model> e)
         {
             if (ModelRemoved != null) ModelRemoved(this, e);
         }
-        private void Model_SelectedChanged(object sender, ModificationEventArgs<SaveModelWithInfo> model)
+        private void Model_SelectedChanged(object sender, ModificationEventArgs<Model> model)
         {
-            SaveAnimationWithInfo animationBefore = null, animationAfter = null;
+            Animation animationBefore = null, animationAfter = null;
 
             if (model.Before != null)
             {
@@ -81,20 +81,20 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             if (animationBefore != animationAfter)
             {
-                Animation_SelectedChanged(sender, new ModificationEventArgs<SaveAnimationWithInfo>(animationBefore, animationAfter));
+                Animation_SelectedChanged(sender, new ModificationEventArgs<Animation>(animationBefore, animationAfter));
             }
             if (ModelChanged != null) ModelChanged(this, model);
         }
 
-        void Animation_Added(object sender, AddedEventArgs<SaveAnimationWithInfo> e)
+        void Animation_Added(object sender, AddedEventArgs<Animation> e)
         {
             if (AnimationAdded != null) AnimationAdded(this, e);
         }
-        void Animation_Removed(object sender, RemovedEventArgs<SaveAnimationWithInfo> e)
+        void Animation_Removed(object sender, RemovedEventArgs<Animation> e)
         {
             if (AnimationRemoved != null) AnimationRemoved(this, e);
         }
-        private void Animation_SelectedChanged(object sender, ModificationEventArgs<SaveAnimationWithInfo> animation)
+        private void Animation_SelectedChanged(object sender, ModificationEventArgs<Animation> animation)
         {
             SaveFrame<Texture2DWithPos> frameBefore = null, frameAfter = null;
 
@@ -136,9 +136,9 @@ namespace Mindstep.EasterEgg.MapEditor
 
 
 
-        public readonly ListWithSelectedElement<SaveModelWithInfo> Models = new ListWithSelectedElement<SaveModelWithInfo>();
+        public readonly ListWithSelectedElement<Model> Models = new ListWithSelectedElement<Model>();
 
-        public SaveModelWithInfo SelectedModel
+        public Model SelectedModel
         {
             get { return Models.Selected; }
             set
@@ -147,12 +147,12 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        public ListWithSelectedElement<SaveAnimationWithInfo> Animations
+        public ListWithSelectedElement<Animation> Animations
         {
             get { return SelectedModel == null ? null : SelectedModel.Animations; }
         }
 
-        public SaveAnimationWithInfo SelectedAnimation
+        public Animation SelectedAnimation
         {
             get { return Animations == null ? null : Animations.Selected; }
             set

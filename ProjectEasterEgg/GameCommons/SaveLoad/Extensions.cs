@@ -22,21 +22,19 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
             return new SaveSubModel<Texture2DWithPos>(model.ToTexture2D(graphicsDevice), model.offset);
         }
 
-        public static T ToTexture2D<T>(this SaveModel<BitmapWithPos> model, GraphicsDevice graphicsDevice)
-            where T : SaveModel<Texture2DWithPos>, new()
+        public static SaveModel<Texture2DWithPos> ToTexture2D(this SaveModel<BitmapWithPos> modelIn, GraphicsDevice graphicsDevice)
         {
-            T newModel = new T();
-            newModel.Name = model.Name;
-            newModel.Blocks.AddRange(model.Blocks);
-            foreach (SaveSubModel<BitmapWithPos> subModel in model.SubModels)
+            SaveModel<Texture2DWithPos> modelOut = new SaveModel<Texture2DWithPos>(modelIn.Name);
+            modelOut.Blocks.AddRange(modelIn.Blocks);
+            foreach (SaveSubModel<BitmapWithPos> subModel in modelIn.SubModels)
             {
-                newModel.SubModels.Add(subModel.ToTexture2D(graphicsDevice));
+                modelOut.SubModels.Add(subModel.ToTexture2D(graphicsDevice));
             }
-            foreach (SaveAnimation<BitmapWithPos> animation in model.Animations)
+            foreach (SaveAnimation<BitmapWithPos> animation in modelIn.Animations)
             {
-                newModel.Animations.Add(animation.ToTexture2D(graphicsDevice));
+                modelOut.Animations.Add(animation.ToTexture2D(graphicsDevice));
             }
-            return newModel;
+            return modelOut;
         }
 
         public static SaveAnimation<Texture2DWithPos> ToTexture2D(this SaveAnimation<BitmapWithPos> animation, GraphicsDevice graphicsDevice)

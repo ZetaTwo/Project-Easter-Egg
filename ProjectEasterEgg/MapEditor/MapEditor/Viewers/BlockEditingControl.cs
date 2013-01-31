@@ -185,7 +185,7 @@ namespace Mindstep.EasterEgg.MapEditor
         private void deleteBlockAt(SDPoint mouseLocation)
         {
             Position pos = posUnderPointInCurrentLayer(mouseLocation);
-            foreach (SaveAnimation<Texture2DWithPos> animation in MainForm.ModelManager.SelectedModel.Animations)
+            foreach (Animation animation in MainForm.ModelManager.SelectedModel.Animations)
             {
                 foreach (SaveFrame<Texture2DWithPos> frame in animation.Frames)
                 {

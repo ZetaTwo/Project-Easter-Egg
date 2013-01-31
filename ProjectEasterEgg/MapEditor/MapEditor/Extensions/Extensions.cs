@@ -12,7 +12,7 @@ namespace Mindstep.EasterEgg.MapEditor
 {
     static class Extensions
     {
-        public static IEnumerable<Texture2DWithPos> GetAllTextures(this IEnumerable<SaveAnimation<Texture2DWithPos>> animations)
+        public static IEnumerable<Texture2DWithPos> GetAllTextures(this IEnumerable<Animation> animations)
         {
             return animations.SelectMany(
                 animation =>
