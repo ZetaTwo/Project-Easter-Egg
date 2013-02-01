@@ -50,7 +50,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             base.Initialize(mainForm, wrapper);
             ToolStrips.Add(toolStrip1);
-            toolStripImageList1.Initialize(mainForm.ModelManager);
+            frameListPanel.Initialize(mainForm);
             mainForm.ModelManager.FrameChanged += new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(
                 (sender, e) => { selectedTextures.Clear(); Invalidate(); });
 

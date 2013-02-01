@@ -157,6 +157,12 @@
     <Compile Include="ToolStripTrackBarItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Viewers\UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Viewers\UserControl1.Designer.cs">
+      <DependentUpon>UserControl1.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BlockDetailsForm.resx">
       <DependentUpon>BlockDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -185,11 +191,17 @@
     <EmbeddedResource Include="Viewers\BlockViewControl.resx">
       <DependentUpon>BlockViewControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Viewers\FrameListPanel.resx">
+      <DependentUpon>FrameListPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Viewers\TextureProjectionControl.resx">
       <DependentUpon>TextureProjectionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Viewers\TextureEditingControl.resx">
       <DependentUpon>TextureEditingControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Viewers\UserControl1.resx">
+      <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

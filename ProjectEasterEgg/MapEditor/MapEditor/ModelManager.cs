@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Commons.SaveLoad;
+using System.Threading;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -47,11 +48,41 @@ namespace Mindstep.EasterEgg.MapEditor
             addedFrameEventHandler = new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Added);
             removedFrameEventHandler = new EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Removed);
             selectedFrameEventHandler = new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_SelectedChanged);
+
+            timer = new Timer(new TimerCallback(changeFrame));
+        }
+
+        private Timer timer;
+        private bool play = false;
+        public bool Play
+        {
+            get { return play; }
+            set
+            {
+                play = value;
+                if (play)
+                {
+                    timer.Change(SelectedFrame.Duration, Timeout.Infinite);
+                }
+                else
+                {
+                    timer.Change(Timeout.Infinite, Timeout.Infinite);
+                }
+            }
         }
 
 
 
 
+
+        private void changeFrame(object state)
+        {
+            if (Play)
+            {
+                SelectedFrame = Frames.Next;
+                timer.Change(SelectedFrame.Duration, Timeout.Infinite);
+            }
+        }
 
         void Model_Added(object sender, AddedEventArgs<Model> e)
         {
