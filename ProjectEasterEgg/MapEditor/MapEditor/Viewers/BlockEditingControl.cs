@@ -12,7 +12,7 @@ using Mindstep.EasterEgg.Commons;
 using Microsoft.Xna.Framework;
 using SDPoint = System.Drawing.Point;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     public partial class BlockEditingControl : BlockViewControl
     {

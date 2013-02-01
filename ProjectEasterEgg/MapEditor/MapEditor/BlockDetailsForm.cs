@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Mindstep.EasterEgg.Commons;
 using Mindstep.EasterEgg.Commons.SaveLoad;
+using Mindstep.EasterEgg.MapEditor.Viewers;
 
 namespace Mindstep.EasterEgg.MapEditor
 {

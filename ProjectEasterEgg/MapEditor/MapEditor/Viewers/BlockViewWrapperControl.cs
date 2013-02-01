@@ -11,7 +11,7 @@ using SDPoint = System.Drawing.Point;
 using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     public partial class BlockViewWrapperControl : UserControl
     {

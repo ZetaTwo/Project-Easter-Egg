@@ -1,4 +1,4 @@
-﻿namespace Mindstep.EasterEgg.MapEditor
+﻿namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     partial class TextureProjectionControl
     {

@@ -12,7 +12,7 @@ using Mindstep.EasterEgg.Commons.Graphic;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using SD = System.Drawing;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     public partial class BlockViewControl : GraphicsDeviceControl
     {

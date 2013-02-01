@@ -1,4 +1,4 @@
-﻿namespace Mindstep.EasterEgg.MapEditor.Viewers
+﻿namespace Mindstep.EasterEgg.MapEditor
 {
     partial class FrameListPanelWrapper
     {

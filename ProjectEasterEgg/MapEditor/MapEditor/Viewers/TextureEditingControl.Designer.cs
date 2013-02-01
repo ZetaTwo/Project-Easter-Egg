@@ -1,4 +1,4 @@
-﻿namespace Mindstep.EasterEgg.MapEditor
+﻿namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     partial class TextureEditingControl
     {
@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextureEditingControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
-            this.frameListPanel = new Mindstep.EasterEgg.MapEditor.Viewers.FrameListPanelWrapper();
+            this.frameListPanel = new FrameListPanelWrapper();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +94,6 @@
 
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton drawTextureIndices;
-        private Viewers.FrameListPanelWrapper frameListPanel;
+        private FrameListPanelWrapper frameListPanel;
     }
 }

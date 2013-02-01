@@ -1,3 +1,4 @@
+using Mindstep.EasterEgg.MapEditor.Viewers;
 namespace Mindstep.EasterEgg.MapEditor
 {
     partial class MainForm
@@ -44,7 +45,7 @@ namespace Mindstep.EasterEgg.MapEditor
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.blockViewWrapperControl = new Mindstep.EasterEgg.MapEditor.BlockViewWrapperControl();
+            this.blockViewWrapperControl = new BlockViewWrapperControl();
             this.flowLayoutPanel1.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();

@@ -11,7 +11,7 @@ using Mindstep.EasterEgg.Commons.SaveLoad;
 using SD = System.Drawing;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
     public partial class TextureEditingControl : BlockViewControl
     {
