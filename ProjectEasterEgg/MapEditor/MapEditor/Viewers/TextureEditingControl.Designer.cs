@@ -31,7 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextureEditingControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.drawTextureIndices = new System.Windows.Forms.ToolStripButton();
-            this.frameListPanel = new FrameListPanelWrapper();
+            this.frameListPanel = new Mindstep.EasterEgg.MapEditor.FrameListPanelWrapper();
+            this.button1 = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,15 +75,39 @@
             this.frameListPanel.Size = new System.Drawing.Size(647, 88);
             this.frameListPanel.TabIndex = 24;
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.Gray;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Image = global::Mindstep.EasterEgg.MapEditor.Properties.Resources.play;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button1.Location = new System.Drawing.Point(620, 306);
+            this.button1.Margin = new System.Windows.Forms.Padding(0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(27, 27);
+            this.button1.TabIndex = 25;
+            this.button1.Text = " &";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // TextureEditingControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkBlue;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.frameListPanel);
             this.Controls.Add(this.toolStrip1);
             this.Name = "TextureEditingControl";
             this.Size = new System.Drawing.Size(647, 394);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextureEditingControl_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TextureEditingControl_MouseMove);
+            this.MouseUpWithoutMoving += new System.Windows.Forms.MouseEventHandler(this.TextureEditingControl_MouseUpWithoutMoving);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextureEditingControl_KeyDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TextureEditingControl_MouseUp);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -95,5 +120,6 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton drawTextureIndices;
         private FrameListPanelWrapper frameListPanel;
+        private System.Windows.Forms.Button button1;
     }
 }

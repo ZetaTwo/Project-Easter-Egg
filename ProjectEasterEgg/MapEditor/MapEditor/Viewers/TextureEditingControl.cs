@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using SD = System.Drawing;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
+using Timer = System.Threading.Timer;
 
 namespace Mindstep.EasterEgg.MapEditor.Viewers
 {
@@ -24,6 +26,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         private List<SaveBlock> selectedBlocks = new List<SaveBlock>();
 
         private List<Texture2DWithDoublePos> selectedTextures = new List<Texture2DWithDoublePos>();
+        private Timer timer;
 
 
 
@@ -45,7 +48,44 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                 menuItemSelectBlocksToProjectOnto,
                 new MenuItem("Delete", TextureContextMenuDelete),
             });
+
+            timer = new Timer(new TimerCallback(changeFrame));
         }
+        private bool play = false;
+        public bool Play
+        {
+            get { return play; }
+            set
+            {
+                bool alreadyPlaying = play;
+                play = value;
+                if (value)
+                {
+                    if (!play)
+                    {
+                        ModelManager.SelectedFrame = ModelManager.Frames.Next;
+                    }
+                    timer.Change(ModelManager.SelectedFrame.Duration, Timeout.Infinite);
+                    this.button1.Image = global::Mindstep.EasterEgg.MapEditor.Properties.Resources.pause;
+                }
+                else
+                {
+                    timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    this.button1.Image = global::Mindstep.EasterEgg.MapEditor.Properties.Resources.play;
+                }
+            }
+        }
+
+        private void changeFrame(object state)
+        {
+            if (Play)
+            {
+                ModelManager.SelectedFrame = ModelManager.Frames.Next;
+                timer.Change(ModelManager.SelectedFrame.Duration, Timeout.Infinite);
+            }
+        }
+
+
         public override void Initialize(MainForm mainForm, BlockViewWrapperControl wrapper)
         {
             base.Initialize(mainForm, wrapper);
@@ -53,12 +93,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             frameListPanel.Initialize(mainForm);
             mainForm.ModelManager.FrameChanged += new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(
                 (sender, e) => { selectedTextures.Clear(); Invalidate(); });
-
-            MouseDown += new MouseEventHandler(TextureEditingControl_MouseDown);
-            MouseUp += new MouseEventHandler(TextureEditingControl_MouseUp);
-            MouseMove += new MouseEventHandler(TextureEditingControl_MouseMove);
-            MouseUpWithoutMoving += new MouseEventHandler(TextureEditingControl_MouseUpWithoutMoving);
-            KeyDown += new KeyEventHandler(TextureEditingControl_KeyDown);
         }
 
         #region Context menus
@@ -212,15 +246,27 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
 
         void TextureEditingControl_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.Enter)
-            //{
-            //    Wrapper.EditingMode = EditingMode.Texture;
-            //}
             if (e.KeyCode == Keys.Delete && selectedTextures.Count != 0)
             {
-                MainForm.ModelManager.SelectedFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
+                ModelManager.SelectedFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
                 MainForm.ChangedSomethingThatNeedsToBeSaved();
+            }
+            if (e.KeyCode == Keys.Tab && ModifierKeys == Keys.Control)
+            {
+                if (ModifierKeys == Keys.Shift)
+                {
+                    ModelManager.SelectedFrame = ModelManager.Frames.Previous;
+                }
+                else
+                {
+                    ModelManager.SelectedFrame = ModelManager.Frames.Next;
+                }
+                MainForm.ChangedSomethingThatNeedsToBeSaved();
+            }
+            if (e.KeyCode == Keys.Space)
+            {
+                Play = !Play;
             }
         }
 
@@ -251,6 +297,23 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         private void drawTextureIndices_CheckedChanged(object sender, EventArgs e)
         {
             Invalidate();
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            if (keyData == Keys.Space)
+            {
+                return true;
+            }
+            else
+            {
+                return base.IsInputKey(keyData);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Play = !Play;
         }
     }
 }

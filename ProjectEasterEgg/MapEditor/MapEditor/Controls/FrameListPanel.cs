@@ -255,7 +255,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     if (count == 1) //frame was the only one
                     {           //create new frame
-                        frameListPanel.modelManager.SelectedFrame = new SaveFrame<Texture2DWithPos>();
+                        frameListPanel.modelManager.Frames.Add(new SaveFrame<Texture2DWithPos>());
                     }
                     else if (index == count-1) //frame was at the last index
                     {           //choose previous frame

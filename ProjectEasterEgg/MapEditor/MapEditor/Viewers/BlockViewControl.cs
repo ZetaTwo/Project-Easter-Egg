@@ -76,6 +76,14 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             }
         }
 
+        public ModelManager ModelManager
+        {
+            get
+            {
+                return MainForm.ModelManager;
+            }
+        }
+
         protected BlockViewWrapperControl Wrapper;
 
 

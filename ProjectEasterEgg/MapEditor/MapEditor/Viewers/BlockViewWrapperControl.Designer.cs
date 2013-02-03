@@ -65,7 +65,7 @@
             this.toolStrip2.Location = new System.Drawing.Point(310, 57);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip2.Size = new System.Drawing.Size(177, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(146, 27);
             this.toolStrip2.TabIndex = 17;
             // 
             // toolStripEditBlocks

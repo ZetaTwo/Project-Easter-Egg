@@ -133,6 +133,11 @@
             this.Name = "BlockEditingControl";
             this.Size = new System.Drawing.Size(1050, 653);
             this.TextureOpacity = 0.3F;
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BlockEditingControl_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BlockEditingControl_MouseMove);
+            this.MouseUpWithoutMoving += new System.Windows.Forms.MouseEventHandler(this.BlockEditingControl_MouseUpWithoutMoving);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BlockEditingControl_KeyDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BlockEditingControl_MouseUp);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

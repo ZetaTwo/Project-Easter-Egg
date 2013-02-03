@@ -50,12 +50,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             base.Initialize(mainForm, wrapper);
             ToolStrips.Add(toolStrip1);
             ToolStrips.Add(toolStrip2);
-
-            MouseDown += new MouseEventHandler(BlockEditingControl_MouseDown);
-            MouseUp += new MouseEventHandler(BlockEditingControl_MouseUp);
-            MouseMove += new MouseEventHandler(BlockEditingControl_MouseMove);
-            KeyDown += new KeyEventHandler(BlockEditingControl_KeyDown);
-            MouseUpWithoutMoving += new MouseEventHandler(BlockEditingControl_MouseUpWithoutMoving);
         }
         
 

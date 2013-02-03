@@ -44,9 +44,14 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+        public T Previous
+        {
+            get { return this[((IndexOf(selected)-1)+Count) % Count]; }
+        }
+
         public T Next
         {
-            get { return this[(IndexOf(selected) + 1) % Count]; }
+            get { return this[(IndexOf(selected)+1) % Count]; }
         }
 
         new public void Add(T item)

@@ -23,23 +23,5 @@ namespace Mindstep.EasterEgg.MapEditor
             this.mainForm = mainForm;
             frameListPanel1.Initialize(mainForm.ModelManager);
         }
-
-        private void frameListPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            mainForm.ModelManager.Play ^= true;
-        }
-
-        private void UserControl1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Space)
-            {
-                button1.PerformClick();
-            }
-        }
     }
 }

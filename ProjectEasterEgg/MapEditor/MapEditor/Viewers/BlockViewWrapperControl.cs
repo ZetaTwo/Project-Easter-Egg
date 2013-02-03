@@ -65,12 +65,16 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             {
                 if (MainForm != null)
                 {
-                    BlockViewControl old = BlockViewer;
+                    //BlockViewControl old = BlockViewer;
+                    MainForm.RemoveToolStrip(BlockViewer.ToolStrips);
+                    BlockViewer.Visible = false;
                     editingMode = value;
-                    MainForm.RemoveToolStrip(old.ToolStrips);
+                    BlockViewer.Visible = true;
                     MainForm.AddToolStrip(BlockViewer.ToolStrips);
-                    Controls.Remove(old);
-                    Controls.Add(BlockViewer);
+                    BlockViewer.Focus();
+                    //old.Enabled = old.Visible = false;
+                    //old.Enabled = false;
+                    //Controls.Add(BlockViewer);
                 }
                 else
                 {
@@ -118,13 +122,17 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             blockViewers.Add(EditingMode.Block, new BlockEditingControl());
             blockViewers.Add(EditingMode.Texture, new TextureEditingControl());
             blockViewers.Add(EditingMode.TextureProjection, textureProjectionControl);
+            foreach (BlockViewControl viewer in blockViewers.Values)
+            {
+                viewer.Dock = DockStyle.Fill;
+                Controls.Add(viewer);
+                viewer.Visible = false;
+            }
         }
         private void initializeBlockViewers()
         {
             foreach (BlockViewControl viewer in blockViewers.Values)
             {
-                viewer.Dock = DockStyle.Fill;
-
                 viewer.Initialize(MainForm, this);
             }
         }
@@ -193,7 +201,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
 
         private void textureOpacityTrackBar_MouseUp(object sender, MouseEventArgs e)
         {
-            Focus();
+            BlockViewer.Focus();
         }
 
         private void toolStripButtonSelectBackgroundColor_Click(object sender, EventArgs e)
