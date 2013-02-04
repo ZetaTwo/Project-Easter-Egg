@@ -6,8 +6,15 @@ using System.Text.RegularExpressions;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    public class ImageManager<T> where T : ImageWithPos
+    public class ImageManager<T> : Modifiable
+        where T : ImageWithPos
     {
+        public event EventHandler Modified;
+        private void Modify()
+        {
+            if (Modified != null) Modified(this, null);
+        }
+
         public List<T> textures = new List<T>();
         public int Count { get { return textures.Count; } }
 
@@ -30,17 +37,27 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
 
 
-        public void BringToFront(T tex)
-        {
-            Remove(tex);
-            AddToFront(tex);
-        }
+
+
+
+
         public void BringToFront(IEnumerable<T> texs)
         {
             foreach (T tex in texs)
             {
-                BringToFront(tex);
+                pBringToFront(tex);
             }
+            Modify();
+        }
+        public void BringToFront(T tex)
+        {
+            pBringToFront(tex);
+            Modify();
+        }
+        private void pBringToFront(T tex)
+        {
+            pRemove(tex);
+            pAddToFront(tex);
         }
 
 
@@ -49,13 +66,19 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs)
             {
-                SendToBack(tex);
+                pSendToBack(tex);
             }
+            Modify();
         }
         public void SendToBack(T tex)
         {
-            Remove(tex);
-            AddToBack(tex);
+            pSendToBack(tex);
+            Modify();
+        }
+        private void pSendToBack(T tex)
+        {
+            pRemove(tex);
+            pAddToBack(tex);
         }
 
 
@@ -64,22 +87,28 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs.OrderBy(tex => textures.IndexOf(tex)))
             {
-                SendBackward(tex);
+                pSendBackward(tex);
             }
+            Modify();
         }
         public void SendBackward(T tex)
+        {
+            pSendBackward(tex);
+            Modify();
+        }
+        private void pSendBackward(T tex)
         {
             T intersectingTex = textures.FirstOrDefault(t => t.Bounds.Intersects(tex.Bounds));
             if (intersectingTex != null &&
                 textures.IndexOf(intersectingTex) < textures.IndexOf(tex))
             {
-                Remove(tex);
+                pRemove(tex);
                 textures.Insert(textures.IndexOf(intersectingTex), tex);
             }
             else
             {
-                Remove(tex);
-                AddToBack(tex);
+                pRemove(tex);
+                pAddToBack(tex);
             }
         }
 
@@ -89,22 +118,28 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs.OrderByDescending(tex => textures.IndexOf(tex)))
             {
-                BringForward(tex);
+                pBringForward(tex);
             }
+            Modify();
         }
         public void BringForward(T tex)
+        {
+            pBringForward(tex);
+            Modify();
+        }
+        private void pBringForward(T tex)
         {
             T intersectingTex = textures.LastOrDefault(t => t.Bounds.Intersects(tex.Bounds));
             if (intersectingTex != null &&
                 textures.IndexOf(intersectingTex) > textures.IndexOf(tex))
             {
-                Remove(tex);
+                pRemove(tex);
                 textures.Insert(textures.IndexOf(intersectingTex) + 1, tex);
             }
             else
             {
-                Remove(tex);
-                AddToFront(tex);
+                pRemove(tex);
+                pAddToFront(tex);
             }
         }
 
@@ -114,12 +149,18 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs)
             {
-                AddToBack(tex);
+                renameTextureIfNecessary(tex);
+                tex.Modified += Modified;
+                pAddToBack(tex);
             }
+            Modify();
         }
         public void AddToBack(T tex)
         {
-            renameTextureIfNecessary(tex);
+            AddToBack(new T[] { tex });
+        }
+        private void pAddToBack(T tex)
+        {
             textures.Insert(0, tex);
         }
 
@@ -129,12 +170,18 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs)
             {
-                AddToFront(tex);
+                renameTextureIfNecessary(tex);
+                tex.Modified += Modified;
+                pAddToFront(tex);
             }
+            Modify();
         }
         public void AddToFront(T tex)
         {
-            renameTextureIfNecessary(tex);
+            AddToFront(new T[]{tex});
+        }
+        private void pAddToFront(T tex)
+        {
             textures.Add(tex);
         }
 
@@ -144,10 +191,18 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             foreach (T tex in texs)
             {
-                Remove(tex);
+                pRemove(tex);
+                tex.Modified -= Modified;
             }
+            Modify();
         }
         public void Remove(T tex)
+        {
+            pRemove(tex);
+            tex.Modified -= Modified;
+            Modify();
+        }
+        private void pRemove(T tex)
         {
             textures.Remove(tex);
         }
@@ -156,6 +211,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
 
 
+        //TODO: should this method be placed somewhere else? in the model manager for example
         private void renameTextureIfNecessary(T tex)
         {
             if (textures.Any(t => t.name == tex.name))

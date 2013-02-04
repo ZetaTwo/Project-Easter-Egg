@@ -8,6 +8,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using SD = System.Drawing;
 using Mindstep.EasterEgg.Commons.SaveLoad;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
@@ -31,7 +32,6 @@ namespace Mindstep.EasterEgg.MapEditor
         }
 
         private float ratio;
-        private ModelManager modelManager;
         [DefaultValueAttribute(typeof(float), "0.75f")]
         public float FrameRatio
         {
@@ -43,6 +43,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
+        private ModelManager modelManager;
         private AddFramePanel panelAddNewFrame;
 
 
@@ -61,27 +62,33 @@ namespace Mindstep.EasterEgg.MapEditor
         public void Initialize(ModelManager modelManager)
         {
             this.modelManager = modelManager;
-            modelManager.AnimationChanged +=
-                new EventHandler<ModificationEventArgs<Animation>>(modelManager_AnimationChanged);
-            modelManager.FrameChanged +=
-                new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameChanged);
-            modelManager.FrameAdded += new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameAdded);
-            modelManager.FrameRemoved += new EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameRemoved);
+            modelManager.SelectedAnimationChanged +=
+                new EventHandler<ReplacedEventArgs<Animation>>(modelManager_AnimationChanged);
+            modelManager.SelectedFrameChanged +=
+                new EventHandler<ReplacedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameChanged);
+            modelManager.FrameModified +=
+                new EventHandler<ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>>>(modelManager_FrameModified);
         }
 
-        void modelManager_FrameAdded(object sender, AddedEventArgs<SaveFrame<Texture2DWithPos>> e)
+
+
+
+
+        void modelManager_FrameModified(object sender, ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            PicturePanel panel = new PicturePanel(this, e.Element);
-            Controls.Add(panel);
-            Controls.SetChildIndex(panel, modelManager.Frames.IndexOf(e.Element));
+            if (e.Action == ContentAction.Add)
+            {
+                PicturePanel panel = new PicturePanel(this, e.Element);
+                Controls.Add(panel);
+                Controls.SetChildIndex(panel, modelManager.Frames.IndexOf(e.Element));
+            }
+            else if (e.Action == ContentAction.Remove)
+            {
+                Controls.Remove(getFramePanel(e.Element));
+            }
         }
 
-        void modelManager_FrameRemoved(object sender, RemovedEventArgs<SaveFrame<Texture2DWithPos>> e)
-        {
-            Controls.Remove(getFramePanel(e.Element));
-        }
-
-        private void modelManager_AnimationChanged(object sender, ModificationEventArgs<Animation> e)
+        private void modelManager_AnimationChanged(object sender, ReplacedEventArgs<Animation> e)
         {
             Controls.Clear();
             Controls.Add(panelAddNewFrame);
@@ -95,7 +102,7 @@ namespace Mindstep.EasterEgg.MapEditor
             }
         }
 
-        private void modelManager_FrameChanged(object sender, ModificationEventArgs<SaveFrame<Texture2DWithPos>> e)
+        private void modelManager_FrameChanged(object sender, ReplacedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
             if (getFramePanel(e.Before) != null)
             {

@@ -62,13 +62,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CascadingListWithSelectedElement.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Conversions.cs" />
     <Compile Include="DTO\AnimationDTO.cs" />
     <Compile Include="DTO\GameModelDTO.cs" />
     <Compile Include="DTO\SaveableBlockImage.cs" />
     <Compile Include="Graphic\Extensions.cs" />
+    <Compile Include="ListWithSelectedElement.cs" />
     <Compile Include="MathExtensions.cs" />
+    <Compile Include="Modifiable.cs" />
+    <Compile Include="ContentsModifiedEventArgs.cs" />
+    <Compile Include="ReplacedEventArgs.cs" />
     <Compile Include="Physics\SpawnLocation.cs" />
     <Compile Include="Graphic\BlockImage.cs" />
     <Compile Include="DTO\FrameDTO.cs" />

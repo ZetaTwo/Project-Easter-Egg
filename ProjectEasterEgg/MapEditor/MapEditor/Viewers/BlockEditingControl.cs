@@ -124,7 +124,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                     selectedBlocks.Add(hitBlock);
                     Invalidate();
                     blockContextMenu.Show(this, e.Location);
-                    MainForm.ChangedSomethingThatNeedsToBeSaved();
                     Invalidate();
                 }
                 //updateSelectedBlocks(e.Location, getClickOperation());
@@ -152,7 +151,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             BlockDetailsForm form = new BlockDetailsForm(selectedBlocks, MousePosition, Wrapper);
             form.Show();
             selectedBlocks.Clear();
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 
@@ -172,7 +170,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             {
                 MainForm.ModelManager.SelectedModel.Blocks.Add(new SaveBlock(pos));
             }
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 
@@ -190,7 +187,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                 }
             }
             MainForm.ModelManager.SelectedModel.Blocks.RemoveAll(block => block.Position == pos);
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
             Invalidate();
         }
 
@@ -248,20 +244,20 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                 switch (Math.Sign(saveBlock.Position.Z - CurrentLayer))
                 {
                     case 1: //above
-                        drawBlock(blockDrawStateTexture[BlockDrawState], boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                        drawBlock(blockDrawStateTexture[BlockDrawState], boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position);
                         break;
                     case 0: //at
-                        drawBlock(textureDrawing, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                        drawBlock(textureDrawing, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position);
                         break;
                     case -1: //below
-                        drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                        drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position);
                         break;
                 }
-                if (!string.IsNullOrWhiteSpace(saveBlock.script))
+                if (!string.IsNullOrWhiteSpace(saveBlock.Script))
                 {
                     Vector2 drawCoords = CoordinateTransform.ObjectToProjectionSpace(saveBlock.Position);
-                    drawCoords -= (spriteFont.MeasureString(saveBlock.script)/2).Ceiling();
-                    spriteBatch.DrawString(spriteFont, saveBlock.script, drawCoords,
+                    drawCoords -= (spriteFont.MeasureString(saveBlock.Script)/2).Ceiling();
+                    spriteBatch.DrawString(spriteFont, saveBlock.Script, drawCoords,
                         Color.Cyan, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
                 }
             }

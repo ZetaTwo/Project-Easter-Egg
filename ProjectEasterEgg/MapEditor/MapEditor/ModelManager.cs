@@ -4,32 +4,34 @@ using System.Linq;
 using System.Text;
 using Mindstep.EasterEgg.Commons.SaveLoad;
 using System.Threading;
+using Mindstep.EasterEgg.Commons;
 
 namespace Mindstep.EasterEgg.MapEditor
 {
     public class ModelManager
     {
-        public event EventHandler<AddedEventArgs<Model>> ModelAdded;
-        public event EventHandler<RemovedEventArgs<Model>> ModelRemoved;
-        public event EventHandler<ModificationEventArgs<Model>> ModelChanged;
+        public event EventHandler<ContentsModifiedEventArgs<Model>> ModelModified;
+        public event EventHandler<ReplacedEventArgs<Model>> SelectedModelChanged;
+        public event EventHandler<ReplacedEventArgs<string>> ModelNameChanged;
+        public event EventHandler ModelNeedsSaving;
 
-        public event EventHandler<AddedEventArgs<Animation>> AnimationAdded;
-        public event EventHandler<RemovedEventArgs<Animation>> AnimationRemoved;
-        public event EventHandler<ModificationEventArgs<Animation>> AnimationChanged;
+        public event EventHandler<ContentsModifiedEventArgs<Animation>> AnimationModified;
+        public event EventHandler<ReplacedEventArgs<Animation>> SelectedAnimationChanged;
 
-        public event EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>> FrameAdded;
-        public event EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>> FrameRemoved;
-        public event EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>> FrameChanged;
-
+        public event EventHandler<ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>>> FrameModified;
+        public event EventHandler<ReplacedEventArgs<SaveFrame<Texture2DWithPos>>> SelectedFrameChanged;
 
 
-        private EventHandler<AddedEventArgs<Animation>> addedAnimationEventHandler;
-        private EventHandler<RemovedEventArgs<Animation>> removedAnimationEventHandler;
-        private EventHandler<ModificationEventArgs<Animation>> selectedAnimationEventHandler;
+        private EventHandler<ReplacedEventArgs<string>> Model_NameChangedEventHandler;
+        private EventHandler<ReplacedEventArgs<bool>> Model_SavedOrNeedsSavingEventHandler;
 
-        private EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>> addedFrameEventHandler;
-        private EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>> removedFrameEventHandler;
-        private EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>> selectedFrameEventHandler;
+        private EventHandler<ContentsModifiedEventArgs<Animation>> Animations_ModifiedEventHandler;
+        private EventHandler<ReplacedEventArgs<Animation>> Animations_SelectedChangedEventHandler;
+
+        private EventHandler<ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>>> Frames_ModifiedEventHandler;
+        private EventHandler<ReplacedEventArgs<SaveFrame<Texture2DWithPos>>> Frames_SelectedChangedEventHandler;
+
+        public readonly ListWithSelectedElement<Model> Models = new ListWithSelectedElement<Model>();
 
 
 
@@ -37,107 +39,104 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public ModelManager()
         {
-            Models.Added += new EventHandler<AddedEventArgs<Model>>(Model_Added);
-            Models.Removed += new EventHandler<RemovedEventArgs<Model>>(Model_Removed);
-            Models.SelectedChanged += new EventHandler<ModificationEventArgs<Model>>(Model_SelectedChanged);
+            Models.Modified += new EventHandler<ContentsModifiedEventArgs<Model>>(Models_Modified);
+            Models.SelectedChanged += new EventHandler<ReplacedEventArgs<Model>>(Models_SelectedChanged);
+            Model_NameChangedEventHandler = new EventHandler<ReplacedEventArgs<string>>(Model_NameChanged);
+            Model_SavedOrNeedsSavingEventHandler = Model_SavedOrNeedsSaving;
 
-            addedAnimationEventHandler = new EventHandler<AddedEventArgs<Animation>>(Animation_Added);
-            removedAnimationEventHandler = new EventHandler<RemovedEventArgs<Animation>>(Animation_Removed);
-            selectedAnimationEventHandler = new EventHandler<ModificationEventArgs<Animation>>(Animation_SelectedChanged);
+            Animations_ModifiedEventHandler = new EventHandler<ContentsModifiedEventArgs<Animation>>(Animations_Modified);
+            Animations_SelectedChangedEventHandler = new EventHandler<ReplacedEventArgs<Animation>>(Animations_SelectedChanged);
 
-            addedFrameEventHandler = new EventHandler<AddedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Added);
-            removedFrameEventHandler = new EventHandler<RemovedEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_Removed);
-            selectedFrameEventHandler = new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(Frame_SelectedChanged);
+            Frames_ModifiedEventHandler = new EventHandler<ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>>>(Frames_Modified);
+            Frames_SelectedChangedEventHandler = new EventHandler<ReplacedEventArgs<SaveFrame<Texture2DWithPos>>>(Frames_SelectedChanged);
         }
 
 
 
 
 
-        void Model_Added(object sender, AddedEventArgs<Model> e)
+        void Models_Modified(object sender, ContentsModifiedEventArgs<Model> e)
         {
-            if (ModelAdded != null) ModelAdded(this, e);
+            if (ModelModified != null) ModelModified(this, e);
         }
-        void Model_Removed(object sender, RemovedEventArgs<Model> e)
-        {
-            if (ModelRemoved != null) ModelRemoved(this, e);
-        }
-        private void Model_SelectedChanged(object sender, ModificationEventArgs<Model> model)
+        private void Models_SelectedChanged(object sender, ReplacedEventArgs<Model> model)
         {
             Animation animationBefore = null, animationAfter = null;
 
             if (model.Before != null)
             {
                 animationBefore = model.Before.Animations.Selected;
-                model.Before.Animations.SelectedChanged -= selectedAnimationEventHandler;
-                model.Before.Animations.Added -= addedAnimationEventHandler;
-                model.Before.Animations.Removed -= removedAnimationEventHandler;
+                model.Before.Animations.SelectedChanged -= Animations_SelectedChangedEventHandler;
+                model.Before.Animations.Modified -= Animations_ModifiedEventHandler;
+                model.Before.PathChanged -= Model_NameChangedEventHandler;
+                model.Before.SavedOrNeedsSaving -= Model_SavedOrNeedsSaving;
             }
             if (model.After != null)
             {
                 animationAfter = model.After.Animations.Selected;
-                model.After.Animations.SelectedChanged += selectedAnimationEventHandler;
-                model.After.Animations.Added += addedAnimationEventHandler;
-                model.After.Animations.Removed += removedAnimationEventHandler;
+                model.After.Animations.SelectedChanged += Animations_SelectedChangedEventHandler;
+                model.After.Animations.Modified += Animations_ModifiedEventHandler;
+                model.After.PathChanged += Model_NameChangedEventHandler;
+                model.After.SavedOrNeedsSaving += Model_SavedOrNeedsSaving;
             }
             if (animationBefore != animationAfter)
             {
-                Animation_SelectedChanged(sender, new ModificationEventArgs<Animation>(animationBefore, animationAfter));
+                Animations_SelectedChanged(sender, new ReplacedEventArgs<Animation>(animationBefore, animationAfter));
             }
-            if (ModelChanged != null) ModelChanged(this, model);
+            if (SelectedModelChanged != null) SelectedModelChanged(this, model);
+        }
+        void Model_NameChanged(object sender, ReplacedEventArgs<string> e)
+        {
+            if (ModelNameChanged != null) ModelNameChanged(this, e);
+        }
+        void Model_SavedOrNeedsSaving(object sender, EventArgs e)
+        {
+            if (ModelNeedsSaving != null) ModelNeedsSaving(this, e);
         }
 
-        void Animation_Added(object sender, AddedEventArgs<Animation> e)
+
+
+
+
+        void Animations_Modified(object sender, ContentsModifiedEventArgs<Animation> e)
         {
-            if (AnimationAdded != null) AnimationAdded(this, e);
+            if (AnimationModified != null) AnimationModified(this, e);
         }
-        void Animation_Removed(object sender, RemovedEventArgs<Animation> e)
-        {
-            if (AnimationRemoved != null) AnimationRemoved(this, e);
-        }
-        private void Animation_SelectedChanged(object sender, ModificationEventArgs<Animation> animation)
+        private void Animations_SelectedChanged(object sender, ReplacedEventArgs<Animation> animation)
         {
             SaveFrame<Texture2DWithPos> frameBefore = null, frameAfter = null;
 
             if (animation.Before != null)
             {
                 frameBefore = animation.Before.Frames.Selected;
-                animation.Before.Frames.SelectedChanged -= selectedFrameEventHandler;
-                animation.Before.Frames.Added -= addedFrameEventHandler;
-                animation.Before.Frames.Removed -= removedFrameEventHandler;
+                animation.Before.Frames.SelectedChanged -= Frames_SelectedChangedEventHandler;
+                animation.Before.Frames.Modified -= Frames_ModifiedEventHandler;
             }
             if (animation.After != null)
             {
                 frameAfter = animation.After.Frames.Selected;
-                animation.After.Frames.SelectedChanged += selectedFrameEventHandler;
-                animation.After.Frames.Added += addedFrameEventHandler;
-                animation.After.Frames.Removed += removedFrameEventHandler;
+                animation.After.Frames.SelectedChanged += Frames_SelectedChangedEventHandler;
+                animation.After.Frames.Modified += Frames_ModifiedEventHandler;
             }
             if (frameBefore != frameAfter)
             {
-                Frame_SelectedChanged(sender, new ModificationEventArgs<SaveFrame<Texture2DWithPos>>(frameBefore, frameAfter));
+                Frames_SelectedChanged(sender, new ReplacedEventArgs<SaveFrame<Texture2DWithPos>>(frameBefore, frameAfter));
             }
-            if (AnimationChanged != null) AnimationChanged(this, animation);
+            if (SelectedAnimationChanged != null) SelectedAnimationChanged(this, animation);
         }
 
-        void Frame_Added(object sender, AddedEventArgs<SaveFrame<Texture2DWithPos>> e)
+        void Frames_Modified(object sender, ContentsModifiedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            if (FrameAdded != null) FrameAdded(this, e);
+            if (FrameModified != null) FrameModified(this, e);
         }
-        void Frame_Removed(object sender, RemovedEventArgs<SaveFrame<Texture2DWithPos>> e)
+        private void Frames_SelectedChanged(object sender, ReplacedEventArgs<SaveFrame<Texture2DWithPos>> e)
         {
-            if (FrameRemoved != null) FrameRemoved(this, e);
-        }
-        private void Frame_SelectedChanged(object sender, ModificationEventArgs<SaveFrame<Texture2DWithPos>> e)
-        {
-            if (FrameChanged != null) FrameChanged(this, e);
+            if (SelectedFrameChanged != null) SelectedFrameChanged(this, e);
         }
 
 
 
 
-
-        public readonly ListWithSelectedElement<Model> Models = new ListWithSelectedElement<Model>();
 
         public Model SelectedModel
         {

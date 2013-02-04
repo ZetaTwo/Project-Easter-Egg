@@ -91,7 +91,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             base.Initialize(mainForm, wrapper);
             ToolStrips.Add(toolStrip1);
             frameListPanel.Initialize(mainForm);
-            mainForm.ModelManager.FrameChanged += new EventHandler<ModificationEventArgs<SaveFrame<Texture2DWithPos>>>(
+            mainForm.ModelManager.SelectedFrameChanged += new EventHandler<ReplacedEventArgs<SaveFrame<Texture2DWithPos>>>(
                 (sender, e) => { selectedTextures.Clear(); Invalidate(); });
         }
 
@@ -99,25 +99,21 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         private void TextureContextMenuBringToFront(object sender, EventArgs e)
         {
             MainForm.ModelManager.SelectedFrame.Images.BringToFront(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuBringForward(object sender, EventArgs e)
         {
             MainForm.ModelManager.SelectedFrame.Images.BringForward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSendBackward(object sender, EventArgs e)
         {
             MainForm.ModelManager.SelectedFrame.Images.SendBackward(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSendToBack(object sender, EventArgs e)
         {
             MainForm.ModelManager.SelectedFrame.Images.SendToBack(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
 
         private void TextureContextMenuSelectBlocksToProjectOnto(object sender, EventArgs e)
@@ -128,7 +124,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         {
             MainForm.ModelManager.SelectedFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
             selectedTextures.Clear();
-            MainForm.ChangedSomethingThatNeedsToBeSaved();
         }
         #endregion
 
@@ -167,7 +162,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             foreach (Texture2DWithPos hitTexture in MainForm.ModelManager.SelectedFrame.Images.FrontToBack())
             {
                 if (hitTexture.Bounds.Contains(mousePosInProjSpace) &&
-                    hitTexture.Texture.GetPixelColor(mousePosInProjSpace.Subtract(hitTexture.pos)).A != 0)
+                    hitTexture.Texture.GetPixelColor(mousePosInProjSpace.Subtract(hitTexture.Position)).A != 0)
                 {
                     Texture2DWithDoublePos hitAlreadySelectedTexture = null;
                     foreach (Texture2DWithDoublePos selectedTexture in selectedTextures)
@@ -210,7 +205,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                             }
                             break;
                     }
-                    MainForm.ChangedSomethingThatNeedsToBeSaved();
                     return;
                 }
             }
@@ -223,9 +217,9 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         {
             if (e.Button == MouseButtons.Left)
             {
-                mouseCoordAtMouseDown = e.Location.ToXnaPoint();
+                mouseCoordAtMouseDown = CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), Wrapper.Camera);
                 updateSelectedTextures(e.Location, Helper.getClickOperation());
-                selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.pos);
+                selectedTextures.ForEach(t => t.CoordAtMouseDown = t.t.Position);
             }
         }
 
@@ -238,8 +232,9 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         {
             if (e.Button == MouseButtons.Left)
             {
-                Point changeInProjectionSpace = e.Location.ToXnaPoint().Subtract(mouseCoordAtMouseDown).Divide(Wrapper.Camera.Zoom);
-                selectedTextures.ForEach(tex => tex.t.pos = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
+                Point changeInProjectionSpace = CoordinateTransform.ScreenToProjSpace(e.Location.ToXnaPoint(), Wrapper.Camera)
+                    .Subtract(mouseCoordAtMouseDown);
+                selectedTextures.ForEach(tex => tex.t.Position = tex.CoordAtMouseDown.Add(changeInProjectionSpace));
                 Invalidate();
             }
         }
@@ -250,7 +245,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             {
                 ModelManager.SelectedFrame.Images.Remove(selectedTextures.GetUnderlyingTextures2DWithDoublePos());
                 selectedTextures.Clear();
-                MainForm.ChangedSomethingThatNeedsToBeSaved();
             }
             if (e.KeyCode == Keys.Tab && ModifierKeys == Keys.Control)
             {
@@ -262,7 +256,6 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                 {
                     ModelManager.SelectedFrame = ModelManager.Frames.Next;
                 }
-                MainForm.ChangedSomethingThatNeedsToBeSaved();
             }
             if (e.KeyCode == Keys.Space)
             {
@@ -279,7 +272,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
                 float i = 0;
                 foreach (Texture2DWithPos tex in MainForm.ModelManager.SelectedFrame.Images.BackToFront())
                 {
-                    spriteBatch.DrawString(spriteFont, i.ToString(), tex.pos.ToVector2(),
+                    spriteBatch.DrawString(spriteFont, i.ToString(), tex.Position.ToVector2(),
                         Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
                     i++;
                 }

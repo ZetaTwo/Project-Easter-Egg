@@ -34,23 +34,23 @@ namespace Mindstep.EasterEgg.MapEditor
             blockTypesDropDown.Items.Remove(Enum.GetName(typeof(BlockType), BlockType.OUT_OF_BOUNDS));
             blockTypesDropDown.Items.Remove(Enum.GetName(typeof(BlockType), BlockType.EMPTY));
 
-            if (this.blocks.All(block => block.type == this.blocks.First().type))
+            if (this.blocks.All(block => block.Type == this.blocks.First().Type))
             {
-                oldBlockType.Text = blockTypesDropDown.Text = System.Enum.GetName(typeof(BlockType), this.blocks.First().type);
+                oldBlockType.Text = blockTypesDropDown.Text = System.Enum.GetName(typeof(BlockType), this.blocks.First().Type);
             }
             else
             {
                 oldBlockType.Text = blockTypesDropDown.Text = MULTIPLE_ENTRY_TEXT;
             }
 
-            if (this.blocks.All(block => string.IsNullOrWhiteSpace(block.script)))
+            if (this.blocks.All(block => string.IsNullOrWhiteSpace(block.Script)))
             {
                 scriptNameBox.Text = "";
                 oldScriptName.Text = NO_SCRIPT_NAME_TEXT;
             }
-            else if (this.blocks.All(block => block.script == this.blocks.First().script))
+            else if (this.blocks.All(block => block.Script == this.blocks.First().Script))
             {
-                oldScriptName.Text = scriptNameBox.Text = this.blocks.First().script;
+                oldScriptName.Text = scriptNameBox.Text = this.blocks.First().Script;
             }
             else
             {
@@ -70,12 +70,12 @@ namespace Mindstep.EasterEgg.MapEditor
                 if (blockTypesDropDown.Text != MULTIPLE_ENTRY_TEXT)
                 {
                     BlockType blockType = (BlockType)Enum.Parse(typeof(BlockType), blockTypesDropDown.Text);
-                    blocks.ToList().ForEach(block => block.type = blockType);
+                    blocks.ToList().ForEach(block => block.Type = blockType);
                 }
 
                 if (scriptNameBox.Text != MULTIPLE_ENTRY_TEXT)
                 {
-                    blocks.ToList().ForEach(block => block.script = scriptNameBox.Text);
+                    blocks.ToList().ForEach(block => block.Script = scriptNameBox.Text);
                 }
                 if (oldScriptName.Text != NO_SCRIPT_NAME_TEXT)
                 {
@@ -88,8 +88,8 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             for (int i = 0; i < blocks.Count; i++)
             {
-                blocks[i].type = oldBlocks[i].type;
-                blocks[i].script = oldBlocks[i].script;
+                blocks[i].Type = oldBlocks[i].Type;
+                blocks[i].Script = oldBlocks[i].Script;
             }
         }
 

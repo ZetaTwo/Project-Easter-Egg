@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mindstep.EasterEgg.MapEditor
+namespace Mindstep.EasterEgg.Commons
 {
-    public class ListWithSelectedElement<T> : List<T>
+    public class ListWithSelectedElement<T> : List<T>, Modifiable<ContentsModifiedEventArgs<T>>
     {
-        public event EventHandler<ModificationEventArgs<T>> SelectedChanged;
-        public event EventHandler<AddedEventArgs<T>> Added;
-        public event EventHandler<RemovedEventArgs<T>> Removed;
+        public event EventHandler<ReplacedEventArgs<T>> SelectedChanged;
+        public event EventHandler<ContentsModifiedEventArgs<T>> Modified;
 
         new public T this[int index]
         {
@@ -37,7 +36,7 @@ namespace Mindstep.EasterEgg.MapEditor
                         throw new ArgumentException("Can't select an element that isn't already in the list");
                     }
 
-                    ModificationEventArgs<T> e = new ModificationEventArgs<T>(selected, value);
+                    ReplacedEventArgs<T> e = new ReplacedEventArgs<T>(selected, value);
                     selected = value;
                     if (SelectedChanged != null) SelectedChanged(this, e);
                 }
@@ -57,7 +56,7 @@ namespace Mindstep.EasterEgg.MapEditor
         new public void Add(T item)
         {
             base.Add(item);
-            if (Added != null) Added(this, new AddedEventArgs<T>(item));
+            if (Modified != null) Modified(this, new ContentsModifiedEventArgs<T>(ContentAction.Add, item));
             if (Count == 1)
             {
                 Selected = item;
@@ -82,7 +81,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     selected = default(T);
                 }
-                if (Removed != null) Removed(this, new RemovedEventArgs<T>(item));
+                if (Modified != null) Modified(this, new ContentsModifiedEventArgs<T>(ContentAction.Remove, item));
             }
             return success;
         }
@@ -91,6 +90,7 @@ namespace Mindstep.EasterEgg.MapEditor
         {
             base.Clear();
             selected = default(T);
+            if (Modified != null) Modified(this, new ContentsModifiedEventArgs<T>(ContentAction.Clear, default(T)));
         }
 
         new public int RemoveAll(Predicate<T> match)

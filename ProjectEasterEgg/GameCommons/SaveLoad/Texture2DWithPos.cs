@@ -30,7 +30,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             get
             {
-                return new Rectangle(pos.X, pos.Y, originalBitmap.Width, originalBitmap.Height);
+                return new Rectangle(Position.X, Position.Y, originalBitmap.Width, originalBitmap.Height);
             }
         }
 

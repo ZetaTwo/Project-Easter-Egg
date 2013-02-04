@@ -10,13 +10,36 @@ using Mindstep.EasterEgg.Commons.Graphic;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    public class SaveBlock : BlockImage, IPositionable, ICloneable
+    public class SaveBlock : BlockImage, IPositionable, ICloneable, Modifiable
     {
+        public event EventHandler Modified;
+
         private Position position;
         public Position Position { get { return position; } }
 
-        public string script;
-        public BlockType type;
+        private string script;
+        public string Script
+        {
+            get { return script; }
+            set
+            {
+                script = value;
+                if (Modified != null) Modified(this, null);
+            }
+        }
+
+        private BlockType type;
+        public BlockType Type
+        {
+            get { return type; }
+            set
+            {
+                type = value;
+                if (Modified != null) Modified(this, null);
+            }
+        }
+
+
 
         public SaveBlock(Position position)
         {
@@ -26,13 +49,13 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public SaveBlock(Position position, BlockType type, string script)
             : this(position)
         {
-            this.type = type;
-            this.script = script;
+            this.Type = type;
+            this.Script = script;
         }
 
         public object Clone()
         {
-            return new SaveBlock(position, type, script);
+            return new SaveBlock(position, Type, Script);
         }
     }
 }

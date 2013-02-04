@@ -23,7 +23,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         {
             get
             {
-                return new Rectangle(pos.X, pos.Y, bitmap.Width, bitmap.Height);
+                return new Rectangle(Position.X, Position.Y, bitmap.Width, bitmap.Height);
             }
         }
 

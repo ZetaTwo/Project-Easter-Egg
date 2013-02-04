@@ -290,7 +290,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
         {
             foreach (SaveBlock saveBlock in MainForm.ModelManager.SelectedModel.Blocks)
             {
-                drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position);
             }
         }
 
@@ -307,7 +307,7 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             foreach (Texture2DWithPos tex in MainForm.ModelManager.SelectedFrame.Images.BackToFront())
             {
                 float depth = (1 - i / MainForm.ModelManager.SelectedFrame.Images.Count) * .1f;
-                spriteBatch.Draw(tex.Texture, tex.pos.ToVector2(), null,
+                spriteBatch.Draw(tex.Texture, tex.Position.ToVector2(), null,
                     new Color(1, 1, 1, TextureOpacity), 0,
                     Vector2.Zero, 1, SpriteEffects.None, depth / Wrapper.Camera.Zoom);
                 i++;

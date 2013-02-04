@@ -22,7 +22,7 @@ namespace Mindstep.EasterEgg.MapEditor
         /// <param name="model"></param>
         /// <param name="path">Path to save to, including file name</param>
         /// <exception cref="Exception">All possible save exceptions?</exception>
-        public static void Save(MapEditor.Model model)
+        public static void Save(Model model, string fileName)
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("model");
@@ -38,7 +38,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 {
                     XElement subModelElement = new XElement("model");
                     imports.Add(subModelElement);
-                    subModelElement.SetAttributeValue("offset", subModel.offset.GetSaveString());
+                    subModelElement.SetAttributeValue("offset", subModel.Offset.GetSaveString());
                     subModelElement.Value = subModel.Name;
                 }
             }
@@ -53,10 +53,10 @@ namespace Mindstep.EasterEgg.MapEditor
                     blocksElement.Add(blockElement);
 
                     blockElement.SetAttributeValue("offset", block.Position.GetSaveString());
-                    blockElement.SetAttributeValue("type", block.type.GetSaveString());
-                    if (!string.IsNullOrWhiteSpace(block.script))
+                    blockElement.SetAttributeValue("type", block.Type.GetSaveString());
+                    if (!string.IsNullOrWhiteSpace(block.Script))
                     {
-                        blockElement.SetAttributeValue("script", block.script);
+                        blockElement.SetAttributeValue("script", block.Script);
                     }
                 }
             }
@@ -84,7 +84,7 @@ namespace Mindstep.EasterEgg.MapEditor
                             XElement textureElement = new XElement("image");
                             frameElement.Add(textureElement);
                             textureElement.SetAttributeValue("name", tex.name);
-                            textureElement.SetAttributeValue("coord", tex.pos.GetSaveString());
+                            textureElement.SetAttributeValue("coord", tex.Position.GetSaveString());
                             allTextures.Add(tex);
                             
                             foreach (SaveBlock block in tex.projectedOnto)
@@ -98,7 +98,7 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
 
-            using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(model.path, FileMode.Create)))
+            using (ZipOutputStream zipStream = new ZipOutputStream(new FileStream(fileName, FileMode.Create)))
             {
                 zipStream.PutNextEntry(new ZipEntry("model.xml"));
                 zipStream.Write(doc.ToString());

@@ -60,13 +60,13 @@ namespace Mindstep.EasterEgg.MapEditor.Viewers
             {
                 if (textureBeingProjectedDown.projectedOnto.Contains(saveBlock))
                 {
-                    drawBlock(textureWireframeBack, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, .01f);
+                    drawBlock(textureWireframeBack, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position, .01f);
                     //TODO: cut out relevant piece of the texture and draw it inside the block
-                    drawBlock(textureWireframe, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position, -.01f);
+                    drawBlock(textureWireframe, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position, -.01f);
                 }
                 else
                 {
-                    drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.type], saveBlock.Position);
+                    drawBlock(textureBlock, boundingBox, blockTypeColor[saveBlock.Type], saveBlock.Position);
                 }
             }
         }

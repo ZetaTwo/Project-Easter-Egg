@@ -51,18 +51,22 @@ namespace Mindstep.EasterEgg.MapEditor
             menuStrip.Visible = false;
             flowLayoutPanel2.AutoSize = true; //TODO: is this line needed?
             blockViewWrapperControl.Initialize(this);
-            MouseWheel += new MouseEventHandler(mouseWheel);
+            MouseWheel += mouseWheel;
 
+            ModelManager.SelectedModelChanged += (sender, e) => UpdateTitle();
+            ModelManager.ModelNameChanged     += (sender, e) => UpdateTitle();
+            ModelManager.ModelNeedsSaving     += (sender, e) => UpdateTitle();
         }
 
         public MainForm()
             : this(false)
         {
-            ModelManager.Models.Add(new Model());
+            Model model = new Model();
+            ModelManager.Models.Add(model);
             ModelManager.Animations.Add(new Animation());
             ModelManager.Frames.Add(new SaveFrame<Texture2DWithPos>());
 
-            UpdateTitle();
+            model.ChangedSinceLastSave = false;
         }
 
         public MainForm(string fileName)
@@ -110,15 +114,16 @@ namespace Mindstep.EasterEgg.MapEditor
 
         public void UpdateTitle()
         {
-            Text = TITLE + " - " + ModelManager.SelectedModel.Name +
-                (ModelManager.SelectedModel.changedSinceLastSave ? "*" : "") +
+            string path = ModelManager.SelectedModel.Path;
+            Text = TITLE + " - " + (path==null?"untitled":path) +
+                (ModelManager.SelectedModel.ChangedSinceLastSave ? "*" : "") +
                 " [" + Math.Round(blockViewWrapperControl.Camera.Zoom * 100, 0) + "%]";
         }
 
         #region save/open/import
         private void saveToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            save(ModelManager.SelectedModel.path == null);
+            save(ModelManager.SelectedModel.Path == null);
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -139,28 +144,22 @@ namespace Mindstep.EasterEgg.MapEditor
             }
             else
             {
-                writeSave(ModelManager.SelectedModel.path);
+                writeSave(ModelManager.SelectedModel, ModelManager.SelectedModel.Path);
             }
         }
 
         private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-            writeSave(saveFileDialog.FileName);
+            writeSave(ModelManager.SelectedModel, saveFileDialog.FileName);
         }
 
-        private void writeSave(string fileName)
+        private void writeSave(Model model, string fileName)
         {
             while (true)
             {
                 try
                 {
-                    ModelManager.SelectedModel.path = fileName;
-                    EggModelSaver.Save(ModelManager.SelectedModel);
-
-                    ModelManager.SelectedModel.changedSinceLastSave = false;
-                    ModelManager.SelectedModel.Name = Regex.Match(fileName,
-                        "([^/\\\\]*)(\\.egg)?$", RegexOptions.RightToLeft).Groups[1].Value;
-                    UpdateTitle();
+                    model.Save(fileName);
                     return;
                 }
                 catch (Exception e)
@@ -182,11 +181,11 @@ namespace Mindstep.EasterEgg.MapEditor
         }
         private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (ModelManager.SelectedModel.changedSinceLastSave &&
+            if (ModelManager.SelectedModel.ChangedSinceLastSave &&
                 !(ModelManager.SelectedModel.Blocks.Count == 0 &&
                 ModelManager.SelectedModel.SubModels.Count == 0))
             {
-                DialogResult dialogResult = MessageBox.Show("Save changes to " + ModelManager.SelectedModel.Name + "?",
+                DialogResult dialogResult = MessageBox.Show("Save changes to " + ModelManager.SelectedModel.Path + "?",
                     TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 switch (dialogResult)
                 {
@@ -207,12 +206,10 @@ namespace Mindstep.EasterEgg.MapEditor
             Model model = new Model(EggModelLoader.Load(path).ToTexture2D(GraphicsDevice));
             ModelManager.Models.Add(model);
             ModelManager.SelectedModel = model;
+            //TODO: are the following two lines needed?
             ModelManager.SelectedAnimation = ModelManager.Animations[0];
             ModelManager.SelectedFrame = ModelManager.Frames[0];
-            model.path = path;
-            model.changedSinceLastSave = false;
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
-            UpdateTitle();
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -243,7 +240,7 @@ namespace Mindstep.EasterEgg.MapEditor
             {
                 tex = new Texture2DWithPos(new SD.Bitmap(fileStream), GraphicsDevice, fileName);
             }
-            tex.pos = lastImportedTextureOffset;
+            tex.Position = lastImportedTextureOffset;
 
             blockViewWrapperControl.EditingMode = EditingMode.Texture;
             foreach (Texture2DWithPos existingTex in((IEnumerable<Animation>)ModelManager.Animations).GetAllTextures())
@@ -258,18 +255,8 @@ namespace Mindstep.EasterEgg.MapEditor
                 }
             }
             ModelManager.SelectedFrame.Images.AddToFront(tex);
-            ChangedSomethingThatNeedsToBeSaved();
         }
         #endregion
-
-        internal void ChangedSomethingThatNeedsToBeSaved()
-        {
-            if (!ModelManager.SelectedModel.changedSinceLastSave)
-            {
-                ModelManager.SelectedModel.changedSinceLastSave = true;
-                UpdateTitle();
-            }
-        }
 
         private void menuStrip_MenuActivate(object sender, EventArgs e)
         {

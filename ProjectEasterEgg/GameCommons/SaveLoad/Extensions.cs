@@ -19,7 +19,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
         public static SaveSubModel<Texture2DWithPos> ToTexture2D(this SaveSubModel<BitmapWithPos> model, GraphicsDevice graphicsDevice)
         {
-            return new SaveSubModel<Texture2DWithPos>(model.ToTexture2D(graphicsDevice), model.offset);
+            return new SaveSubModel<Texture2DWithPos>(model.ToTexture2D(graphicsDevice), model.Offset);
         }
 
         public static SaveModel<Texture2DWithPos> ToTexture2D(this SaveModel<BitmapWithPos> modelIn, GraphicsDevice graphicsDevice)
@@ -61,7 +61,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
         public static Texture2DWithPos ToTexture2D(this BitmapWithPos bitmapWithPos, GraphicsDevice graphicsDevice)
         {
             Texture2DWithPos texture = new Texture2DWithPos(bitmapWithPos.bitmap.CloneFix(), graphicsDevice);
-            texture.pos = bitmapWithPos.pos;
+            texture.Position = bitmapWithPos.Position;
             texture.name = bitmapWithPos.name;
             texture.projectedOnto.AddRange(bitmapWithPos.projectedOnto);
             return texture;

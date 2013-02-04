@@ -50,22 +50,22 @@ namespace EggEnginePipeline
             {
                 foreach (SaveBlock block in saveModel.Blocks)
                 {
-                    if (block.type == BlockType.SPAWN_LOCATION)
+                    if (block.Type == BlockType.SPAWN_LOCATION)
                     {
-                        model.spawnLocations.Add(block.script, block.Position);
+                        model.spawnLocations.Add(block.Script, block.Position);
                     }
                     else
                     {
                         GameBlockDTO gameBlock = new GameBlockDTO();
                         gameBlock.Position = block.Position;
-                        gameBlock.scriptName = block.script;
-                        gameBlock.Type = block.type;
+                        gameBlock.scriptName = block.Script;
+                        gameBlock.Type = block.Type;
 
                         model.blocks.Add(gameBlock);
                     }
                 }
 
-                saveModel.Blocks.RemoveAll(block => block.type == BlockType.SPAWN_LOCATION);
+                saveModel.Blocks.RemoveAll(block => block.Type == BlockType.SPAWN_LOCATION);
             }
 
             //Debugger.Launch();

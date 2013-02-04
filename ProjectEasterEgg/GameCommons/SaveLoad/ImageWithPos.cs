@@ -7,18 +7,31 @@ using System.IO;
 
 namespace Mindstep.EasterEgg.Commons.SaveLoad
 {
-    public abstract class ImageWithPos
+    public abstract class ImageWithPos : Modifiable
     {
+        public event EventHandler Modified;
+
         public string name;
-        public Point pos;
+        private Point pos;
+        public Point Position
+        {
+            get { return pos; }
+            set
+            {
+                pos = value;
+                if (Modified != null) Modified(this, null);
+            }
+        }
         public abstract Rectangle Bounds { get; }
 
         public ImageWithPos()
-        { }
+        {
+        }
 
         public ImageWithPos(Point pos)
+            :this()
         {
-            this.pos = pos;
+            this.Position = pos;
         }
 
         public abstract void SaveTo(Stream stream);

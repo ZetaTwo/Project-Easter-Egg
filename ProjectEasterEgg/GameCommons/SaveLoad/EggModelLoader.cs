@@ -51,11 +51,11 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
 
                             SaveBlock block = new SaveBlock(pos);
                             model.Blocks.Add(block);
-                            block.type = blockElement.Attribute("type").Value.LoadBlockType();
+                            block.Type = blockElement.Attribute("type").Value.LoadBlockType();
                             XAttribute scriptAttribute = blockElement.Attribute("script");
                             if (scriptAttribute != null)
                             {
-                                block.script = scriptAttribute.Value;
+                                block.Script = scriptAttribute.Value;
                             }
                         }
                     }
@@ -83,7 +83,7 @@ namespace Mindstep.EasterEgg.Commons.SaveLoad
                             {
                                 BitmapWithPos bitmapWithPos = new BitmapWithPos();
                                 frame.Images.AddToFront(bitmapWithPos);
-                                bitmapWithPos.pos = imageElement.Attribute("coord").Value.LoadPoint();
+                                bitmapWithPos.Position = imageElement.Attribute("coord").Value.LoadPoint();
                                 bitmapWithPos.name = imageElement.Attribute("name").Value;
                                 bitmapWithPos.projectedOnto.AddRange(imageElement.Elements("projectedOnto").Select(e => model.Blocks[e.Value.LoadInt()]));
                                 bitmapWithPos.bitmap = bitmapManager[bitmapWithPos.name];
